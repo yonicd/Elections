@@ -1,9 +1,8 @@
-Sys.setlocale("LC_ALL", "Hebrew")
-library(dplyr);library(ggplot2);library(stringr)
+library(ggplot2);library(stringr)
 
+x=read.csv("election_data.csv",fileEncoding="windows-1255")
 
-x=read.csv(url("https://github.com/yonicd/Elections/raw/master/election_data.csv"))
-
+x=x[,-1]
 
 shinyUI(
   fluidPage(

@@ -1,14 +1,23 @@
-Sys.setlocale("LC_ALL", "Hebrew")
 library(dplyr);library(ggplot2);library(stringr)
 
-x=read.csv(url("https://github.com/yonicd/Elections/raw/master/election_data.csv"))
+x=read.csv("election_data.csv",fileEncoding="windows-1255")
+
+x$Date=as.Date(as.character(x$Date))
+x$Publisher=as.character(x$Publisher)
+Encoding(x$Publisher)="windows-1255"
+x$Pollster=as.character(x$Pollster)
+Encoding(x$Pollster)="windows-1255"
+x$party=as.character(x$party)
+Encoding(x$party)="windows-1255"
+x$attribute=as.character(x$attribute)
+Encoding(x$attribute)="windows-1255"
 
 shinyServer(function(input, output, session) {  
-
+  
   output$election<-renderUI({
     selectInput("election",label = "Election",
-                choices = unique(x$election),
-                selected = unique(x$election)[5],multiple=T)
+                choices = c(2015,2013,2009,2006,2003),
+                selected = 2015,multiple=T)
   })
   
   output$party <- renderUI({
@@ -27,9 +36,11 @@ shinyServer(function(input, output, session) {
   })
   
   output$daterange <- renderUI({
-  dateRangeInput("daterange", "Date range:",
-                 start  = range((x%>%filter(election%in%input$election))$Date)[1],
-                 end    = range((x%>%filter(election%in%input$election))$Date)[2])
+    a=x%>%filter(election%in%input$election)%>%do(.,data.frame(range=range(.$Date)))
+    
+    dateRangeInput("daterange", "Date range:",
+                   start  = as.Date(a$range[1]),
+                   end    = as.Date(a$range[2]))
   })
   
   selectedData <- reactive({
@@ -40,10 +51,10 @@ shinyServer(function(input, output, session) {
     a
   })
   
-
   
-    output$plot1 <- renderPlot({
-
+  
+  output$plot1 <- renderPlot({
+    
     p=ggplot(selectedData())+theme_bw()
     
     if(input$ptype=="point")  p=p+geom_point(aes_string(x=input$varx,y=input$vary,colour=paste0("factor(",input$fill_var,")")))
