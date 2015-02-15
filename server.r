@@ -1,7 +1,7 @@
 Sys.setlocale("LC_ALL", "Hebrew")
 library(dplyr);library(ggplot2);library(stringr)
-d=paste0(gsub("Documents","",normalizePath(Sys.getenv("HOME"),"\\")),"Dropbox\\elections\\")
-load(paste0(d,"elections_data.rdata"))
+
+x=read.csv(url("https://github.com/yonicd/Elections/raw/master/election_data.csv"))
 
 shinyServer(function(input, output, session) {  
 

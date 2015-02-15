@@ -1,7 +1,9 @@
 Sys.setlocale("LC_ALL", "Hebrew")
 library(dplyr);library(ggplot2);library(stringr)
-d=paste0(gsub("Documents","",normalizePath(Sys.getenv("HOME"),"\\")),"Dropbox\\elections\\")
-load(paste0(d,"elections_data.rdata"))
+
+
+x=read.csv(url("https://github.com/yonicd/Elections/raw/master/election_data.csv"))
+
 
 shinyUI(
   fluidPage(
@@ -11,11 +13,11 @@ shinyUI(
       column(3,uiOutput("party")),
       column(3,uiOutput("Pollster")),
       column(3,uiOutput("Publisher"))
-      ),
-
-hr(),
-
-fluidRow(
+    ),
+    
+    hr(),
+    
+    fluidRow(
       column(3,uiOutput("daterange"),
              checkboxInput("wrap",label = "Wrap Graph",value = T),
              checkboxGroupInput("scales",label = "Fixed Scales",inline = T,
@@ -31,7 +33,7 @@ fluidRow(
                          choices=c(None=".",names(x)[c(1,8,3,4,10)]),selected="party")),
       column(3,
              selectInput("varx","X axis Variable",selected = "Date",
-                         choices=names(x)[c(1,2,3,4,7,8,10,12)]),
+                         choices=names(x)[c(1,2,3,4,7,8,10,1)]),
              
              selectInput("vary","Y axis Variable",selected = "mandates",
                          choices=names(x)[c(1,2,3,4,7,8,10,12)])
@@ -42,10 +44,10 @@ fluidRow(
              
              selectInput("facet_col","Column Facet",
                          choices=c(None=".",names(x)[c(1,8,3,4,10)])))
-            ),
+    ),
     hr(),
     plotOutput('plot1')
-
     
-
-))
+    
+    
+  ))
