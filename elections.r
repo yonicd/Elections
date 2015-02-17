@@ -1,10 +1,10 @@
  Sys.setlocale("LC_ALL", "Hebrew")
 
-pkg=c("plyr","dplyr","reshape2","ggplot2","XML","stringr","shiny")
+pkg=c("plyr","dplyr","reshape2","ggplot2","XML","stringr","shiny","shinyapps")
 sapply(pkg,require,character.only = T,warn.conflicts = F,quietly = T)
 rm(pkg)
 
-results=read.csv("election_results.csv")%>%mutate(party=as.character(party))
+results=read.csv("election_results.csv",stringsAsFactors=F)%>%select(-Origin)
 
   #URL of project61 google spreadsheet
     url="https://docs.google.com/spreadsheets/d/13XIAgbVk_c2Zxxa5xsR0EJFb6W9HMQpAjBImtFxZdxo/"
@@ -20,7 +20,7 @@ results=read.csv("election_results.csv")%>%mutate(party=as.character(party))
                         as.data.frame=TRUE)})
 
  #Organize the data 
-  x=ldply(ret,function(df){
+  x=ldply(ret[c(1)],function(df){
   df=df[!(df[,2]%in%c(NA,"")),-1]
   rownames(df)=NULL
   r=which(str_detect(df[,1],"/"))
@@ -30,29 +30,36 @@ results=read.csv("election_results.csv")%>%mutate(party=as.character(party))
   df=df[which(str_detect(df[,1],"/")),]
   df=data.frame(df[,1:(min(which(str_detect(as.matrix(df)[1,],"%")))-1)])
   if(sum(str_detect(names(df),"Var"))!=0)  df=df%>%select(-contains("Var"))
-  names(df)=c(ret[[1]][5,2:6],paste0("V",seq(1,ncol(df)-5)))
+  names(df)=c(ret[[1]][which(ret[[1]][,2]=="Date"),2:6],paste0("V",seq(1,ncol(df)-5)))
   df$Date=as.Date(df$Date,"%d/%m/%Y")
   df=df%>%mutate_each(funs(as.numeric(as.character(.))),-c(Date,Publisher,Pollster,Type))%>%filter(Sample>10)
-  df=melt(df,id=names(df)[1:5],value.name = "mandates")
-  df$party=as.character(factor(df$variable,labels=party.names))
-  df%>%select(-variable)
-},.id="election")%>%
-    mutate(X1=as.numeric(as.character(factor(X1,labels=c("2015","2013","2009","2006","2003")))))%>%
-   rename(election=X1)
-  
-  #unify name of "other parties"
-  x$party=str_replace(x$party,"מפלגות","רשימות")
+  df=melt(df,id=names(df)[1:5],value.name = "Mandates")
+  df$Party=as.character(factor(df$variable,labels=party.names))
+  df%>%select(-variable)},.id="Election")%>%mutate(Election=2015,Party=str_replace(Party,"מפלגות","רשימות"))
+ 
+#     mutate(X1=as.numeric(as.character(factor(X1,labels=c("2015","2013","2009","2006","2003")))))%>%
+#    rename(Election=X1)
 
   #join from results.csv
-  x=join(x,results,by=c("election","party"))%>%arrange(election,Date,party)
+  x=join(x,results,by=c("Election","Party"))%>%arrange(Election,Date,Party)
 
-  x=left_join(x,results%>%group_by(election,party)%>%filter(row_number(party)==1)%>%count(election)%>%ungroup,
-            by="election")
+  x=left_join(x,results%>%group_by(Election,Party)%>%filter(row_number(Party)==1)%>%count(Election)%>%ungroup,
+            by="Election")%>%rename(N=n)
 
-  x=x%>%mutate(se=((mandates-results)),Publisher=str_replace_all(tolower(Publisher),"!",""),
-               party=str_replace_all(party,'\"',""))%>%
-   mutate_each(funs(as.numeric(factor(.))),party,Publisher,Pollster)
+  x=x%>%mutate(Error=((Mandates-Results)),Publisher=str_replace_all(tolower(Publisher),"!",""),
+               Party=str_replace_all(Party,'\"',""))
+ 
+ x.old=read.csv("C:\\Users\\yoni\\Documents\\GitHub\\election_data.csv",stringsAsFactors=F)
+ x=rbind(x%>%filter(Date>max(x.old$Date)),x.old%>%select(-ends_with("id")))%>%
+   mutate(Date=as.Date(Date),week=format(Date,"%w"),month=format(Date,"%m"),year=format(Date,"%Y"))
+ 
+ x$Partyid=as.numeric(factor(x$Party))
+ x$Pollsterid=as.numeric(factor(x$Pollster))
+ x$Publisherid=as.numeric(factor(x$Publisher))
 
+
+ write.csv(x,file="C://Users//yoni//Documents//GitHub//Elections//election_data.csv",row.names=F)
+ 
 # a few graphs to check the data
  
 # ggplot(x%>%filter(election!=2015),aes(x=Date,y=se,colour=party))+
