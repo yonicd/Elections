@@ -41,13 +41,9 @@ shinyServer(function(input, output, session) {
     if(length(input$Party)>0)a=a%>%filter(Partyid%in%input$Party)
     if(length(input$Publisher)>0)a=a%>%filter(Publisherid%in%input$Publisher)
     if(length(input$Pollster)>0)a=a%>%filter(Pollsterid%in%input$Pollster)
-    a
-  })
-  
-  output$plot1 <- renderPlot({
     
-    p=ggplot(selectedData())+theme_bw()+theme(axis.text.x = element_text(angle = 90))
-
+    p=ggplot(a)+theme_bw()+theme(axis.text.x = element_text(angle = 90))
+    
     
     if(input$ptype=="point")  p=p+geom_point(aes_string(x=input$varx,y=input$vary,colour=paste0("factor(",input$fill_var,")")))+scale_colour_discrete(name=input$fill_var)
     if(input$ptype=="line")  p=p+geom_line(aes_string(x=input$varx,y=input$vary,colour=paste0("factor(",input$fill_var,")")))+scale_colour_discrete(name=input$fill_var)
@@ -71,7 +67,16 @@ shinyServer(function(input, output, session) {
     
     p=p+xlab(input$varx)
     
-    suppressWarnings(print(p))
+    p
   })
+  
+  output$plot1 <- renderPlot({
+    suppressWarnings(print(selectedData()))
+  })
+  
+  output$foo = downloadHandler(filename = "ElectionPlot.png",
+                               content = function(file){
+                                ggsave(file, plot = selectedData(),width=20,height=10)})
+    
   
 })

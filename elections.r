@@ -58,7 +58,7 @@ results=read.csv("election_results.csv",stringsAsFactors=F)%>%select(-Origin)
  x$Publisherid=as.numeric(factor(x$Publisher))
 
 
- write.csv(x,file="C://Users//yoni//Documents//GitHub//Elections//election_data.csv",row.names=F)
+ write.csv(x%>%distinct,file="C://Users//yoni//Documents//GitHub//Elections//election_data.csv",row.names=F)
  
 # a few graphs to check the data
  
