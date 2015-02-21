@@ -1,10 +1,3 @@
-library(dplyr);library(ggplot2);library(stringr)
-
-x=read.csv("election_data.csv",stringsAsFactors=F,fileEncoding="windows-1255")
-x=x%>%mutate(Date=as.Date(Date))
-
-fac_vars=names(x)[c(1,2,7,8,3,4,10,12,16:18)]
-
 shinyUI(
   
   fluidPage(
@@ -18,40 +11,51 @@ shinyUI(
     hr(),
     fluidRow(
       column(3,uiOutput("Election")),
-      column(3,uiOutput("Party")),
-      column(3,uiOutput("Pollster")),
-      column(3,uiOutput("Publisher"))
+      column(2,uiOutput("Party")),
+      column(2,uiOutput("Pollster")),
+      column(2,uiOutput("Publisher")),
+      column(2, radioButtons(inputId = "lang",label="Plot Language",inline=T,
+                          choices = split(c("",".En"),c("Hebrew","English")),
+                          selected=""))
     ),
     
     hr(),
     
     fluidRow(
       column(3,uiOutput("daterange"),
-             checkboxGroupInput("chkbox",label=NULL,inline=T,
-                                choices = c("Wrap Graph","Elections Threshold"),
-                                selected=c("Wrap Graph")),
-             checkboxGroupInput("scales",label = "Facet Scales (Choose one)",inline = T,
-                                choices = c("fixed","free","free_x","free_y"),
-                                selected="fixed")),
+             uiOutput("DaysLeft"),
+             checkboxInput(inputId = "chkbox",label="Mandate Threshold",value = T)
+             ),
       
-      column(3,
+      column(2,
              selectInput(inputId = "ptype",label = "Graph Type",
-                         choices = c("point","bar","line","boxplot","density"),
+                         choices = c("point","bar","line","step","boxplot","density"),
                          selected="bar"),
              
              selectInput("fill_var","Colour Groups",
-                         choices=c(None=".",fac_vars),selected="Pollster")),
-      column(3,
+                         choices=fac_vars,selected="Party")),
+      column(2,
              selectInput("varx","X axis Variable",selected = "Date",choices=fac_vars),
              
              selectInput("vary","Y axis Variable",selected = "Mandates",choices=fac_vars)
       ),
-      column(3,
+      column(2,
              selectInput("facet_row","Row Facet",
-                         choices=c(None=".",fac_vars[-c(2,3,8)]),selected="Party"),
+                         choices=c(None=".",fac_vars),selected="Pollster"),
              
              selectInput("facet_col","Column Facet",
-                         choices=c(None=".",fac_vars[-c(2,3,8)])))
+                         choices=c(None=".",fac_vars))),
+      column(1,
+              radioButtons(inputId = "scales",label = "Facet Scales",
+                           choices = c("fixed","free","free_x","free_y"),
+                           selected="free_x")),
+      column(2,
+             checkboxGroupInput(inputId = "axis.attr",label = "X-axis Attrib",
+                          choices = c("Rotate Label","Discrete"),
+                          selected=c("Discrete")),
+             radioButtons(inputId = "facet.shp",label = "Facet Layout",inline=T,
+                                choices = c("Wrap","Grid"),
+                                selected=c("Wrap")))
     ),
     hr(),
     plotOutput('plot1'),
