@@ -5,7 +5,7 @@ shinyUI(
     titlePanel("Israel Election Polls Analysis Depot"),
     h6(a("Created and maintained by Jonathan Sidi",href="https://github.com/yonicd/Elections")),
     h5("Analyze polling results from Israeli Elections from 2003, 2006, 2009, 2013 and the current election, and slice the data on any variable as you please. 
-       You can also compare pollster outcomes across Elections, Publishers (new outlets) and Pollsters (Midgam, Dialogue,...), and Parties.
+       You can also compare pollster outcomes across Elections, Publishers (news outlets) and Pollsters (Midgam, Dialogue,...), and Parties.
        You can also filter any combination of values of the variables, e.g. Polls of Election 2015 Parties Likud and HaMachane HaZioni Published in Haaretz and Israel Hayom. 
        If you are proud of the plot you made save a high resolution version of it on your computer and share it with you friends."),
     hr(),
@@ -59,6 +59,14 @@ shinyUI(
     ),
     hr(),
     plotOutput('plot1'),
+    hr(),
+    helpText(a("Add layers with R ggplot2 open code (base layer p=ggplot(x))",href="http://docs.ggplot2.org/current/")),
+    fluidRow(
+      column(8,
+             actionButton("send", "Add"),
+             aceEditor(outputId = "code",
+                       value="p",
+                       mode = "r", theme = "chrome", height = "50px", fontSize = 12))),
     hr(),
            downloadButton('foo', 'Download Plot'),
 helpText(a("Data Source: Project 61 of Infomeyda",href="http://infomeyda.com/"))

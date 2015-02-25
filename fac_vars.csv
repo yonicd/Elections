@@ -1,15 +1,17 @@
 fac_vars,fac_vars.en
-Date,תאריך
-Publisher,גוף מזמין
-Pollster,גוף מבצע
 Party,מפלגה
-Mandates,מנדטים
+Ideology,צד במפה
+Ideology.Group,צד במפה קבוצה
 Election,בחירות
-Mandate.Group,קב. מנדטים
-Results,תוצאה
-Attribute,מאפיין
-Error,סטיה
+DaysLeft,ימים עד בחירות
+Date,תאריך
 week,שבוע
 month,חודש
 year,שנה
-DaysLeft,ימים.עד.בחירות
+Publisher,גוף מזמין
+Pollster,גוף מבצע
+Mandates,מנדטים
+Mandate.Group,קב. מנדטים
+Results,תוצאה
+Error,סטיה
+Attribute,מאפיין
