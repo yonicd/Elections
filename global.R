@@ -12,6 +12,7 @@ loc.run="windows-1255"
 x.old=read.csv("election_data.csv",stringsAsFactors=F,fileEncoding=loc.run)%>%mutate(Date=as.Date(Date))
 attribute=read.csv("election_results.csv",stringsAsFactors=F,fileEncoding=loc.run)
 Poll=read.csv("Pollster_En.csv",stringsAsFactors=F,fileEncoding=loc.run)
+ProjectScore=read.csv("ProjectScore.csv",stringsAsFactors=F,fileEncoding=loc.run)
 fac_vars.df=read.csv("fac_vars.csv",stringsAsFactors=F,fileEncoding=loc.run)
 
 fac_vars=fac_vars.df[,1]
@@ -82,9 +83,7 @@ x=x%>%mutate(Partyid=as.numeric(factor(str_trim(Party))),
  x$Ideology=factor(x$Ideology)
  x$Ideology.Group=factor(x$Ideology.Group)
 
-
-#Clean Workspace
-rm(list=ls(pattern = ("[^x*|fac_vars|fac_vars.df]")))
+ #Clean Workspace
 
 remove_geom <- function(ggplot2_object, geom_type) {
   layers <- lapply(ggplot2_object$layers, function(x) if(x$geom$objname == geom_type) NULL else x)
@@ -93,3 +92,34 @@ remove_geom <- function(ggplot2_object, geom_type) {
   ggplot2_object$layers <- layers
   ggplot2_object
 }
+
+party=x%>%filter(Election==2015&!is.na(Mandates))%>%select(Partyid,Party)%>%unique
+
+#Project61 adjustment
+
+x3=x%>%filter(Election==2015)%>%select(Pollster,Date)%>%group_by(Date,Pollster)%>%filter(row_number(Pollster)==1)%>%head(.,10)
+
+x2=left_join(x3,x%>%select(Date,Pollster,Party,Mandates,Sample.Error),by=c("Pollster","Date"))
+
+x2=left_join(x2,x2%>%select(Date,Pollster)%>%distinct%>%mutate(x=1)%>%group_by(Pollster)%>%mutate(N=cumsum(x))%>%select(-x),by=c("Pollster","Date"))
+
+x2=left_join(x2,ProjectScore,by=c("Pollster","Party"))%>%
+  mutate(Mandates.adj=Mandates-Score,Weight=sqrt(Pollster.weight-(as.numeric(max(Date)-Date))-abs(Sample.Error*50)/N))
+
+y=sum(unique(x2$Weight))
+
+project61=x2%>%group_by(Party)%>%summarise(base=sum(Mandates*Weight)/y)%>%ungroup%>%mutate(base=120*base/sum(base),base.floor=floor(base),pct=base/(base.floor+1),add=0,id=0,share=factor(Party,labels=c(1,1,2,3,4,5,6,6,2,7,3)))
+
+for(i in (1:(120-sum(project61$base.floor)))){
+y1=(project61%>%group_by(share)%>%summarise(group_pct=sum(base)/(sum(base.floor)+1))%>%filter(group_pct==max(group_pct)))$share
+id=project61$pct==max(project61$pct[project61$share==y1])
+project61$id[id]=i
+project61$base.floor[id]=project61$base.floor[id]+1
+project61$add[id]=project61$add[id]+1
+project61$pct[id]=project61$base[id]/(project61$base.floor[id]+1)}
+
+project61=left_join(project61%>%select(Party,Mandates=base.floor),attribute%>%filter(Election==2015)%>%select(Party,Ideology),by="Party")%>%mutate(Date=max(x3$Date),Pollster="פרויקט 61")%>%
+  arrange(desc(Date),desc(Mandates))%>%ungroup
+
+
+rm(list=ls(pattern = ("[^x*|fac_vars|fac_vars.df|project61|party]")))
