@@ -34,13 +34,14 @@ shinyUI(
       You can also filter any combination of values of the variables, e.g. Polls of Election 2015 Parties Likud and HaMachane HaZioni Published in Haaretz and Israel Hayom. 
       If you are proud of the plot you made save a high resolution version of it on your computer and share it with you friends."),
     fluidRow(
-      column(3,uiOutput("Election")),
+      column(2,uiOutput("Election")),
       column(2,uiOutput("Party")),
       column(2,uiOutput("Pollster")),
       column(2,uiOutput("Publisher")),
       column(2, radioButtons(inputId = "lang",label="Plot Language",inline=T,
                           choices = split(c("",".En"),c("Hebrew","English")),
-                          selected=".En"))
+                          selected=".En")),
+      column(2,downloadButton('foo', 'Download Plot'))
     ),
     
     hr(),
@@ -71,12 +72,11 @@ shinyUI(
     ),
     hr(),
     plotOutput('plot1',height="500px"),
-    downloadButton('foo', 'Download Plot'),
     hr(),
-    helpText(a("Add layers with R ggplot2 open code (base layer p=ggplot(x))",href="http://docs.ggplot2.org/current/")),
+    helpText(a("Add layers with R ggplot2 open code (base layer p=ggplot(x), use remove_geom(p,geom='bar') to drop layers)",href="http://docs.ggplot2.org/current/")),
     fluidRow(
       column(8,
-             actionButton("send", "Add"),
+             actionButton("send", "Update Plot"),
              aceEditor(outputId = "code",value="p",mode = "r", theme = "chrome", height = "100px", fontSize = 12))),
       hr(),
       helpText(a("Data Source: Project 61 of Infomeyda",href="http://infomeyda.com/"))
@@ -94,10 +94,15 @@ shinyUI(
              sliderInput("poll","Number of Last Polls to Use",min = 1,max=10,value = c(1,5),step = 1),
              checkboxInput("sim","View Simulation Results",value = F),
            hr(),
-           radioButtons(inputId = "lang.sim",label="Plot Language",inline=T,
-                        choices = split(c("",".En"),c("Hebrew","English")),
-                        selected=".En"),
-           conditionalPanel("input.sim",plotOutput('SimPlot',height="500px")),
+          fluidRow(
+            column(2,radioButtons(inputId = "lang.sim",label="Plot Language",inline=T,
+                                  choices = split(c("",".En"),c("Hebrew","English")),
+                                  selected=".En")),
+            column(3,downloadButton('sim.down', 'Download Plot'))
+          ),  
+           conditionalPanel("input.sim",
+                            radioButtons("Boot","Simulation Size", choices= c(50,100,500,1000),selected=100,inline = T),
+                            plotOutput('SimPlot',height="500px")),
            conditionalPanel(condition = "!input.sim",
                             fluidRow(
                               h4("Create Coalition"),
@@ -106,7 +111,7 @@ shinyUI(
                               column(3,uiOutput("Opposition"))
                             ),
                             hr(),
-                            plotOutput('CoalitionPlot',height="400px")),
+                            plotOutput('CoalitionPlot',height="500px")),
            hr(),
            helpText(a("Data Source: Project 61 of Infomeyda",href="http://infomeyda.com/"))
   ),

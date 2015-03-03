@@ -25,14 +25,12 @@ shinyServer(function(input, output, session) {
     xmin=min(x[x$Election%in%input$Election,'DaysLeft'],na.rm = T)
     xmax=max(x[x$Election%in%input$Election,'DaysLeft'],na.rm = T)
     
-    sliderInput(inputId = "DaysLeft",label = "Days Left",
+    sliderInput(inputId = "DaysLeft",label = "Days Left to Election",
                 min = xmin,max = xmax,step=1,value=c(xmin,30))
   })
   
   selectedData <- reactive({
     a=x%>%filter(Election%in%input$Election&
-                   #Date>=input$daterange[1]&
-                   #Date<=input$daterange[2]&
                    !is.na(Mandates)&
                    DaysLeft>=input$DaysLeft[1]&DaysLeft<=input$DaysLeft[2])
     if(length(input$Party)>0)a=a%>%filter(Partyid%in%input$Party)
@@ -115,7 +113,16 @@ if(input$facet.shp=="Wrap"){
                                content = function(file){
                                  p=selectedData()
                                 ggsave(file, plot = eval(parse(text=input$code)),width=20,height=10)})
-    
+  
+  output$sim.down = downloadHandler(filename = "ElectionSimPlot.png",
+                               content = function(file){
+                                 if(input$sim){
+                                   p=SimPrePlot()
+                                 }else{
+                                   p=CoalitionPrePlot()
+                                 }
+                               ggsave(file, plot = p,
+                                      width=20,height=10)})  
   
   output$Coalition <- renderUI({
     selectInput("coalition","Coalition",choices = split(party[,1],party[,2]),multiple=T)
@@ -133,7 +140,7 @@ if(input$facet.shp=="Wrap"){
     a$nr=1:nrow(a)
     out=ddply(a%>%select(Mandates.lb,Mandates.ub,nr),.(nr),
               .fun = function(df) {
-                B=100
+                B=input$Boot
                 mout=cbind(as.matrix(sample(as.numeric(df[1]):as.numeric(df[2]),B,replace=T),ncol=1),1:B)
               })
     names(out)[-1]=c("rMandates","bs.id")
@@ -183,7 +190,7 @@ if(input$facet.shp=="Wrap"){
     return(lout)
   })
 
-  output$SimPlot<-renderPlot({
+  SimPrePlot<-reactive({
     lin=CoalitionData()
     df=lin$df.full
     
@@ -196,26 +203,33 @@ if(input$facet.shp=="Wrap"){
     str_fill=paste0("Party",input$lang.sim)
     if(input$lang.sim==""){
       xl="מנדטים"
-      yl="אחוז"
+      yl=""
       ttl=paste("התפלגות סימולציה לחלוקה סופית של מנדטים לאחר אחוז החסימה וסיווג עודפים לפי מפלגה",
                 "משולש מהווה חציון המנדטים למפלגה על פי הסקרים בפועל",sep="\n")
       nm="מפלגה"
     }else{
       xl="Mandates"
-      yl="Percent"
-      ttl="Distribution of Simulated of Mandate Results Conditioned Mandate Threshold and Surplus Vote Agreements \n Triangle shows the Median Published Result"
+      yl=""
+      ttl="Distribution of Simulated of Mandate Results Conditioned on Mandate Threshold and Surplus Vote Agreements \n Triangle shows the Median Published Result"
       nm="Party"
     }
-          
+    
+    base.lvl$n=base.lvl$n/as.numeric(input$Boot)
+    txt.lvl$n=txt.lvl$n/as.numeric(input$Boot)
+    
     p=ggplot(base.lvl)+
       geom_bar(aes_string(x="factor(base.floor)",y="n",fill=str_fill),stat="identity",position = "dodge")+
-      geom_point(aes(x=factor(base.floor),y=n+2),size=3,shape=17,data=txt.lvl)+
+      geom_point(aes(x=factor(base.floor),y=n+.02),size=3,shape=17,data=txt.lvl)+
       facet_wrap(as.formula(paste0("~",str_fill)),scales="free_x")+theme_bw()+
-      ggtitle(ttl)+ylab(yl)+xlab(xl)+scale_fill_discrete(name=nm)
-    print(p)
+      ggtitle(ttl)+ylab(yl)+xlab(xl)+scale_fill_discrete(name=nm)+scale_y_continuous(label=percent)
+    p
   })
 
-  output$CoalitionPlot <- renderPlot({
+  output$SimPlot <- renderPlot({
+    print(SimPrePlot())
+  })
+  
+  CoalitionPrePlot <- reactive({
     lin=CoalitionData()
     
     df=lin$df
@@ -266,9 +280,13 @@ if(input$facet.shp=="Wrap"){
     p=p+geom_text(aes_string(x=str_x,y="Mandates",label="Mandates"),vjust=-.1,data=b)
     p=p+geom_hline(yintercept=lin$yint,linetype=2)
     p=p+xlab("")+ylab(yl)+ggtitle(ttl)
-    print(p)
+    p
   })
-  
+
+  output$CoalitionPlot <- renderPlot({
+      print(CoalitionPrePlot())
+  })
+    
   output$IntroPlot <- renderPlot({
     
     mainplot=rbind(x%>%filter(Date==max(Date))%>%select(Date,Pollster,Party,Mandates,Ideology),project61)%>%

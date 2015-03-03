@@ -6,6 +6,7 @@ library(stringr)
 library(ggplot2)
 library(httr)
 library(shinyAce)
+library(scales)
 
 loc.run="windows-1255"
 
@@ -122,4 +123,4 @@ project61=left_join(project61%>%select(Party,Mandates=base.floor),attribute%>%fi
   arrange(desc(Date),desc(Mandates))%>%ungroup
 
 
-rm(list=ls(pattern = ("[^x*|fac_vars|fac_vars.df|project61|party]")))
+rm(list=ls(pattern = ("[^x*|fac_vars|fac_vars.df|project61|party|remove_geom]")))
