@@ -3,14 +3,14 @@ shinyUI(
   tabPanel("Election PAD",
    img(src='CDlogo.png', align = "right", height='75px'),
    img(src='Project61logo.png', align = "right", height='75px'),
-    h3("The Israel Election Polls Analysis Depot (",a("#IsraelElectionPAD",href="https://twitter.com/hashtag/IsraelElectionPAD?src=hash"),") is an interactive web application for analysing the elections in Israel powered by",
-       a("Shiny of Rstudio",href="http://shiny.rstudio.com/"),"and realtime published polling data from the",
+    h3("The Israel Election Polls Analysis Depot (",a("#IsraelElectionPAD",href="https://twitter.com/hashtag/IsraelElectionPAD?src=hash"),") is an interactive web application for analysing the elections in Israel powered by the",
+       a("Shiny library of RStudio",href="http://shiny.rstudio.com/"),"and realtime published polling data from the",
         a("Project 61",href="http://infomeyda.com/"),"database."),
    h4("Application Layout:"),
       strong("Election Analyis:"),p("An interactive polling analysis layout where the user can filter elections, parties, publishers and pollster, dates
           and create different types of plots using any variable as the x and y axis.\n 
           If you are an R user and know ggplot there is an additional editor console where you can create advanced plots freehand"),
-   strong("Coalition Whiteboard:"),p("A bootstrap simulation is run on Polling results from up to 10 of the latest polls using the sampling error. 
+   strong("Coalition Whiteboard:"),p("A", a("bootstrap simulation",href="http://en.wikipedia.org/wiki/Bootstrapping_%28statistics%29") ,"is run on published polling results from up to 10 of the latest polls using the sampling error. 
          Taking into account mandate surplus agreements and the mandate threshold, giving the final tally of mandates. 
          The distributions are plotted per party and the location of the median published results in the media. 
          Once the simulator is complete you can create coalitions based on either the simulated distribution or 

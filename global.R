@@ -7,6 +7,9 @@ library(ggplot2)
 library(httr)
 library(shinyAce)
 library(scales)
+#library(png)
+#library(grid)
+#library(gridExtra)
 
 loc.run="windows-1255"
 

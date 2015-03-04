@@ -48,7 +48,9 @@ shinyServer(function(input, output, session) {
 
     if("Discrete"%in%input$axis.attr) x_str=paste0("factor(",x_str,")")
 
-    p=ggplot(a)+geom_blank()+theme_bw()+theme(axis.text.x = element_text(angle = 90*as.numeric("Rotate Label"%in%input$axis.attr)))+xlab(input$varx)
+    a$Election=factor(a$Election)
+    
+    p=ggplot(a)+geom_blank()+theme_bw()+theme(axis.text.x = element_text(angle = 90*as.numeric("Rotate Label"%in%input$axis.attr)))
 
     #yerr=aes_string(x=paste0("factor(",input$varx,")"),y=input$vary,
     #ymin="Mandates.lb",ymax="Mandates.ub",
@@ -69,7 +71,7 @@ shinyServer(function(input, output, session) {
     
      nm=ifelse(input$lang=="",fac_vars.df[which(fac_vars.df[,1]%in%input$fill_var),2],input$fill_var)
     
-     p=p+scale_colour_discrete(name=nm)+scale_fill_discrete(name=nm)  
+     #p=p+scale_colour_discrete(name=nm)+scale_fill_discrete(name=nm)  
 
      
     
@@ -95,6 +97,7 @@ if(input$facet.shp=="Wrap"){
   }
 }
       xl=ifelse(input$lang=="",fac_vars.df[which(fac_vars.df[,1]%in%input$varx),2],input$varx)
+      xl=paste0(xl,"\n \n https:\\\\yonicd.shinyapps.io\\Elections")
       yl=ifelse(input$lang=="",fac_vars.df[which(fac_vars.df[,1]%in%input$vary),2],input$vary)
       p=p+xlab(xl)
       if(input$ptype!="density") p=p+ylab(yl)
@@ -118,9 +121,22 @@ if(input$facet.shp=="Wrap"){
                                content = function(file){
                                  if(input$sim){
                                    p=SimPrePlot()
+                                   #m=readPNG("PADqr.png")
+#                                    p1=ggplotGrob(p)
+#                                    p2=ggplotGrob(
+#                                      qplot(1,1,geom="blank")+theme_bw()+theme(panel.border=element_blank(),panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+#                                                                               text=element_blank(),axis.ticks=element_blank())+
+                                   
+                                     #p+annotation_custom(g=rasterGrob(m,x = 4.6,y =.85),xmax=1,xmin=-Inf,ymax=Inf,ymin=-Inf)
+                                   #p0=arrangeGrob(p1,p2,)
+                                   #grid.arrange(p0)
+                                   #grid.newpage()
+                                   #p=grid.draw(p3)
                                  }else{
                                    p=CoalitionPrePlot()
                                  }
+                                 
+                                
                                ggsave(file, plot = p,
                                       width=20,height=10)})  
   
@@ -184,7 +200,7 @@ if(input$facet.shp=="Wrap"){
     pos="dodge"
     yint=4
     
-    b.id=sample(1:100,1)
+    b.id=sample(1:input$Boot,1)
     
     lout=list(df=df%>%filter(bs.id==b.id),df.full=df,fill_var=fill_var,pos=pos,yint=yint)
     return(lout)
@@ -203,12 +219,14 @@ if(input$facet.shp=="Wrap"){
     str_fill=paste0("Party",input$lang.sim)
     if(input$lang.sim==""){
       xl="מנדטים"
+      xl=paste0(xl,"\n \n https:\\\\yonicd.shinyapps.io\\Elections")
       yl=""
       ttl=paste("התפלגות סימולציה לחלוקה סופית של מנדטים לאחר אחוז החסימה וסיווג עודפים לפי מפלגה",
                 "משולש מהווה חציון המנדטים למפלגה על פי הסקרים בפועל",sep="\n")
       nm="מפלגה"
     }else{
       xl="Mandates"
+      xl=paste0(xl,"\n \n https:\\\\yonicd.shinyapps.io\\Elections")
       yl=""
       ttl="Distribution of Simulated of Mandate Results Conditioned on Mandate Threshold and Surplus Vote Agreements \n Triangle shows the Median Published Result"
       nm="Party"
@@ -226,6 +244,7 @@ if(input$facet.shp=="Wrap"){
   })
 
   output$SimPlot <- renderPlot({
+    
     print(SimPrePlot())
   })
   
@@ -279,7 +298,7 @@ if(input$facet.shp=="Wrap"){
       scale_fill_discrete(name=nm)
     p=p+geom_text(aes_string(x=str_x,y="Mandates",label="Mandates"),vjust=-.1,data=b)
     p=p+geom_hline(yintercept=lin$yint,linetype=2)
-    p=p+xlab("")+ylab(yl)+ggtitle(ttl)
+    p=p+xlab("\n\n\n https:\\\\yonicd.shinyapps.io\\Elections")+ylab(yl)+ggtitle(ttl)
     p
   })
 
@@ -323,7 +342,7 @@ if(input$facet.shp=="Wrap"){
     p=p+geom_bar(stat="identity",position="stack")+scale_fill_discrete(name=fac_vars.df[which(fac_vars=="Party"),lang.id])
     p=p+geom_hline(yintercept=61,linetype=2)+facet_wrap(as.formula(paste0("~",paste0("Pollster",input$lang.main))))+
       geom_text(aes_string(x=str_x,y="MandatesC",label="Mandates"),vjust=1)
-    p=p+xlab("")+ylab(fac_vars.df[which(fac_vars=="Mandates"),lang.id])+ggtitle(str_title)
+    p=p+xlab("\n\n\n https:\\\\yonicd.shinyapps.io\\Elections")+ylab(fac_vars.df[which(fac_vars=="Mandates"),lang.id])+ggtitle(str_title)
     
     p=p+scale_x_reverse(breaks=seq(4,1),labels=str_lvl)
     
