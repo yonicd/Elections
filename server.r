@@ -7,18 +7,18 @@ shinyServer(function(input, output, session) {
   })
   
   output$Party <- renderUI({
-    Party=x%>%filter(Election%in%input$Election)%>%select(Partyid,Party)%>%unique
-    selectInput("Party","Party Filter",choices = split(Party[,1],Party[,2]),multiple=T)
+    Party=x%>%filter(Election%in%input$Election)%>%select(Partyid,Party,Party.En)%>%unique
+    selectInput("Party","Party Filter",choices = split(Party[,1],paste(Party[,3],Party[,2],sep=":")),multiple=T)
   })
   
   output$Publisher <- renderUI({
-    Publisher=x%>%filter(Election%in%input$Election)%>%select(Publisherid,Publisher)%>%unique
-    selectInput("Publisher","Publisher Filter",choices = split(Publisher[,1],Publisher[,2]),multiple=T)
+    Publisher=x%>%filter(Election%in%input$Election)%>%select(Publisherid,Publisher,Publisher.En)%>%unique
+    selectInput("Publisher","Publisher Filter",choices = split(Publisher[,1],paste(Publisher[,3],Publisher[,2],sep=":")),multiple=T)
   })
   
   output$Pollster <- renderUI({
-    Pollster=x%>%filter(Election%in%input$Election)%>%select(Pollsterid,Pollster)%>%unique
-    selectInput("Pollster","Pollster Filter",choices = split(Pollster[,1],Pollster[,2]),multiple=T)
+    Pollster=x%>%filter(Election%in%input$Election)%>%select(Pollsterid,Pollster,Pollster.En)%>%unique
+    selectInput("Pollster","Pollster Filter",choices = split(Pollster[,1],paste(Pollster[,3],Pollster[,2],sep=":")),multiple=T)
   })
   
   output$DaysLeft<-renderUI({
@@ -71,7 +71,7 @@ shinyServer(function(input, output, session) {
     
      nm=ifelse(input$lang=="",fac_vars.df[which(fac_vars.df[,1]%in%input$fill_var),2],input$fill_var)
     
-     #p=p+scale_colour_discrete(name=nm)+scale_fill_discrete(name=nm)  
+     p=p+scale_colour_discrete(name=nm)+scale_fill_discrete(name=nm)  
 
      
     
@@ -141,11 +141,11 @@ if(input$facet.shp=="Wrap"){
                                       width=20,height=10)})  
   
   output$Coalition <- renderUI({
-    selectInput("coalition","Coalition",choices = split(party[,1],party[,2]),multiple=T)
+    selectInput("coalition","Coalition",choices = split(party[,1],paste(party[,3],party[,2],sep=":")),multiple=T)
   })
   
   output$Opposition <- renderUI({
-    selectInput("opposition","Opposition",choices = split(party[,1],party[,2]),multiple=T)
+    selectInput("opposition","Opposition",choices = split(party[,1],paste(party[,3],party[,2],sep=":")),multiple=T)
   })
   
   CoalitionData <- reactive({
@@ -260,7 +260,7 @@ if(input$facet.shp=="Wrap"){
       c2=data.frame(Partyid=as.numeric(input$opposition))%>%mutate(Block="אופוזיציה")
       b=rbind(c1,c2)
       
-      b0=left_join(df%>%select(variable,Party.En,Party,base.floor),party,by="Party")
+      b0=left_join(df%>%select(variable,Party.En,Party,base.floor),party,by=c("Party","Party.En"))
       b0$Partyid=as.numeric(as.character(b0$Partyid))
       
       c1=left_join(b0,b,by="Partyid")%>%mutate(Block=ifelse(is.na(Block),"לא סווג",Block))%>%

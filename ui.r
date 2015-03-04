@@ -107,8 +107,8 @@ shinyUI(
                             fluidRow(
                               h4("Create Coalition"),
                               column(4,radioButtons("var_y",NULL,split(c("Mandates","rMandates"),c("Average Polling Results","Polling Results with Sample Error")),selected="Mandates",inline=T)),
-                              column(3,uiOutput("Coalition")),
-                              column(3,uiOutput("Opposition"))
+                              column(4,uiOutput("Coalition")),
+                              column(4,uiOutput("Opposition"))
                             ),
                             hr(),
                             plotOutput('CoalitionPlot',height="500px")),

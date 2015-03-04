@@ -97,7 +97,7 @@ remove_geom <- function(ggplot2_object, geom_type) {
   ggplot2_object
 }
 
-party=x%>%filter(Election==2015&!is.na(Mandates))%>%select(Partyid,Party)%>%unique
+party=x%>%filter(Election==2015&!is.na(Mandates))%>%select(Partyid,Party,Party.En)%>%unique
 
 #Project61 adjustment
 
