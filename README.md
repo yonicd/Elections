@@ -44,17 +44,17 @@ In addition the plot itself is a ggplot thus the options above the graph give th
 
 To define the following plot attributes:
 
-  * X axis variable
-  * X axis attributes: 
-  * Discrete/Continuous, Rotation of X tick labels
-  * Y axis Variable
-  * Grouping
-    * Split Y by colors using a different variable (can be also X or Y)
-    * Create Facets to display subsets of the data in different panels (two more variables to cut data)
-      * Type of facets: 
-        * Wrap: Wrap 1d ribbon of panels into 2d
-        * Grid: Layout panels in a grid (matrix)
-      * Choose the variable to be the row dimension and another variable to be the column dimension
+|Axes|Grouping|Plot Facets|
+|:-:|:-:|:-:|
+|X axis variable| Split Y by colors using a different variable | Row Facet |
+|Discrete/Continuous| |Column Facet |
+|Rotation of X tick labels|||
+|Y axis variable|||
+
+ * Create Facets to display subsets of the data in different panels (two more variables to cut data) there are two type of facets to choose from
+     * Wrap: Wrap 1d ribbon of panels into 2d
+     * Grid: Layout panels in a grid (matrix)
+   
 
 An example of filtering parties in the 2015 elections:
 ![Snapshot of Election Analysis Page with filter](www/pad_screen_grab_filter.png)
