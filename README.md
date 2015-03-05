@@ -68,7 +68,7 @@ An example of comparing distribution polling errors by day to election and party
   * Finally the plots can be viewed in English or Hebrew, and can be downloaded to you local computer using the download button.
 
   
-3. Mandate Simulator and Coalition Whiteboard<a=name="C3"></a>
+Mandate Simulator and Coalition Whiteboard<a=name="C3"></a>
   * A bootstrap simulation is run on Polling results from up to 10 of the latest polls using the sampling error as the uncertainty of each mandate published. Taking into account mandate surplus agreements using the [Hagenbach-Bischoff quota method](http://en.wikipedia.org/wiki/Hagenbach-Bischoff_quota) and the mandate threshold limit (in this election it is 4 mandates), calculating the simulated final tally of mandates. The distributions are plotted per party and the location of the median published results in the media.View the simulation results by checking the "View Simulation Results checkbox".
   * The user can choose how many polls to take into account, up to last 10 polls, and how big a simulation they want to run: 50,100,500,1000 random polling results per each party and poll.
 
@@ -79,5 +79,5 @@ An example of comparing distribution polling errors by day to election and party
 ![Coalition Whiteboard](www/coal_screen_grab.png)
 
 
-4. Polling Database<a=name="C4"></a>
+Polling Database<a=name="C4"></a>
   * All raw data used in the application can be viewed and filtered in a datatable.
