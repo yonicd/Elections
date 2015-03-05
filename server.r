@@ -115,7 +115,7 @@ if(input$facet.shp=="Wrap"){
   
   output$main.down = downloadHandler(filename = "LastDayPlot.png",
                                content = function(file){
-                                 p=IntroPrePlot()+theme(text=element_text(size=16))
+                                 p=IntroPrePlot()+theme(text=element_text(size=20))
                                  ggsave(file, plot = p,width=20,height=10)})
   
   output$foo = downloadHandler(filename = "ElectionPlot.png",
