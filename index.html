@@ -61,7 +61,7 @@
 </li>
 </ol>
 
-<p><img src="https://github.com/yonicd/Elections/blob/master/www/LastDayPlot.png" alt="Snapshot of Overview Plot"></p>
+<p><img src="https://github.com/yonicd/Elections/blob/master/images/LastDayPlot.png" alt="Current Day"></p>
 
 <p>The Project 61 prediction is based past pollster error deriving weights from the 2003,2006,2009 and 2013 elections, dependant on days to elections and parties. In their <a href="http://shiny.rstudio.com/">site</a> there is an extensive analysis on pollster bias towards certain parties and party blocks.</p>
 
@@ -75,7 +75,7 @@ the x and y axis.</li>
 </li>
 </ol>
 
-<p><img src="https://github.com/yonicd/Elections/blob/master/www/pad_screen_grab.png" alt="Snapshot of Election Analysis Page"></p>
+<p><img src="https://github.com/yonicd/Elections/blob/master/images/pad_screen_grab.png" alt="Snapshot of Election Analysis Page"></p>
 
 <p>The user can choose to include in the plots Elections (2003,2006,2009,2013,2015) and the subsequent filters are populated with the relevant parties, pollsters and publishers relevant to the chosen elections. Next there is a slider to choose the days before the election you want to view in the plot. This was used instead of a calendar to make a uniform timeline when comparing across elections.</p>
 
@@ -137,16 +137,16 @@ the x and y axis.</li>
 </ul>
 
 <p>An example of filtering parties in the 2015 elections:
-<img src="https://github.com/yonicd/Elections/blob/master/www/pad_screen_grab_filter.png" alt="Snapshot of Election Analysis Page with filter"></p>
+<img src="https://github.com/yonicd/Elections/blob/master/images/pad_screen_grab_filter.png" alt="Snapshot of Election Analysis Page with filter"></p>
 
 <p>An example of comparing distribution polling errors by day to election and party blocks
-<img src="https://github.com/yonicd/Elections/blob/master/www/ElectionPlot_longitudinal.png" alt="Election Comparison"></p>
+<img src="https://github.com/yonicd/Elections/blob/master/images/ElectionPlot_longitudinal.png" alt="Election Comparison"></p>
 
 <ul>
 <li><p>If you are an R user and know ggplot there is an additional editor console,below the plot, where you can create advanced plots freehand, just add to the final object from the GUI called p and the data.frame is x, eg p+geom_point(). Just notice that all aesthetics must be given they are not defined in the original ggplot() definition. It is also possible to use any library you want just add it to the top of the code, the end object must be a ggplot.
-<img src="https://github.com/yonicd/Elections/blob/master/www/pad_screen_grab_ace.png" alt="Snapshot of PAD Plot"></p></li>
+<img src="https://github.com/yonicd/Elections/blob/master/images/pad_screen_grab_ace.png" alt="Snapshot of PAD Plot"></p></li>
 <li><p>You can also remove the original layer if you want using the function remove_geom(ggplot_object,geom_layer), eg p=p+remove_geom(p,"point") will remove the geom_point layer in the original graph
-<img src="https://github.com/yonicd/Elections/blob/master/www/pad_screen_grab_ace_remove_geom.png" alt="Snapshot of PAD Plot"></p></li>
+<img src="https://github.com/yonicd/Elections/blob/master/images/pad_screen_grab_ace_remove_geom.png" alt="Snapshot of PAD Plot"></p></li>
 <li><p>Finally the plots can be viewed in English or Hebrew, and can be downloaded to you local computer using the download button.</p></li>
 </ul>
 
@@ -160,13 +160,13 @@ the x and y axis.</li>
 </li>
 </ol>
 
-<p><img src="https://github.com/yonicd/Elections/blob/master/www/sim_screen_grab.png" alt="Election Simulation"></p>
+<p><img src="https://github.com/yonicd/Elections/blob/master/images/sim_screen_grab.png" alt="Election Simulation"></p>
 
 <ul>
 <li>Once the simulator is complete you can create coalitions based on either the simulated distribution or actual published polls and see who can pass 60 mandates. Choose the coalition parties and the opposition parties from dropdown lists. (Yes the ones chosen are nonsensical on purpose...)</li>
 </ul>
 
-<p><img src="https://github.com/yonicd/Elections/blob/master/www/coal_screen_grab.png" alt="Coalition Whiteboard"></p>
+<p><img src="https://github.com/yonicd/Elections/blob/master/images/coal_screen_grab.png" alt="Coalition Whiteboard"></p>
 
 <ol>
 <li>Polling Database
