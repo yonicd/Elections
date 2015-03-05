@@ -3,6 +3,7 @@
 ####The App can be found on the [shiny servers](https://yonicd.shinyapps.io/Elections) or can be run through Github
 
 ```r
+#If running on Windows Sys.setlocale("LC_ALL", "Hebrew_Israel.1255")
 shiny::runGitHub("Elections","yonicd")
 ```
 
@@ -32,14 +33,14 @@ The user can choose to include in the plots Elections (2003,2006,2009,2013,2015)
 
 In addition the plot itself is a ggplot thus the options above the graph give the user control on nearly all the options to build a plot. The user can choose from the following variables:
 
-  * Party characteristics
-    * Party, Ideology (Left, Left Center, Right, Right Center), Ideology.Group (Left, Right) ,Attribute (if party is old/new/split/merge compared to last election)
-  * Time characteristics
-    * Election, DaysLeft, Date, week, month, year, 
-  * Poll characteristics
-    * Publisher, Pollster
-  * Results characteristics
-    * Mandates, Mandate.Group, Results, Error (Pollster Error)
+| Time     | Party                           | Results       | Poll |
+| :--------: | :-----:                           | :----:          | :----: | 
+| Election | Party                           | Mandates      | Publisher |
+| DaysLeft | Ideology (5 Party Blocks)       | Mandate.Group | Pollster |
+| Date     | Ideology.Group (2 Party Blocks) | Results       | |
+| year     | Attribute (Party History)       | (Pollster) Error | |
+| month    |                                 |               | |
+| week     |                                 |               | |
 
 To define the following plot attributes:
 
