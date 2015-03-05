@@ -143,7 +143,7 @@ if(input$facet.shp=="Wrap"){
                                  }
                                  
                                 
-                               ggsave(file, plot = p,
+                               ggsave(file, plot = p+theme(text=element_text(size=16)),
                                       width=20,height=10)})  
   
   output$Coalition <- renderUI({
@@ -157,8 +157,9 @@ if(input$facet.shp=="Wrap"){
   CoalitionData <- reactive({
     a=x%>%mutate(Dateid=factor(Date),DatePoll=factor(paste(Dateid,Pollsterid,sep=".")))
     nt=tail(levels(a$DatePoll),input$poll[2])
-    nt=tail(nt,input$poll[2]-input$poll[1]-1)
+    nt=tail(nt,input$poll[2]-input$poll[1]+1)
     a=a%>%filter(DatePoll%in%nt)
+    maxdate=max(a$Date)
     a$nr=1:nrow(a)
     out=ddply(a%>%select(Mandates.lb,Mandates.ub,nr),.(nr),
               .fun = function(df) {
@@ -228,13 +229,14 @@ if(input$facet.shp=="Wrap"){
       xl=paste0(xl,"\n \n https:\\\\yonicd.shinyapps.io\\Elections")
       yl=""
       ttl=paste("התפלגות סימולציה לחלוקה סופית של מנדטים לאחר אחוז החסימה וסיווג עודפים לפי מפלגה",
-                "משולש מהווה חציון המנדטים למפלגה על פי הסקרים בפועל",sep="\n")
+                "משולש מהווה חציון המנדטים למפלגה על פי הסקרים בפועל",
+                maxdate,sep="\n")
       nm="מפלגה"
     }else{
       xl="Mandates"
       xl=paste0(xl,"\n \n https:\\\\yonicd.shinyapps.io\\Elections")
       yl=""
-      ttl="Distribution of Simulated of Mandate Results Conditioned on Mandate Threshold and Surplus Vote Agreements \n Triangle shows the Median Published Result"
+      ttl=paste("Distribution of Simulated of Mandate Results Conditioned on Mandate Threshold and Surplus Vote Agreements \n Triangle shows the Median Published Result",maxdate,sep="\n")
       nm="Party"
     }
     
