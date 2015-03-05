@@ -1,4 +1,4 @@
-#Sys.setlocale("LC_ALL", "Hebrew_Israel.1255")
+Sys.setlocale("LC_ALL", "Hebrew_Israel.1255")
 
 library(shiny)
 library(shinyAce)
