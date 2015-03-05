@@ -1,3 +1,4 @@
+Sys.setlocale("LC_ALL", "Hebrew_Israel.1255")
 library(plyr)
 library(dplyr)
 library(reshape2)
