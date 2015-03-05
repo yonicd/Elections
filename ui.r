@@ -3,10 +3,10 @@ shinyUI(
   tabPanel("Election PAD",
    img(src='CDlogo.png', align = "right", height='75px'),
    img(src='Project61logo.png', align = "right", height='75px'),
-    h3("The Israel Election Polls Analysis Depot (",a("#IsraelElectionPAD",href="https://twitter.com/hashtag/IsraelElectionPAD?src=hash"),") is an interactive web application for analysing the elections in Israel powered by the",
+    h3("The Israel Election Polls Analysis Depot is an interactive web application for analysing the elections in Israel powered by the",
        a("Shiny library of RStudio",href="http://shiny.rstudio.com/"),"and realtime published polling data from the",
         a("Project 61",href="http://infomeyda.com/"),"database."),
-   h4("Application Layout:"),
+   h4("Application Layout (Navigate on top ribbon of page):"),
       strong("Election Analyis:"),p("An interactive polling analysis layout where the user can filter elections, parties, publishers and pollster, dates
           and create different types of plots using any variable as the x and y axis.\n 
           If you are an R user and know ggplot there is an additional editor console where you can create advanced plots freehand"),
@@ -15,18 +15,24 @@ shinyUI(
          The distributions are plotted per party and the location of the median published results in the media. 
          Once the simulator is complete you can create coalitions based on either the simulated distribution or 
          actual published polls and see who can pass 60 mandates."),
-   strong("Polling Database:"),p("Keeping in an open source state of mind all data used in the site can be viewed and filtered and can be accessed in" , a("github",href="https://github.com/yonicd/Elections"),"."),
+   strong("Polling Database:"),p("All data used in the site can be viewed and filtered."),
+   p("Keeping in an open source state of mind all code and data used can be accessed on the project homepage on" , a("Github",href="https://github.com/yonicd/Elections")),
   br(),
-  radioButtons(inputId = "lang.main",label="Plot Language",inline=T,
-               choices = split(c("",".En"),c("Hebrew","English")),
-               selected=".En"),
+  fluidRow(column(2,downloadButton('main.down', 'Download Plot')),
+           column(3,  radioButtons(inputId = "lang.main",label="Plot Language",inline=T,
+                                   choices = split(c("",".En"),c("Hebrew","English")),
+                                   selected=".En"))
+           ),
    h4("The latest Published Polling Results compared to Project 61* weighted mandates",align="center"),
     plotOutput("IntroPlot"),
    
    h6("*Project 61 results are based on last 10 Published Polls"),
    h6(a("Created and maintained by Jonathan Sidi",href="https://github.com/yonicd/Elections")),
-   h6(a("Data Source: Project 61 of Infomeyda",href="http://infomeyda.com/"))
-   
+   h6(a("Data Source: Project 61 of Infomeyda",href="http://infomeyda.com/")),
+   h6(a("#IsraelElectionPAD",href="https://twitter.com/hashtag/IsraelElectionPAD?src=hash"),
+      a("@Project_61_IL",href="https://twitter.com/Project_61_IL"),
+      a("@yoniceedee",href="https://twitter.com/yoniceedee")
+      )
    ),
   tabPanel("Election Analysis",
      h5("Analyze polling results from Israeli Elections from 2003, 2006, 2009, 2013 and the current election, and slice the data on any variable as you please. 

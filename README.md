@@ -1,6 +1,8 @@
 ####The Israel Election Polls Analysis Depot [#IsraelElectionPAD](https://twitter.com/hashtag/IsraelElectionPAD?src=hash) is an interactive web application for analysing the elections in Israel powered by the [Shiny library of RStudio](http://shiny.rstudio.com/) and realtime published polling data from the [Project 61](http://infomeyda.com/) database.
 
-####The [App](https://yonicd.shinyapps.io/Elections) can be found on the Shinyapps.io servers.
+####The App can be found on the [shiny servers](https://yonicd.shinyapps.io/Elections) or can be run through github
+
+    runGitHub("Elections","yonicd")
 
 ####Application Layout:
 1. Election PAD

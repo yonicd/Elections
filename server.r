@@ -112,6 +112,12 @@ if(input$facet.shp=="Wrap"){
     })
   })
   
+  
+  output$main.down = downloadHandler(filename = "LastDayPlot.png",
+                               content = function(file){
+                                 p=IntroPrePlot()
+                                 ggsave(file, plot = p,width=20,height=10)})
+  
   output$foo = downloadHandler(filename = "ElectionPlot.png",
                                content = function(file){
                                  p=selectedData()
@@ -306,7 +312,7 @@ if(input$facet.shp=="Wrap"){
       print(CoalitionPrePlot())
   })
     
-  output$IntroPlot <- renderPlot({
+  IntroPrePlot <- reactive({
     
     mainplot=rbind(x%>%filter(Date==max(Date))%>%select(Date,Pollster,Party,Mandates,Ideology),project61)%>%
       group_by(Pollster,Ideology)%>%mutate(MandatesC=cumsum(Mandates))%>%arrange(Pollster,Ideology,MandatesC)%>%ungroup
@@ -342,11 +348,15 @@ if(input$facet.shp=="Wrap"){
     p=p+geom_bar(stat="identity",position="stack")+scale_fill_discrete(name=fac_vars.df[which(fac_vars=="Party"),lang.id])
     p=p+geom_hline(yintercept=61,linetype=2)+facet_wrap(as.formula(paste0("~",paste0("Pollster",input$lang.main))))+
       geom_text(aes_string(x=str_x,y="MandatesC",label="Mandates"),vjust=1)
-    p=p+xlab("\n\n\n https:\\\\yonicd.shinyapps.io\\Elections")+ylab(fac_vars.df[which(fac_vars=="Mandates"),lang.id])+ggtitle(str_title)
+    p=p+xlab("\n\n\n https:\\\\yonicd.shinyapps.io\\Elections \n Project61: http:\\\\infomeyda.com")+ylab(fac_vars.df[which(fac_vars=="Mandates"),lang.id])+ggtitle(str_title)
     
     p=p+scale_x_reverse(breaks=seq(4,1),labels=str_lvl)
-    
-    print(p)
+    p
+  })
+  
+  
+  output$IntroPlot=renderPlot({
+    print(IntroPrePlot())
   })
   
   output$table <- renderDataTable(x%>%select(-c(N,contains("id"))))
