@@ -1,13 +1,18 @@
-Sys.setlocale("LC_ALL", "Hebrew_Israel.1255")
+#Sys.setlocale("LC_ALL", "Hebrew_Israel.1255")
+
+library(shiny)
+library(shinyAce)
+library(httr)
+library(XML)
 library(plyr)
 library(dplyr)
 library(reshape2)
-library(XML)
 library(stringr)
 library(ggplot2)
-library(httr)
-library(shinyAce)
+
+
 library(scales)
+
 #library(png)
 #library(grid)
 #library(gridExtra)

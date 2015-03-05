@@ -3,7 +3,7 @@
 ####The App can be found on the [shiny servers](https://yonicd.shinyapps.io/Elections) or can be run through Github
 
 ```r
-runGitHub("Elections","yonicd")
+shiny::runGitHub("Elections","yonicd")
 ```
 
 ####Application Layout:
