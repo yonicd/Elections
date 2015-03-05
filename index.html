@@ -31,32 +31,151 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>
-<a id="analyszing-the------some-code-here" class="anchor" href="#analyszing-the------some-code-here" aria-hidden="true"><span class="octicon octicon-link"></span></a>Analyszing the      some code here</h1>
+        <h3>
+<a id="the-israel-election-polls-analysis-depot-is-an-interactive-web-application-for-analyzing-the-elections-in-israel-powered-by-the-shiny-library-of-rstudio-and-real-time-published-polling-data-from-the-project-61-database" class="anchor" href="#the-israel-election-polls-analysis-depot-is-an-interactive-web-application-for-analyzing-the-elections-in-israel-powered-by-the-shiny-library-of-rstudio-and-real-time-published-polling-data-from-the-project-61-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Israel Election Polls Analysis Depot is an interactive web application for analyzing the elections in Israel powered by the <a href="http://shiny.rstudio.com/">Shiny library of RStudio</a> and real time published polling data from the <a href="http://infomeyda.com/">Project 61</a> database.</h3>
 
-<p><a href="https://yonicd.shinyapps.io/Elections">Election PAD</a></p>
+<h4>
+<a id="the-app-can-be-found-on-the-shiny-servers-or-can-be-run-through-github" class="anchor" href="#the-app-can-be-found-on-the-shiny-servers-or-can-be-run-through-github" aria-hidden="true"><span class="octicon octicon-link"></span></a>The App can be found on the <a href="https://yonicd.shinyapps.io/Elections">shiny servers</a> or can be run through Github</h4>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<div class="highlight highlight-r"><pre>runGitHub(<span class="pl-s1"><span class="pl-pds">"</span>Elections<span class="pl-pds">"</span></span>,<span class="pl-s1"><span class="pl-pds">"</span>yonicd<span class="pl-pds">"</span></span>)</pre></div>
 
-<h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<h4>
+<a id="application-layout" class="anchor" href="#application-layout" aria-hidden="true"><span class="octicon octicon-link"></span></a>Application Layout:</h4>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<ol>
+<li><a href="#C1">Election PAD</a></li>
+<li><a href="#C2">Election Analyis</a></li>
+<li><a href="#C3">Mandate Simulator and Coalition Whiteboard</a></li>
+<li><a href="#C4">Polling Database</a></li>
+</ol>
 
-<h3>
-<a id="rather-drive-stick" class="anchor" href="#rather-drive-stick" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<h4>
+<a id="usage-instructions" class="anchor" href="#usage-instructions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage Instructions:</h4>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<ol>
+<li>Election PAD
 
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<ul>
+<li>The latest polling day results published in the media and the prediction made using the Project 61 weighting schemes. The parties are stacked into blocks to see which block has best chance to create a coalition.</li>
+</ul>
+</li>
+</ol>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p><img src="https://github.com/yonicd/Elections/blob/master/www/LastDayPlot.png" alt="Snapshot of Overview Plot"></p>
 
-<h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<p>The Project 61 prediction is based past pollster error deriving weights from the 2003,2006,2009 and 2013 elections, dependant on days to elections and parties. In their <a href="http://shiny.rstudio.com/">site</a> there is an extensive analysis on pollster bias towards certain parties and party blocks.</p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="https://help.github.com/pages">https://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<ol>
+<li>Election Analysis
+
+<ul>
+<li>An interactive polling analysis layout where the user can filter elections, parties, publishers and pollster, dates and create different types of plots using any variable as 
+the x and y axis.</li>
+</ul>
+</li>
+</ol>
+
+<p><img src="https://github.com/yonicd/Elections/blob/master/www/pad_screen_grab.png" alt="Snapshot of Election Analysis Page"></p>
+
+<p>The user can choose to include in the plots Elections (2003,2006,2009,2013,2015) and the subsequent filters are populated with the relevant parties, pollsters and publishers relevant to the chosen elections. Next there is a slider to choose the days before the election you want to view in the plot. This was used instead of a calendar to make a uniform timeline when comparing across elections.</p>
+
+<p>In addition the plot itself is a ggplot thus the options above the graph give the user control on nearly all the options to build a plot. The user can choose from the following variables:</p>
+
+<ul>
+<li>Party characteristics
+
+<ul>
+<li>Party, Ideology (Left, Left Center, Right, Right Center), Ideology.Group (Left, Right) ,Attribute (if party is old/new/split/merge compared to last election)</li>
+</ul>
+</li>
+<li>Time characteristics
+
+<ul>
+<li>Election, DaysLeft, Date, week, month, year, </li>
+</ul>
+</li>
+<li>Poll characteristics
+
+<ul>
+<li>Publisher, Pollster</li>
+</ul>
+</li>
+<li>Results characteristics
+
+<ul>
+<li>Mandates, Mandate.Group, Results, Error (Pollster Error)</li>
+</ul>
+</li>
+</ul>
+
+<p>To define the following plot attributes:</p>
+
+<ul>
+<li>X axis variable</li>
+<li>X axis attributes: </li>
+<li>Discrete/Continuous, Rotation of X tick labels</li>
+<li>Y axis Variable</li>
+<li>Grouping
+
+<ul>
+<li>Split Y by colors using a different variable (can be also X or Y)</li>
+<li>Create Facets to display subsets of the data in different panels (two more variables to cut data)
+
+<ul>
+<li>Type of facets: 
+
+<ul>
+<li>Wrap: Wrap 1d ribbon of panels into 2d</li>
+<li>Grid: Layout panels in a grid (matrix)</li>
+</ul>
+</li>
+<li>Choose the variable to be the row dimension and another variable to be the column dimension</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<p>An example of filtering parties in the 2015 elections:
+<img src="https://github.com/yonicd/Elections/blob/master/www/pad_screen_grab_filter.png" alt="Snapshot of Election Analysis Page with filter"></p>
+
+<p>An example of comparing distribution polling errors by day to election and party blocks
+<img src="https://github.com/yonicd/Elections/blob/master/www/ElectionPlot_longitudinal.png" alt="Election Comparison"></p>
+
+<ul>
+<li><p>If you are an R user and know ggplot there is an additional editor console,below the plot, where you can create advanced plots freehand, just add to the final object from the GUI called p and the data.frame is x, eg p+geom_point(). Just notice that all aesthetics must be given they are not defined in the original ggplot() definition. It is also possible to use any library you want just add it to the top of the code, the end object must be a ggplot.
+<img src="https://github.com/yonicd/Elections/blob/master/www/pad_screen_grab_ace.png" alt="Snapshot of PAD Plot"></p></li>
+<li><p>You can also remove the original layer if you want using the function remove_geom(ggplot_object,geom_layer), eg p=p+remove_geom(p,"point") will remove the geom_point layer in the original graph
+<img src="https://github.com/yonicd/Elections/blob/master/www/pad_screen_grab_ace_remove_geom.png" alt="Snapshot of PAD Plot"></p></li>
+<li><p>Finally the plots can be viewed in English or Hebrew, and can be downloaded to you local computer using the download button.</p></li>
+</ul>
+
+<ol>
+<li>Mandate Simulator and Coalition Whiteboard
+
+<ul>
+<li>A bootstrap simulation is run on Polling results from up to 10 of the latest polls using the sampling error as the uncertainty of each mandate published. Taking into account mandate surplus agreements using the <a href="http://en.wikipedia.org/wiki/Hagenbach-Bischoff_quota">Hagenbach-Bischoff quota method</a> and the mandate threshold limit (in this election it is 4 mandates), calculating the simulated final tally of mandates. The distributions are plotted per party and the location of the median published results in the media.View the simulation results by checking the "View Simulation Results checkbox".</li>
+<li>The user can choose how many polls to take into account, up to last 10 polls, and how big a simulation they want to run: 50,100,500,1000 random polling results per each party and poll.</li>
+</ul>
+</li>
+</ol>
+
+<p><img src="https://github.com/yonicd/Elections/blob/master/www/sim_screen_grab.png" alt="Election Simulation"></p>
+
+<ul>
+<li>Once the simulator is complete you can create coalitions based on either the simulated distribution or actual published polls and see who can pass 60 mandates. Choose the coalition parties and the opposition parties from dropdown lists. (Yes the ones chosen are nonsensical on purpose...)</li>
+</ul>
+
+<p><img src="https://github.com/yonicd/Elections/blob/master/www/coal_screen_grab.png" alt="Coalition Whiteboard"></p>
+
+<ol>
+<li>Polling Database
+
+<ul>
+<li>All raw data used in the application can be viewed and filtered in a datatable.</li>
+</ul>
+</li>
+</ol>
       </section>
     </div>
 
