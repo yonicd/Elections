@@ -209,7 +209,7 @@ if(input$facet.shp=="Wrap"){
     
     b.id=sample(1:input$Boot,1)
     
-    lout=list(df=df%>%filter(bs.id==b.id),df.full=df,fill_var=fill_var,pos=pos,yint=yint)
+    lout=list(df=df%>%filter(bs.id==b.id),df.full=df,fill_var=fill_var,pos=pos,yint=yint,maxdate=maxdate)
     return(lout)
   })
 
@@ -230,13 +230,13 @@ if(input$facet.shp=="Wrap"){
       yl=""
       ttl=paste("התפלגות סימולציה לחלוקה סופית של מנדטים לאחר אחוז החסימה וסיווג עודפים לפי מפלגה",
                 "משולש מהווה חציון המנדטים למפלגה על פי הסקרים בפועל",
-                maxdate,sep="\n")
+                lin$maxdate,sep="\n")
       nm="מפלגה"
     }else{
       xl="Mandates"
       xl=paste0(xl,"\n \n https:\\\\yonicd.shinyapps.io\\Elections")
       yl=""
-      ttl=paste("Distribution of Simulated of Mandate Results Conditioned on Mandate Threshold and Surplus Vote Agreements \n Triangle shows the Median Published Result",maxdate,sep="\n")
+      ttl=paste("Distribution of Simulated of Mandate Results Conditioned on Mandate Threshold and Surplus Vote Agreements \n Triangle shows the Median Published Result",lin$maxdate,sep="\n")
       nm="Party"
     }
     
