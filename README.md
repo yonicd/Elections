@@ -13,14 +13,14 @@ runGitHub("Elections","yonicd")
 4. [Polling Database](#C4)
 
 ####Usage Instructions:
-1. <a=name="C1"></a>Election PAD
+1. Election PAD<a=name="C1"></a>
   * The latest polling day results published in the media and the prediction made using the Project 61 weighting schemes. The parties are stacked into blocks to see which block has best chance to create a coalition.
 
 ![Snapshot of Overview Plot](www/LastDayPlot.png)
 
 The Project 61 prediction is based past pollster error deriving weights from the 2003,2006,2009 and 2013 elections, dependant on days to elections and parties. In their [site](http://shiny.rstudio.com/) there is an extensive analysis on pollster bias towards certain parties and party blocks.
   
-2. <a=name="C2"></a>Election Analysis
+2. Election Analysis<a=name="C2"></a>
   * An interactive polling analysis layout where the user can filter elections, parties, publishers and pollster, dates and create different types of plots using any variable as 
 the x and y axis.
 
@@ -68,7 +68,7 @@ An example of comparing distribution polling errors by day to election and party
   * Finally the plots can be viewed in English or Hebrew, and can be downloaded to you local computer using the download button.
 
   
-3. <a=name="C3"></a>Mandate Simulator and Coalition Whiteboard
+3. Mandate Simulator and Coalition Whiteboard<a=name="C3"></a>
   * A bootstrap simulation is run on Polling results from up to 10 of the latest polls using the sampling error as the uncertainty of each mandate published. Taking into account mandate surplus agreements using the [Hagenbach-Bischoff quota method](http://en.wikipedia.org/wiki/Hagenbach-Bischoff_quota) and the mandate threshold limit (in this election it is 4 mandates), calculating the simulated final tally of mandates. The distributions are plotted per party and the location of the median published results in the media.View the simulation results by checking the "View Simulation Results checkbox".
   * The user can choose how many polls to take into account, up to last 10 polls, and how big a simulation they want to run: 50,100,500,1000 random polling results per each party and poll.
 
@@ -79,5 +79,5 @@ An example of comparing distribution polling errors by day to election and party
 ![Coalition Whiteboard](www/coal_screen_grab.png)
 
 
-4. <a=name="C4"></a>Polling Database
+4. Polling Database<a=name="C4"></a>
   * All raw data used in the application can be viewed and filtered in a datatable.
