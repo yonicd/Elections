@@ -37,7 +37,8 @@
 <h4>
 <a id="the-app-can-be-found-on-the-shiny-servers-or-can-be-run-through-github" class="anchor" href="#the-app-can-be-found-on-the-shiny-servers-or-can-be-run-through-github" aria-hidden="true"><span class="octicon octicon-link"></span></a>The App can be found on the <a href="https://yonicd.shinyapps.io/Elections">shiny servers</a> or can be run through Github</h4>
 
-<div class="highlight highlight-r"><pre>runGitHub(<span class="pl-s1"><span class="pl-pds">"</span>Elections<span class="pl-pds">"</span></span>,<span class="pl-s1"><span class="pl-pds">"</span>yonicd<span class="pl-pds">"</span></span>)</pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-c">#If running on Windows Sys.setlocale("LC_ALL", "Hebrew_Israel.1255")</span>
+<span class="pl-e">shiny</span><span class="pl-k">::</span>runGitHub(<span class="pl-s1"><span class="pl-pds">"</span>Elections<span class="pl-pds">"</span></span>,<span class="pl-s1"><span class="pl-pds">"</span>yonicd<span class="pl-pds">"</span></span>)</pre></div>
 
 <h1>
 <a id="application-layout" class="anchor" href="#application-layout" aria-hidden="true"><span class="octicon octicon-link"></span></a>Application Layout:</h1>
@@ -77,32 +78,54 @@ the x and y axis.</li>
 
 <p>In addition the plot itself is a ggplot thus the options above the graph give the user control on nearly all the options to build a plot. The user can choose from the following variables:</p>
 
-<ul>
-<li>Party characteristics
-
-<ul>
-<li>Party, Ideology (Left, Left Center, Right, Right Center), Ideology.Group (Left, Right) ,Attribute (if party is old/new/split/merge compared to last election)</li>
-</ul>
-</li>
-<li>Time characteristics
-
-<ul>
-<li>Election, DaysLeft, Date, week, month, year, </li>
-</ul>
-</li>
-<li>Poll characteristics
-
-<ul>
-<li>Publisher, Pollster</li>
-</ul>
-</li>
-<li>Results characteristics
-
-<ul>
-<li>Mandates, Mandate.Group, Results, Error (Pollster Error)</li>
-</ul>
-</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Time</th>
+<th align="center">Party</th>
+<th align="center">Results</th>
+<th align="center">Poll</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Election</td>
+<td align="center">Party</td>
+<td align="center">Mandates</td>
+<td align="center">Publisher</td>
+</tr>
+<tr>
+<td align="center">DaysLeft</td>
+<td align="center">Ideology (5 Party Blocks)</td>
+<td align="center">Mandate.Group</td>
+<td align="center">Pollster</td>
+</tr>
+<tr>
+<td align="center">Date</td>
+<td align="center">Ideology.Group (2 Party Blocks)</td>
+<td align="center">Results</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">year</td>
+<td align="center">Attribute (Party History)</td>
+<td align="center">(Pollster) Error</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">month</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">week</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
 
 <p>To define the following plot attributes:</p>
 
