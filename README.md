@@ -8,13 +8,10 @@ runGitHub("Elections","yonicd")
 
 # Application Layout:
 
-- [Table of Contents Generator](#table-of-contents-generator)
-    - [Election PAD](#Election PAD)
-
-1. [Election PAD](#Election PAD)
-2. [Election Analyis](#C2)
-3. [Mandate Simulator and Coalition Whiteboard](#C3)
-4. [Polling Database](#C4)
+1. [Election PAD](#Election-PAD)
+2. [Election Analyis](#Election-Analyis)
+3. [Mandate Simulator and Coalition Whiteboard](#Mandate-Simulator-and-Coalition-Whiteboard)
+4. [Polling Database](#Polling-Database)
 
 # Usage Instructions:
 
