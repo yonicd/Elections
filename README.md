@@ -8,8 +8,8 @@ runGitHub("Elections","yonicd")
 
 # Application Layout:
 
-1. [Election PAD](#election-pAD)
-2. [Election Analyis](#election-analyis)
+1. [Election PAD](#election-pad)
+2. [Election Analyis](#election-analysis)
 3. [Mandate Simulator and Coalition Whiteboard](#mandate-simulator-and-coalition-whiteboard)
 4. [Polling Database](#polling-database)
 
