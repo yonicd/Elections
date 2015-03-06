@@ -45,12 +45,14 @@ In addition the plot itself is a ggplot thus the options above the graph give th
 
 To define the following plot attributes:
 
-|Axes|Grouping|Plot Facets|
-|:-:|:-:|:-:|
-|X axis variable| Split Y by colors using a different variable | Row Facet |
-|Discrete/Continuous| |Column Facet |
-|Rotation of X tick labels|||
-|Y axis variable|||
+|Plot Type|Axes|Grouping|Plot Facets|
+|:-----:|:-:|:-:|:-:|
+| Point |X axis variable| Split Y by colors using a different variable | Row Facet |
+| Bar |Discrete/Continuous| |Column Facet |
+| Line |Rotation of X tick labels|||
+| Step |Y axis variable|||
+| Boxplot ||||
+| Density ||||
 
  * Create Facets to display subsets of the data in different panels (two more variables to cut data) there are two type of facets to choose from
      * Wrap: Wrap 1d ribbon of panels into 2d
@@ -66,8 +68,21 @@ An example of comparing distribution polling errors by day to election and party
   * If you are an R user and know ggplot there is an additional editor console,below the plot, where you can create advanced plots freehand, just add to the final object from the GUI called p and the data.frame is x, eg p+geom_point(). Just notice that all aesthetics must be given they are not defined in the original ggplot() definition. It is also possible to use any library you want just add it to the top of the code, the end object must be a ggplot.
 ![Snapshot of PAD Plot](www/pad_screen_grab_ace.png "")
 
+```r
+#new layer
+p+geom_smooth(aes(x=DaysLeft,y=Mandates,fill=Party.En))+
+scale_x_reverse()+scale_fill_discrete(name="Party")
+```
+
   * You can also remove the original layer if you want using the function remove_geom(ggplot_object,geom_layer), eg p=p+remove_geom(p,"point") will remove the geom_point layer in the original graph
 ![Snapshot of PAD Plot](www/pad_screen_grab_ace_remove_geom.png)
+
+```r
+p=remove_geom(p,"point") #blank ggplot with facets in place
+#new layer
+p+geom_smooth(aes(x=DaysLeft,y=Mandates,fill=Party.En))+
+scale_x_reverse()+scale_fill_discrete(name="Party")
+```
 
   * Finally the plots can be viewed in English or Hebrew, and can be downloaded to you local computer using the download button.
 
