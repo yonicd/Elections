@@ -5,6 +5,7 @@
 ```r
 #If running on Windows Sys.setlocale("LC_ALL", "Hebrew_Israel.1255")
 shiny::runGitHub("Elections","yonicd")
+Sys.setlocale("LC_ALL")
 ```
 
 # Application Layout:
