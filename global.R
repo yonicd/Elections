@@ -7,15 +7,46 @@ library(dplyr)
 library(reshape2)
 library(stringr)
 library(ggplot2)
-
-
 library(scales)
 
 #library(png)
 #library(grid)
 #library(gridExtra)
 
+#helper functions
+
+re.encode=function(df){
+  v.id=which(sapply(df%>%summarise_each(funs(class))%>%c,'[',1)%in%"character")
+  for(i in v.id)  Encoding(df[,i])<-enc2native(df[,i])
+  df
+}
+
+#http://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string (Andrie 15.06.11)
+simpleCap <- function(x) {
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+        sep="", collapse=" ")
+}
+
+
+#http://stackoverflow.com/questions/13407236/remove-a-layer-from-a-ggplot2-chart (erik shilts 15.12.12)
+remove_geom <- function(ggplot2_object, geom_type) {
+  layers <- lapply(ggplot2_object$layers, function(x) if(x$geom$objname == geom_type) NULL else x)
+  layers <- layers[!sapply(layers, is.null)]
+  
+  ggplot2_object$layers <- layers
+  ggplot2_object
+}
+
+#Read old Elections Data and Auxillary Data
 loc.run="windows-1255"
+#loc.run=""
+
+# x.old=read.csv("election_data.csv",stringsAsFactors=F,encoding = "UTF-8")%>%re.encode%>%mutate(Date=as.Date(Date))
+# attribute=read.csv("election_results.csv",stringsAsFactors=F,encoding = "UTF-8")%>%re.encode
+# Poll=read.csv("Pollster_En.csv",stringsAsFactors=F,encoding = "UTF-8")%>%re.encode
+# ProjectScore=read.csv("ProjectScore.csv",stringsAsFactors=F,encoding = "UTF-8")%>%re.encode
+# fac_vars.df=read.csv("fac_vars.csv",stringsAsFactors=F,encoding = "UTF-8")%>%re.encode
 
 x.old=read.csv("election_data.csv",stringsAsFactors=F,fileEncoding=loc.run)%>%mutate(Date=as.Date(Date))
 attribute=read.csv("election_results.csv",stringsAsFactors=F,fileEncoding=loc.run)
@@ -31,7 +62,7 @@ doc <- content(GET(url),as="text",encoding="UTF-8")
 htmlTable <- gsub("^.*?(<table.*</table).*$", "\\1>", doc)
 tableNodes = getNodeSet(htmlParse(htmlTable,encoding="UTF-8"), "//table") 
 ret=readHTMLTable(tableNodes[[1]],header=T,stringsAsFactors=FALSE,
-                  as.data.frame=TRUE,row.names = NULL,encoding="windows-1255")
+                  as.data.frame=TRUE,row.names = NULL,encoding=loc.run)
 
 #Clean Data
 df=as.data.frame(ret[-1,-1])
@@ -47,14 +78,9 @@ df=melt(df,id=names(df)[1:5],value.name = "Mandates",variable.name="Party")%>%
          Publisher=str_replace_all(Publisher,"!",""),
          Election=2015)
 
-#Combine to Old Data
+#df=re.encode(df)
 
-simpleCap <- function(x) {
-  s <- strsplit(x, " ")[[1]]
-  paste(toupper(substring(s, 1,1)), substring(s, 2),
-        sep="", collapse=" ")
-}
-
+#Combine Current Data to Old Data
 x=rbind(df,x.old)%>%filter(!is.na(Mandates))%>%
   mutate(Mandate.Group=cut(Mandates,breaks = c(0,1,5,10,15,20,30,50),include.lowest = T))%>%
   distinct
@@ -70,15 +96,6 @@ x=left_join(x,x%>%select(Election,Pollster,Date)%>%unique%>%count(Election,Polls
   rename(N=n)%>%mutate(Error=Mandates-Results,Error.abs=abs(Mandates-Results),week=format(Date,"%w"),month=format(Date,"%m"),year=format(Date,"%Y"))%>%
   arrange(desc(Date),Election,Publisher,desc(Mandates))%>%ungroup
 
-# Pollster_Error=x%>%filter(Election!=2015)%>%group_by(Election,Pollster,Date)%>%summarise(PollErr=sqrt(sum(Error.abs^2,na.rm = T)))
-# Pollster_Error_Mean=x1%>%group_by(Election,Pollster)%>%summarise(PollErr=mean(PollErr))
-# 
-# Pollster_Party_Error=x%>%filter(Election!=2015)%>%group_by(Election,Pollster,Party,Date)%>%summarise(PollErr=sum(Error,na.rm = T))
-# Pollster_Party_Error_Mean=Pollster_Party_Error%>%group_by(Election,Pollster,Party)%>%summarise(PollPartyErr=mean(PollErr))
-# 
-# ggplot(Pollster_Party_Error%>%ungroup%>%mutate(Election=factor(Election)),
-#        aes(x=Pollster,y=PollErr,fill=Pollster))+geom_boxplot()+facet_wrap(~Election)+theme_bw()
-
 x=x%>%mutate(Partyid=as.numeric(factor(str_trim(Party))),
          Pollsterid=as.numeric(factor(str_trim(Pollster))),
          Publisherid=as.numeric(factor(str_trim(Publisher))),
@@ -91,27 +108,18 @@ x=x%>%mutate(Partyid=as.numeric(factor(str_trim(Party))),
  x$Ideology=factor(x$Ideology)
  x$Ideology.Group=factor(x$Ideology.Group)
 
- #Clean Workspace
-
-remove_geom <- function(ggplot2_object, geom_type) {
-  layers <- lapply(ggplot2_object$layers, function(x) if(x$geom$objname == geom_type) NULL else x)
-  layers <- layers[!sapply(layers, is.null)]
-  
-  ggplot2_object$layers <- layers
-  ggplot2_object
-}
+#Project61 weighting scheme
 
 party=x%>%filter(Election==2015&!is.na(Mandates))%>%select(Partyid,Party,Party.En)%>%unique
+pollster=x%>%filter(Election==2015&!is.na(Mandates))%>%select(Pollsterid,Pollster,Pollster.En)%>%unique 
+ 
+x3=x%>%filter(Election==2015)%>%select(Pollster,Pollsterid,Date)%>%group_by(Date,Pollster)%>%filter(row_number(Pollster)==1)%>%head(.,10)
 
-#Project61 adjustment
+x2=left_join(x3,x%>%select(Date,Pollster,Party,Pollsterid,Partyid,Mandates,Sample.Error),by=c("Pollster","Pollsterid","Date"))
 
-x3=x%>%filter(Election==2015)%>%select(Pollster,Date)%>%group_by(Date,Pollster)%>%filter(row_number(Pollster)==1)%>%head(.,10)
+x2=left_join(x2,x2%>%select(Date,Pollster,Pollsterid)%>%distinct%>%mutate(x=1)%>%group_by(Pollster)%>%mutate(N=cumsum(x))%>%select(-x),by=c("Pollster","Pollsterid","Date"))
 
-x2=left_join(x3,x%>%select(Date,Pollster,Party,Mandates,Sample.Error),by=c("Pollster","Date"))
-
-x2=left_join(x2,x2%>%select(Date,Pollster)%>%distinct%>%mutate(x=1)%>%group_by(Pollster)%>%mutate(N=cumsum(x))%>%select(-x),by=c("Pollster","Date"))
-
-x2=left_join(x2,ProjectScore,by=c("Pollster","Party"))%>%
+x2=left_join(x2,ProjectScore%>%select(-Party,-Pollster)%>%mutate_each(funs(as.numeric),Pollsterid,Partyid),by=c("Pollsterid","Partyid"))%>%
   mutate(Mandates.adj=Mandates-Score,Weight=sqrt(Pollster.weight-(as.numeric(max(Date)-Date))-abs(Sample.Error*50)/N))
 
 y=sum(unique(x2$Weight))
@@ -129,5 +137,5 @@ project61$pct[id]=project61$base[id]/(project61$base.floor[id]+1)}
 project61=left_join(project61%>%select(Party,Mandates=base.floor),attribute%>%filter(Election==2015)%>%select(Party,Ideology),by="Party")%>%mutate(Date=max(x3$Date),Pollster="פרויקט 61")%>%
   arrange(desc(Date),desc(Mandates))%>%ungroup
 
-
+#Clean Workspace
 rm(list=ls(pattern = ("[^x*|fac_vars|fac_vars.df|project61|party|remove_geom]")))

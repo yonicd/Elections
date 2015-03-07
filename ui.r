@@ -24,7 +24,7 @@ shinyUI(
                                    selected=".En"))
            ),
    h4("The latest Published Polling Results compared to Project 61* weighted mandates",align="center"),
-    plotOutput("IntroPlot"),
+    plotOutput("IntroPlot",height="500px"),
    
    h6("*Project 61 results are based on last 10 Published Polls"),
    h6(a("Created and maintained by Jonathan Sidi",href="https://github.com/yonicd/Elections")),
@@ -53,18 +53,17 @@ shinyUI(
     hr(),
     
     fluidRow(
-      column(3,
-             # uiOutput("daterange"),
+      column(2,
              uiOutput("DaysLeft"),
              checkboxInput(inputId = "chkbox",label="Mandate Threshold",value = T)
              ),
-      column(2,
+      column(1,
              selectInput(inputId = "ptype",label = "Graph Type",choices = c("point","bar","line","step","boxplot","density"),selected="bar"),
-             selectInput("fill_var","Colour Groups",choices=fac_vars,selected="Party")),
+             selectInput("fill_var","Colour",choices=c(None=".",fac_vars),selected="Party")),
       column(2,
-             selectInput("varx","X axis Variable",selected = "Date",choices=fac_vars),
+             selectInput("varx","X axis",selected = "Date",choices=fac_vars),
              
-             selectInput("vary","Y axis Variable",selected = "Mandates",choices=fac_vars)
+             selectInput("vary","Y axis",selected = "Mandates",choices=fac_vars)
       ),
       column(2,
              selectInput("facet_row","Row Facet",choices=c(None=".",fac_vars),selected="Pollster"),
@@ -73,8 +72,9 @@ shinyUI(
       column(1,
               radioButtons(inputId = "scales",label = "Facet Scales",choices = c("fixed","free","free_x","free_y"),selected="free_x")),
       column(2,
-             checkboxGroupInput(inputId = "axis.attr",label = "X-axis Attrib",choices = c("Rotate Label","Discrete"),selected=c("Discrete")),
-             radioButtons(inputId = "facet.shp",label = "Facet Layout",inline=T,choices = c("Wrap","Grid"),selected=c("Wrap")))
+             checkboxGroupInput(inputId = "axis.attr",label = "X-axis Attrib",inline=T,choices = c("Rotate Label","Discrete"),selected=c("Discrete")),
+             radioButtons(inputId = "facet.shp",label = "Facet Layout",inline=T,choices = c("Wrap","Grid"),selected=c("Wrap"))),
+      column(2,radioButtons(inputId = "trend",label = "Trend Line",choices = c("None","No Color","Color"),selected="None"))
     ),
     hr(),
     plotOutput('plot1',height="500px"),
@@ -96,9 +96,9 @@ shinyUI(
               number of mandates after taking into account the mandate threshold, this election it is 4, and surplus voting agreements, using the",a("Hagenbach-Bischoff method",href="http://en.wikipedia.org/wiki/Hagenbach-Bischoff_quota"),"."),
             h5("After specifying the simulation, one is run for you by default, you can build your own coalition, either from the actual polling results or from a random result from the simulation,
                  and see what combination passes the threshold of 60 mandates. Choose in the dropdown boxes what parties build the coalition and which ones are in the opposotion."),
-           
-             sliderInput("poll","Number of Last Polls to Use",min = 1,max=10,value = c(1,5),step = 1),
-             checkboxInput("sim","View Simulation Results",value = F),
+           fluidRow(
+             column(3,sliderInput("poll","Number of Last Polls to Use",min = 1,max=10,value = c(1,5),step = 1)),
+             column(8,radioButtons("sim","Choose One",choices = split(c("sim","coal"),c("Simulation Results","Build Coalition")),selected = "sim",inline=T))),
            hr(),
           fluidRow(
             column(2,radioButtons(inputId = "lang.sim",label="Plot Language",inline=T,
@@ -106,10 +106,12 @@ shinyUI(
                                   selected=".En")),
             column(3,downloadButton('sim.down', 'Download Plot'))
           ),  
-           conditionalPanel("input.sim",
+           conditionalPanel("input.sim=='sim'",
                             radioButtons("Boot","Simulation Size", choices= c(50,100,500,1000),selected=100,inline = T),
+                            p("Each subplot sums to one, and each bar is the percent each mandate resulted in each iteration. 
+                              0 mandates indicate a party that did not pass the mandate threshold in the simulation"),
                             plotOutput('SimPlot',height="500px")),
-           conditionalPanel(condition = "!input.sim",
+           conditionalPanel(condition = "input.sim=='coal'",
                             fluidRow(
                               h4("Create Coalition"),
                               column(4,radioButtons("var_y",NULL,split(c("Mandates","rMandates"),c("Average Polling Results","Polling Results with Sample Error")),selected="Mandates",inline=T)),
