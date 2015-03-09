@@ -286,26 +286,6 @@ if(input$facet.shp=="Wrap"){
       print(SimPrePlot())
     })
     
-    output$sim.down = downloadHandler(filename = "ElectionSimPlot.png",
-                                      content = function(file){
-                                        if(input$sim){
-                                          p=SimPrePlot()
-                                          #m=readPNG("PADqr.png")
-                                          #p1=ggplotGrob(p)
-                                          #p2=ggplotGrob(
-                                          #qplot(1,1,geom="blank")+theme_bw()+theme(panel.border=element_blank(),panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
-                                          #text=element_blank(),axis.ticks=element_blank())+
-                                          
-                                          #p+annotation_custom(g=rasterGrob(m,x = 4.6,y =.85),xmax=1,xmin=-Inf,ymax=Inf,ymin=-Inf)
-                                          #p0=arrangeGrob(p1,p2,)
-                                          #grid.arrange(p0)
-                                          #grid.newpage()
-                                          #p=grid.draw(p3)
-                                        }else{
-                                          p=CoalitionPrePlot()
-                                        }
-                                        ggsave(file, plot = p+theme(text=element_text(size=22)),width=20,height=10)})
-
   #Coalition Data                                                                                              
     CoalitionPrePlot <- reactive({
       lin=CoalitionData()
@@ -364,6 +344,25 @@ if(input$facet.shp=="Wrap"){
         print(CoalitionPrePlot())
     })
   
+    output$sim.down = downloadHandler(filename = "ElectionSimPlot.png",
+                                      content = function(file){
+                                        if(input$sim=="sim"){
+                                          p=SimPrePlot()
+                                          #m=readPNG("PADqr.png")
+                                          #p1=ggplotGrob(p)
+                                          #p2=ggplotGrob(
+                                          #qplot(1,1,geom="blank")+theme_bw()+theme(panel.border=element_blank(),panel.grid.major=element_blank(),panel.grid.minor=element_blank(),
+                                          #text=element_blank(),axis.ticks=element_blank())+
+                                          
+                                          #p+annotation_custom(g=rasterGrob(m,x = 4.6,y =.85),xmax=1,xmin=-Inf,ymax=Inf,ymin=-Inf)
+                                          #p0=arrangeGrob(p1,p2,)
+                                          #grid.arrange(p0)
+                                          #grid.newpage()
+                                          #p=grid.draw(p3)
+                                        }else{
+                                          p=CoalitionPrePlot()
+                                        }
+                                        ggsave(file, plot = p+theme(text=element_text(size=22)),width=20,height=10)})
 #Sheet 4  
   output$table <- renderDataTable(x%>%select(-c(N,contains("id"))))
 })
