@@ -4,11 +4,9 @@
 
 ```r
 #If running on Windows Sys.setlocale("LC_ALL", "Hebrew_Israel.1255")
-if(!require(shiny)) install.packages("shiny")
-if(!require(shinyAce)) install.packages("shinyAce")
-if(!require(dplyr)) install.packages("dplyr")
-
-
+#check to see if libraries need to be installed
+libs=c("shiny","shinyAce","plyr","dplyr","httr","XML","reshape2","stringr","ggplot2","scales")
+x=sapply(libs,function(x)if(!require(x,character.only = T)) install.packages(x));rm(x,libs)
 
 shiny::runGitHub("Elections","yonicd")
 Sys.setlocale("LC_ALL")
