@@ -4,6 +4,12 @@
 
 ```r
 #If running on Windows Sys.setlocale("LC_ALL", "Hebrew_Israel.1255")
+if(!require(shiny)) install.packages("shiny")
+if(!require(shinyAce)) install.packages("shinyAce")
+if(!require(dplyr)) install.packages("dplyr")
+
+
+
 shiny::runGitHub("Elections","yonicd")
 Sys.setlocale("LC_ALL")
 ```
