@@ -76,7 +76,6 @@ x=sapply(libs,function(x)if(!require(x,character.only = T)) install.packages(x))
 shiny::runGitHub(&quot;Elections&quot;,&quot;yonicd&quot;)
 
 #reset to original locale on Windows
-#changing locale to run on Windows
 if (Sys.info()[1] == &quot;Windows&quot;) Sys.setlocale(&quot;LC_ALL&quot;)
 </code></pre>
 </div>
