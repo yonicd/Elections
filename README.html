@@ -65,13 +65,20 @@ img {
 <h3>The Israel Election Polls Analysis Depot is an interactive web application for analyzing the elections in Israel powered by the <a href="http://shiny.rstudio.com/">Shiny library of RStudio</a> and real time published polling data from the <a href="http://infomeyda.com/">Project 61</a> database.</h3>
 <div id="the-app-can-be-found-on-the-shiny-servers-or-can-be-run-through-github" class="section level4">
 <h4>The App can be found on the <a href="https://yonisidi.shinyapps.io/Elections">shiny servers</a> or can be run through Github</h4>
-<pre class="r"><code>#If running on Windows Sys.setlocale(&quot;LC_ALL&quot;, &quot;Hebrew_Israel.1255&quot;)
+<pre class="r"><code>#changing locale to run on Windows
+if (Sys.info()[1] == &quot;Windows&quot;) Sys.setlocale(&quot;LC_ALL&quot;,&quot;Hebrew_Israel.1255&quot;) 
+
 #check to see if libraries need to be installed
 libs=c(&quot;shiny&quot;,&quot;shinyAce&quot;,&quot;plyr&quot;,&quot;dplyr&quot;,&quot;httr&quot;,&quot;XML&quot;,&quot;reshape2&quot;,&quot;stringr&quot;,&quot;ggplot2&quot;,&quot;scales&quot;)
 x=sapply(libs,function(x)if(!require(x,character.only = T)) install.packages(x));rm(x,libs)
 
+#run App
 shiny::runGitHub(&quot;Elections&quot;,&quot;yonicd&quot;)
-Sys.setlocale(&quot;LC_ALL&quot;)</code></pre>
+
+#reset to original locale on Windows
+#changing locale to run on Windows
+if (Sys.info()[1] == &quot;Windows&quot;) Sys.setlocale(&quot;LC_ALL&quot;)
+</code></pre>
 </div>
 </div>
 <div id="application-layout" class="section level1">
