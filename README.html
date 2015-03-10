@@ -73,7 +73,7 @@ libs=c(&quot;shiny&quot;,&quot;shinyAce&quot;,&quot;plyr&quot;,&quot;dplyr&quot;
 x=sapply(libs,function(x)if(!require(x,character.only = T)) install.packages(x));rm(x,libs)
 
 #run App
-shiny::runGitHub(&quot;Elections&quot;,&quot;yonicd&quot;)
+shiny::runGitHub(&quot;Elections&quot;,&quot;yonicd&quot;,subdir=&quot;shiny&quot;)
 
 #reset to original locale on Windows
 if (Sys.info()[1] == &quot;Windows&quot;) Sys.setlocale(&quot;LC_ALL&quot;)
