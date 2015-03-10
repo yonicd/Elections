@@ -2,12 +2,12 @@ library(shiny)
 library(shinyAce)
 library(httr)
 library(XML)
-library(plyr)
-library(dplyr)
 library(reshape2)
+library(plyr)
 library(stringr)
 library(ggplot2)
 library(scales)
+library(dplyr)
 
 #library(png)
 #library(grid)
@@ -83,7 +83,7 @@ df=melt(df,id=names(df)[1:5],value.name = "Mandates",variable.name="Party")%>%
 #Combine Current Data to Old Data
 x=rbind(df,x.old)%>%filter(!is.na(Mandates))%>%
   mutate(Mandate.Group=cut(Mandates,breaks = c(0,1,5,10,15,20,30,50),include.lowest = T))%>%
-  distinct
+  unique
 
 x$Publisher=sapply(x$Publisher,simpleCap)
 
@@ -92,8 +92,8 @@ x=left_join(x,Poll%>%select(Publisher,Publisher.En)%>%distinct,by=c("Publisher")
 x=left_join(x,Poll%>%select(Pollster,Pollster.En)%>%distinct,by=c("Pollster"))
 
 
-x=left_join(x,x%>%select(Election,Pollster,Date)%>%unique%>%count(Election,Pollster),by=c("Election","Pollster"))%>%
-  rename(N=n)%>%mutate(Error=Mandates-Results,Error.abs=abs(Mandates-Results),week=format(Date,"%w"),month=format(Date,"%m"),year=format(Date,"%Y"))%>%
+x=left_join(x,x%>%select(Election,Pollster,Date)%>%unique%>%dplyr::count(Election,Pollster),by=c("Election","Pollster"))%>%
+  dplyr::rename(N=n)%>%mutate(Error=Mandates-Results,Error.abs=abs(Mandates-Results),week=format(Date,"%w"),month=format(Date,"%m"),year=format(Date,"%Y"))%>%
   arrange(desc(Date),Election,Publisher,desc(Mandates))%>%ungroup
 
 x=x%>%mutate(Partyid=as.numeric(factor(str_trim(Party))),
@@ -119,12 +119,18 @@ x2=left_join(x3,x%>%select(Date,Pollster,Party,Pollsterid,Partyid,Mandates,Sampl
 
 x2=left_join(x2,x2%>%select(Date,Pollster,Pollsterid)%>%distinct%>%mutate(x=1)%>%group_by(Pollster)%>%mutate(N=cumsum(x))%>%select(-x),by=c("Pollster","Pollsterid","Date"))
 
-x2=left_join(x2,ProjectScore%>%select(-Party,-Pollster)%>%mutate_each(funs(as.numeric),Pollsterid,Partyid),by=c("Pollsterid","Partyid"))%>%
+x2=left_join(x2,ProjectScore%>%select(-Block,-Partyid,-Pollsterid),by=c("Pollster","Party"))%>%
   mutate(Mandates.adj=Mandates-Score,Weight=sqrt(Pollster.weight-(as.numeric(max(Date)-Date))-abs(Sample.Error*50)/N))
 
 y=sum(unique(x2$Weight))
 
-project61=x2%>%group_by(Party)%>%summarise(base=sum(Mandates*Weight)/y)%>%ungroup%>%mutate(base=120*base/sum(base),base.floor=floor(base),pct=base/(base.floor+1),add=0,id=0,share=factor(Party,labels=c(1,1,2,3,4,5,6,6,2,7,3)))
+project61=x2%>%group_by(Party)%>%
+  dplyr::summarise(base=sum(Mandates*Weight)/y)%>%ungroup%>%
+  dplyr::mutate(base=120*base/sum(base),
+         base.floor=floor(base),
+         pct=base/(base.floor+1),
+         add=0,id=0,
+         share=factor(Party,labels=c(1,1,2,3,4,5,6,6,2,7,3)))
 
 for(i in (1:(120-sum(project61$base.floor)))){
 y1=(project61%>%group_by(share)%>%summarise(group_pct=sum(base)/(sum(base.floor)+1))%>%filter(group_pct==max(group_pct)))$share
