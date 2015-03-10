@@ -45,7 +45,7 @@
 <span class="pl-v">x</span><span class="pl-k">=</span>sapply(<span class="pl-vo">libs</span>,<span class="pl-k">function</span>(<span class="pl-vo">x</span>)<span class="pl-k">if</span>(<span class="pl-k">!</span>require(<span class="pl-vo">x</span>,<span class="pl-v">character.only</span> <span class="pl-k">=</span> <span class="pl-c1">T</span>)) install.packages(<span class="pl-vo">x</span>));rm(<span class="pl-vo">x</span>,<span class="pl-vo">libs</span>)
 
 <span class="pl-c">#run App</span>
-<span class="pl-e">shiny</span><span class="pl-k">::</span>runGitHub(<span class="pl-s1"><span class="pl-pds">"</span>Elections<span class="pl-pds">"</span></span>,<span class="pl-s1"><span class="pl-pds">"</span>yonicd<span class="pl-pds">"</span></span>)
+<span class="pl-e">shiny</span><span class="pl-k">::</span>runGitHub(<span class="pl-s1"><span class="pl-pds">"</span>Elections<span class="pl-pds">"</span></span>,<span class="pl-s1"><span class="pl-pds">"</span>yonicd<span class="pl-pds">"</span></span>,<span class="pl-v">subdir</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>shiny<span class="pl-pds">"</span></span>)
 
 <span class="pl-c">#reset to original locale on Windows</span>
 <span class="pl-k">if</span> (Sys.info()[<span class="pl-c1">1</span>] <span class="pl-k">==</span> <span class="pl-s1"><span class="pl-pds">"</span>Windows<span class="pl-pds">"</span></span>) Sys.setlocale(<span class="pl-s1"><span class="pl-pds">"</span>LC_ALL<span class="pl-pds">"</span></span>)
