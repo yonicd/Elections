@@ -39,7 +39,7 @@ shinyServer(function(input, output, session) {
     p=p+geom_bar(stat="identity",position="stack",aes_string(fill=str_fill))+scale_fill_discrete(name=fac_vars.df[which(fac_vars=="Party"),lang.id])
     p=p+geom_hline(yintercept=61,linetype=2)+facet_wrap(as.formula(paste0("~",paste0("Pollster",input$lang.main))))+
       geom_text(aes_string(x=str_x,y="MandatesC",label="Mandates"),vjust=1,size=4)
-    p=p+xlab("\n\n\n https:\\\\yonicd.shinyapps.io\\Elections \n Project61: http:\\\\infomeyda.com")+ylab(fac_vars.df[which(fac_vars=="Mandates"),lang.id])+ggtitle(str_title)
+    p=p+xlab("\n\n\n https:\\\\yonisidi.shinyapps.io\\Elections \n Project61: http:\\\\infomeyda.com")+ylab(fac_vars.df[which(fac_vars=="Mandates"),lang.id])+ggtitle(str_title)
     p=p+scale_x_reverse(breaks=seq(4,1),labels=str_lvl)
     p+geom_text(aes_string(x=str_x,y="MandatesC",label="MandatesC"),vjust=-.5,data=top.bar)+ylim(0,70)
   })
@@ -156,7 +156,7 @@ if(input$facet.shp=="Wrap"){
   }
 }
       xl=ifelse(input$lang=="",fac_vars.df[which(fac_vars.df[,1]%in%input$varx),2],input$varx)
-      xl=paste0(xl,"\n \n https:\\\\yonicd.shinyapps.io\\Elections")
+      xl=paste0(xl,"\n \n https:\\\\yonisidi.shinyapps.io\\Elections")
       yl=ifelse(input$lang=="",fac_vars.df[which(fac_vars.df[,1]%in%input$vary),2],input$vary)
       p=p+xlab(xl)
       if(input$ptype!="density") p=p+ylab(yl)
@@ -257,7 +257,7 @@ if(input$facet.shp=="Wrap"){
     str_fill=paste0("Party",input$lang.sim)
     if(input$lang.sim==""){
       xl="מנדטים"
-      xl=paste0(xl,"\n \n https:\\\\yonicd.shinyapps.io\\Elections")
+      xl=paste0(xl,"\n \n https:\\\\yonisidi.shinyapps.io\\Elections")
       yl=""
       ttl=paste("התפלגות סימולציה לחלוקה סופית של מנדטים לאחר אחוז החסימה וסיווג עודפים לפי מפלגה",
                 "משולש מהווה חציון המנדטים למפלגה על פי הסקרים בפועל",
@@ -265,7 +265,7 @@ if(input$facet.shp=="Wrap"){
       nm="מפלגה"
     }else{
       xl="Mandates"
-      xl=paste0(xl,"\n \n https:\\\\yonicd.shinyapps.io\\Elections")
+      xl=paste0(xl,"\n \n https:\\\\yonisidi.shinyapps.io\\Elections")
       yl=""
       ttl=paste("Distribution of Simulated of Mandate Results Conditioned on Mandate Threshold and Surplus Agreements \n Triangle shows the Median Published Result",lin$maxdate,sep="\n")
       nm="Party"
@@ -335,7 +335,7 @@ if(input$facet.shp=="Wrap"){
         scale_fill_discrete(name=nm)
       p=p+geom_text(aes_string(x=str_x,y="Mandates",label="Mandates"),vjust=-.1,data=b)
       p=p+geom_hline(yintercept=lin$yint,linetype=2)
-      p=p+xlab("\n\n\n https:\\\\yonicd.shinyapps.io\\Elections")+ylab(yl)+ggtitle(ttl)
+      p=p+xlab("\n\n\n https:\\\\yonisidi.shinyapps.io\\Elections")+ylab(yl)+ggtitle(ttl)
       p
     })
 
