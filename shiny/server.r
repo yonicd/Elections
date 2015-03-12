@@ -2,10 +2,7 @@ shinyServer(function(input, output, session) {
 
 #Sheet 1
   IntroPrePlot <- reactive({
-#     mainplot=rbind(x%>%filter(Date==max(Date))%>%select(Date,Pollster,Party,Mandates,Ideology),project61)%>%
-#       group_by(Pollster,Ideology)%>%mutate(MandatesC=cumsum(Mandates))%>%arrange(Pollster,Ideology,MandatesC)%>%ungroup
-    
-    mainplot=x%>%filter(Date==max(Date))%>%select(Date,Pollster,Party,Mandates,Ideology)%>%
+    mainplot=rbind(x%>%filter(Date==max(Date))%>%select(Date,Pollster,Party,Mandates,Ideology),project61)%>%
       group_by(Pollster,Ideology)%>%mutate(MandatesC=cumsum(Mandates))%>%arrange(Pollster,Ideology,MandatesC)%>%ungroup
     
     mainplot=left_join(mainplot,
@@ -14,9 +11,9 @@ shinyServer(function(input, output, session) {
     
     party.temp=x%>%filter(Date==max(Date))%>%select(Party,Party.En,Ideology.En)%>%unique
     
-#     party.temp=party.temp[match(mainplot$Party[which(mainplot$Pollster.En=="Project 61")],party.temp$Party),-1]
-#     mainplot$Party.En[which(mainplot$Pollster.En=="Project 61")]=party.temp$Party.En
-#     mainplot$Ideology.En[which(mainplot$Pollster.En=="Project 61")]=party.temp$Ideology.En
+    party.temp=party.temp[match(mainplot$Party[which(mainplot$Pollster.En=="Project 61")],party.temp$Party),-1]
+    mainplot$Party.En[which(mainplot$Pollster.En=="Project 61")]=party.temp$Party.En
+    mainplot$Ideology.En[which(mainplot$Pollster.En=="Project 61")]=party.temp$Ideology.En
     
     mainplot$Ideology=droplevels(mainplot$Ideology)
     mainplot$Ideology.En=factor(mainplot$Ideology.En,levels=c("Right","Center-Right","Center-Left","Left"))
@@ -42,7 +39,7 @@ shinyServer(function(input, output, session) {
     p=p+geom_bar(stat="identity",position="stack",aes_string(fill=str_fill))+scale_fill_discrete(name=fac_vars.df[which(fac_vars=="Party"),lang.id])
     p=p+geom_hline(yintercept=61,linetype=2)+facet_wrap(as.formula(paste0("~",paste0("Pollster",input$lang.main))))+
       geom_text(aes_string(x=str_x,y="MandatesC",label="Mandates"),vjust=1,size=4)
-    p=p+xlab("\n\n\n https:\\\\yonisidi.shinyapps.io\\Elections")+ylab(fac_vars.df[which(fac_vars=="Mandates"),lang.id])+ggtitle(str_title)
+    p=p+xlab("\n\n\n https:\\\\yonisidi.shinyapps.io\\Elections \n Project61: http:\\\\infomeyda.com")+ylab(fac_vars.df[which(fac_vars=="Mandates"),lang.id])+ggtitle(str_title)
     p=p+scale_x_reverse(breaks=seq(4,1),labels=str_lvl)
     p+geom_text(aes_string(x=str_x,y="MandatesC",label="MandatesC"),vjust=-.5,data=top.bar)+ylim(0,70)
   })
