@@ -69,7 +69,7 @@ img {
 if (Sys.info()[1] == &quot;Windows&quot;) Sys.setlocale(&quot;LC_ALL&quot;,&quot;Hebrew_Israel.1255&quot;) 
 
 #check to see if libraries need to be installed
-libs=c(&quot;shiny&quot;,&quot;shinyAce&quot;,&quot;plyr&quot;,&quot;dplyr&quot;,&quot;httr&quot;,&quot;XML&quot;,&quot;reshape2&quot;,&quot;stringr&quot;,&quot;ggplot2&quot;,&quot;scales&quot;)
+libs=c(&quot;shiny&quot;,&quot;shinyAce&quot;,&quot;httr&quot;,&quot;XML&quot;,&quot;stringr&quot;,&quot;ggplot2&quot;,&quot;scales&quot;,&quot;plyr&quot;,&quot;reshape2&quot;,&quot;dplyr&quot;)
 x=sapply(libs,function(x)if(!require(x,character.only = T)) install.packages(x));rm(x,libs)
 
 #run App

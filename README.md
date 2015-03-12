@@ -7,7 +7,7 @@
 if (Sys.info()[1] == "Windows") Sys.setlocale("LC_ALL","Hebrew_Israel.1255") 
 
 #check to see if libraries need to be installed
-libs=c("shiny","shinyAce","plyr","dplyr","httr","XML","reshape2","stringr","ggplot2","scales")
+libs=c("shiny","shinyAce","httr","XML","stringr","ggplot2","scales","plyr","reshape2","dplyr")
 x=sapply(libs,function(x)if(!require(x,character.only = T)) install.packages(x));rm(x,libs)
 
 #run App
