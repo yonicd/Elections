@@ -40,6 +40,7 @@ The Project 61 prediction is based past pollster error deriving weights from the
   * An interactive polling analysis layout where the user can filter elections, parties, publishers and pollster, dates and create different types of plots using any variable as 
 the x and y axis.
 
+  * The default layer is the 60 day trend (estimated with loess smoother) of mandates published by each pollster by party
 ![Snapshot of Election Analysis Page](www/pad_screen_grab.png)
 
 The user can choose to include in the plots Elections (2003,2006,2009,2013,2015) and the subsequent filters are populated with the relevant parties, pollsters and publishers relevant to the chosen elections. Next there is a slider to choose the days before the election you want to view in the plot. This was used instead of a calendar to make a uniform timeline when comparing across elections.
@@ -71,11 +72,17 @@ To define the following plot attributes:
      * Grid: Layout panels in a grid (matrix)
    
 
-An example of filtering parties in the 2015 elections:
-![Snapshot of Election Analysis Page with filter](www/pad_screen_grab_filter.png)
+An example of filtering pollsters to compare different tendencies for each party in the 2015 elections:
+![Snapshot of Election Analysis Page with filter](www/ElectionPlot_pollster_trend.png)
 
-An example of comparing distribution polling errors by day to election and party blocks
+An example of comparing distribution mandates per party in the last two months of polling
+![Election Comparison](www/boxplot_month.png)
+
+An example of comparing distribution of pollster errors across elections (up to 10 days prior end of polling), by splitting the parties into five groups compared to previous election: old party,new party, combined (combination of two or more old parties), new.split (new party created from a split of a party from last election), old.split (old party that was a left from the split).
 ![Election Comparison](www/ElectionPlot_longitudinal.png)
+ As we can see the pollster do not get a good indication of new,new.split or combined parties, which could be a problem this election since there are: 3 combined, 2 new splits.
+![Election Comparison](www/attribute_compare.png)
+
 
   * If you are an R user and know ggplot there is an additional editor console,below the plot, where you can create advanced plots freehand, just add to the final object from the GUI called p and the data.frame is x, eg p+geom_point(). Just notice that all aesthetics must be given they are not defined in the original ggplot() definition. It is also possible to use any library you want just add it to the top of the code, the end object must be a ggplot.
 ![Snapshot of PAD Plot](www/pad_screen_grab_ace.png "")
