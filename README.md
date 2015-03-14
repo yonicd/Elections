@@ -1,6 +1,8 @@
 ###The Israel Election Polls Analysis Depot is an interactive web application for analyzing the elections in Israel powered by the [Shiny library of RStudio](http://shiny.rstudio.com/) and real time published polling data from the [Project 61](http://infomeyda.com/) database.
 
-####The App can be found on the [shiny servers](https://yonisidi.shinyapps.io/Elections) or can be run through Github
+<!--- be found on the [shiny servers](https://yonisidi.shinyapps.io/Elections) or can --->
+
+####The App can be run through Github
 
 ```r
 #changing locale to run on Windows

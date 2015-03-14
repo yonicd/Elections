@@ -58,7 +58,7 @@ shinyUI(
              checkboxInput(inputId = "chkbox",label="Mandate Threshold",value = T)
              ),
       column(1,
-             selectInput(inputId = "ptype",label = "Graph Type",choices = c("point","bar","line","step","boxplot","density"),selected="bar"),
+             selectInput(inputId = "ptype",label = "Graph Type",choices = c("point","bar","line","step","boxplot","density"),selected="point"),
              selectInput("fill_var","Colour",choices=c(None=".",fac_vars),selected="Party")),
       column(2,
              selectInput("varx","X axis",selected = "Date",choices=fac_vars),
@@ -66,15 +66,15 @@ shinyUI(
              selectInput("vary","Y axis",selected = "Mandates",choices=fac_vars)
       ),
       column(2,
-             selectInput("facet_row","Row Facet",choices=c(None=".",fac_vars),selected="Pollster"),
+             selectInput("facet_row","Row Facet",choices=c(None=".",fac_vars),selected="Party"),
              
              selectInput("facet_col","Column Facet",choices=c(None=".",fac_vars))),
       column(1,
               radioButtons(inputId = "scales",label = "Facet Scales",choices = c("fixed","free","free_x","free_y"),selected="free_x")),
       column(2,
-             checkboxGroupInput(inputId = "axis.attr",label = "X-axis Attrib",inline=T,choices = c("Rotate Label","Discrete"),selected=c("Discrete")),
+             checkboxGroupInput(inputId = "axis.attr",label = "X-axis Attrib",inline=T,choices = c("Rotate Label","Discrete")),
              radioButtons(inputId = "facet.shp",label = "Facet Layout",inline=T,choices = c("Wrap","Grid"),selected=c("Wrap"))),
-      column(2,radioButtons(inputId = "trend",label = "Trend Line",choices = c("None","No Color","Color"),selected="None"))
+      column(2,radioButtons(inputId = "trend",label = "Trend Line",choices = c("None","No Color","Color"),selected="Color"))
     ),
     hr(),
     plotOutput('plot1',height="500px"),
