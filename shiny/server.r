@@ -132,7 +132,7 @@ shinyServer(function(input, output, session) {
      p=p+scale_colour_discrete(name=nm)+scale_fill_discrete(name=nm)  
 
      if(input$trend=="No Color") p=p+geom_smooth(aes_string(x=x_str,y=y_str),method="loess")
-    if(input$trend=="Color") p=p+geom_smooth(aes_string(x=x_str,y=y_str,fill=str_fill),method="loess")
+    if(input$trend=="Color") p=p+geom_smooth(aes_string(x=x_str,y=y_str,fill=str_fill,colour=str_fill),method="loess")
     
     if(input$chkbox&input$vary=="Mandates"&input$ptype!="density") p=p+geom_hline(aes(yintercept=4),linetype=2)
     
