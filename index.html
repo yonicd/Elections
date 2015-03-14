@@ -73,14 +73,15 @@
 
 <p><img src="https://raw.githubusercontent.com/yonicd/Elections/master/www/LastDayPlot.png" alt="Current Day"></p>
 
-<p>The Project 61 prediction is based past pollster error deriving weights from the 2003,2006,2009 and 2013 elections, dependant on days to elections and parties. In their <a href="http://shiny.rstudio.com/">site</a> there is an extensive analysis on pollster bias towards certain parties and party blocks.</p>
+<p>The Project 61 prediction is based past pollster error deriving weights from the 2003,2006,2009 and 2013 elections, dependent on days to elections and parties. In their <a href="http://shiny.rstudio.com/">site</a> there is an extensive analysis on pollster bias towards certain parties and party blocks.</p>
 
 <h2>
 <a id="election-analysis" class="anchor" href="#election-analysis" aria-hidden="true"><span class="octicon octicon-link"></span></a>Election Analysis</h2>
 
 <ul>
-<li>An interactive polling analysis layout where the user can filter elections, parties, publishers and pollster, dates and create different types of plots using any variable as 
-the x and y axis.</li>
+<li><p>An interactive polling analysis layout where the user can filter elections, parties, publishers and pollster, dates and create different types of plots using any variable as 
+the x and y axis.</p></li>
+<li><p>The default layer is the 60 day trend (estimated with loess smoother) of mandates published by each pollster by party</p></li>
 </ul>
 
 <p><img src="https://raw.githubusercontent.com/yonicd/Elections/master/www/pad_screen_grab.png" alt="Snapshot of Election Analysis Page"></p>
@@ -199,11 +200,16 @@ the x and y axis.</li>
 </li>
 </ul>
 
-<p>An example of filtering parties in the 2015 elections:
-<img src="https://raw.githubusercontent.com/yonicd/Elections/master/www/pad_screen_grab_filter.png" alt="Snapshot of Election Analysis Page with filter"></p>
+<p>An example of filtering pollsters to compare different tendencies for each party in the 2015 elections:
+<img src="https://raw.githubusercontent.com/yonicd/Elections/master/www/ElectionPlot_pollster_trend.png" alt="Snapshot of Election Analysis Page with filter"></p>
 
-<p>An example of comparing distribution polling errors by day to election and party blocks
-<img src="https://raw.githubusercontent.com/yonicd/Elections/master/www/ElectionPlot_longitudinal.png" alt="Election Comparison"></p>
+<p>An example of comparing distribution mandates per party in the last two months of polling
+<img src="https://raw.githubusercontent.com/yonicd/Elections/master/www/boxplot_month.png" alt="Election Comparison"></p>
+
+<p>An example of comparing distribution of pollster errors across elections (up to 10 days prior end of polling), by splitting the parties into five groups compared to previous election: old party,new party, combined (combination of two or more old parties), new.split (new party created from a split of a party from last election), old.split (old party that was a left from the split).
+<img src="https://raw.githubusercontent.com/yonicd/Elections/master/www/ElectionPlot_longitudinal.png" alt="Party type Comparison history">
+ As we can see the pollster do not get a good indication of new,new.split or combined parties, which could be a problem this election since there are: 3 combined, 2 new splits.
+<img src="https://raw.githubusercontent.com/yonicd/Elections/master/www/attribute_compare.png" alt="Party type Comparison current"></p>
 
 <ul>
 <li>If you are an R user and know ggplot there is an additional editor console,below the plot, where you can create advanced plots freehand, just add to the final object from the GUI called p and the data.frame is x, eg p+geom_point(). Just notice that all aesthetics must be given they are not defined in the original ggplot() definition. It is also possible to use any library you want just add it to the top of the code, the end object must be a ggplot.
@@ -259,7 +265,7 @@ scale_x_reverse()<span class="pl-k">+</span>scale_fill_discrete(<span class="pl-
     <div id="footer_wrap" class="outer">
       <footer class="inner">
         <p class="copyright">Israel Election PAD maintained by <a href="https://github.com/yonicd">yonicd</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
 
