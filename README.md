@@ -1,6 +1,10 @@
-###The Israel Election Polls Analysis Depot is an interactive web application for analyzing the elections in Israel powered by the [Shiny library of RStudio](http://shiny.rstudio.com/) and real time published polling data from the [Project 61](http://infomeyda.com/) database.
+####The Israeli elections are coming up this Tuesday, 17/3/2015. They are a bit more complicated than your average US presidential race. The elections in Israel are based on nationwide proportional representation. The electoral threshold is 3.25% and the number of seats (or mandates) out of a total of 120 is proportional to the number of votes it recieves, so the threshold roughly translates to at least four mandates. The Israeli system is a multi-party system and is based on coalition governments. Multi-party is putting it mildly, there are 11 that have a chance to pass the mandate threshold. 
+####There are two major parties, Hamachane Hazioni (Left Wing) and the Likud (Right Wing), that are hoping to garner between 16%-25% of the votes, 20-30 mandates. The main winners though are the medium size parties that recomend to the President who they think has the best chance to construct the next government, so yes there is a good possibility that the general elections winner will not be one constructing the coalition. Making the actual winners will be the parties that create the biggest coalition which exceeds 60 mandates.
+####An abundance of polling has been continually published during the run up and the variaety of pollsters and publishers is hard to keep track of as a casual voter trying to gauge the temperature of the political landscape. I came across a great realtime [database by Project 61](http://infomeyda.com/) on google docs of past and present polling result information and decided that it was a great opportunity to learn [Shiny library of RStudio](http://shiny.rstudio.com/) and create an app that I can check current and past results. So after I figured out how to connect google docs to  R, I had a self updating app that became a nice place to keep track of polling every day and checks trends and distributions using interactive ggplot2 graphs.
 
-<!--- be found on the [shiny servers](https://yonisidi.shinyapps.io/Elections) or can --->
+<!--- ####The Israel Election Polls Analysis Depot is an interactive web application for analyzing the elections in Israel powered by the [Shiny library of RStudio](http://shiny.rstudio.com/) and real time published polling data from the [Project 61](http://infomeyda.com/) database.
+
+ be found on the [shiny servers](https://yonisidi.shinyapps.io/Elections) or can --->
 
 ####The App can be run through Github
 
@@ -22,14 +26,14 @@ if (Sys.info()[1] == "Windows") Sys.setlocale("LC_ALL")
 
 # Application Layout:
 
-1. [Election PAD](#election-pad)
+1. [Current Polling](#current-polling)
 2. [Election Analyis](#election-analysis)
 3. [Mandate Simulator and Coalition Whiteboard](#mandate-simulator-and-coalition-whiteboard)
 4. [Polling Database](#polling-database)
 
 # Usage Instructions:
 
-## Election PAD
+## Current Polling
   * The latest polling day results published in the media and the prediction made using the Project 61 weighting schemes. The parties are stacked into blocks to see which block has best chance to create a coalition.
 
 ![Snapshot of Overview Plot](www/LastDayPlot.png)

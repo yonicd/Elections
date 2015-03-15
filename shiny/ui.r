@@ -1,6 +1,6 @@
 shinyUI(
   navbarPage("Israel Election Polls Analysis Depot",
-  tabPanel("Election PAD",
+  tabPanel("Current Polling",
    img(src='CDlogo.png', align = "right", height='75px'),
    img(src='Project61logo.png', align = "right", height='75px'),
     h3("The Israel Election Polls Analysis Depot is an interactive web application for analysing the elections in Israel powered by the",
