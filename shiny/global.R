@@ -111,6 +111,7 @@ x=x%>%mutate(Partyid=as.numeric(factor(str_trim(Party))),
 
  x$Ideology=factor(x$Ideology)
  x$Ideology.Group=factor(x$Ideology.Group)
+ x=x%>%select(-N)%>%unique
 }
 #Project61 weighting scheme
 

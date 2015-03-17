@@ -55,7 +55,7 @@ shinyUI(
     fluidRow(
       column(2,
              uiOutput("DaysLeft"),
-             checkboxInput(inputId = "chkbox",label="Mandate Threshold",value = T)
+             checkboxInput(inputId = "chkbox",label="Exit Polls",value = T)
              ),
       column(1,
              selectInput(inputId = "ptype",label = "Graph Type",choices = c("point","bar","line","step","boxplot","density"),selected="point"),
