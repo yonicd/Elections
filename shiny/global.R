@@ -56,7 +56,7 @@ fac_vars.df=read.csv("fac_vars.csv",stringsAsFactors=F,fileEncoding=loc.run)
 
 fac_vars=fac_vars.df[,1]
 
-if (Sys.info()[1] == "Windows1"){
+if (Sys.info()[1] == "Windows"){
 x=read.csv("x_static.csv",stringsAsFactors=F,fileEncoding=loc.run)%>%mutate(Date=as.Date(Date))
 x=x%>%mutate_each(funs(factor),Publisher,Ideology,Ideology.Group)
 }else{
