@@ -23,10 +23,10 @@ shinyUI(
                                    choices = split(c("",".En"),c("Hebrew","English")),
                                    selected=".En"))
            ),
-   h4("The latest Published Polling Results compared to Project 61* weighted mandates",align="center"),
+   h4("Exit Polling Results",align="center"),
     plotOutput("IntroPlot",height="500px"),
    
-   h6("*Project 61 results are based on last 10 Published Polls"),
+   #h6("*Project 61 results are based on last 10 Published Polls"),
    h6(a("Created and maintained by Jonathan Sidi",href="https://github.com/yonicd/Elections")),
    h6(a("Data Source: Project 61 of Infomeyda",href="http://infomeyda.com/")),
    h6(a("#IsraelElectionPAD",href="https://twitter.com/hashtag/IsraelElectionPAD?src=hash"),
@@ -55,7 +55,7 @@ shinyUI(
     fluidRow(
       column(2,
              uiOutput("DaysLeft"),
-             checkboxInput(inputId = "chkbox",label="Exit Polls",value = T)
+             checkboxInput(inputId = "chkbox",label="Final Results",value = T)
              ),
       column(1,
              selectInput(inputId = "ptype",label = "Graph Type",choices = c("point","bar","line","step","boxplot","density"),selected="point"),

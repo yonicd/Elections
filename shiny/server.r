@@ -2,28 +2,37 @@ shinyServer(function(input, output, session) {
 
 #Sheet 1
   IntroPrePlot <- reactive({
-    mainplot=rbind(x%>%filter(Date==max(Date))%>%select(Date,Pollster,Party,Mandates,Ideology),project61)%>%
-      group_by(Pollster,Ideology)%>%mutate(MandatesC=cumsum(Mandates))%>%arrange(Pollster,Ideology,MandatesC)%>%ungroup
+    mainplot=x%>%filter(Date==max(Date))%>%select(Date,Pollster,Party,Mandates,Ideology,Results)%>%
+      group_by(Pollster,Ideology)%>%mutate(MandatesC=cumsum(Mandates),ResultsC=cumsum(Results))%>%arrange(Pollster,Ideology,MandatesC)%>%ungroup
     
     mainplot=left_join(mainplot,
                        x%>%filter(Date==max(Date))%>%select(Party,Pollster,Ideology,Party.En,Pollster.En,Ideology.En),
-                       by=c("Pollster", "Party", "Ideology"))%>%mutate(Pollster.En=ifelse(Pollster=="פרויקט 61","Project 61",Pollster.En))
+                       by=c("Pollster", "Party", "Ideology"))
+    # %>%mutate(Pollster.En=ifelse(Pollster=="פרויקט 61","Project 61",Pollster.En))
     
-    party.temp=x%>%filter(Date==max(Date))%>%select(Party,Party.En,Ideology.En)%>%unique
+    # party.temp=x%>%filter(Date==max(Date))%>%select(Party,Party.En,Ideology.En)%>%unique
     
-    party.temp=party.temp[match(mainplot$Party[which(mainplot$Pollster.En=="Project 61")],party.temp$Party),-1]
-    mainplot$Party.En[which(mainplot$Pollster.En=="Project 61")]=party.temp$Party.En
-    mainplot$Ideology.En[which(mainplot$Pollster.En=="Project 61")]=party.temp$Ideology.En
+#     party.temp=party.temp[match(mainplot$Party[which(mainplot$Pollster.En=="Project 61")],party.temp$Party),-1]
+#     mainplot$Party.En[which(mainplot$Pollster.En=="Project 61")]=party.temp$Party.En
+#     mainplot$Ideology.En[which(mainplot$Pollster.En=="Project 61")]=party.temp$Ideology.En
     
     mainplot$Ideology=droplevels(mainplot$Ideology)
     mainplot$Ideology.En=factor(mainplot$Ideology.En,levels=c("Right","Center-Right","Center-Left","Left"))
     
-    
+    mainplot=rbind(mainplot%>%select(-c(Results,ResultsC)),
+          mainplot%>%select(-c(Mandates,MandatesC,ResultsC))%>%
+            dplyr::rename(Mandates=Results)%>%
+            mutate(Pollster.En="Final Results",Pollster="תוצאות אמת")%>%unique%>%
+            group_by(Ideology)%>%mutate(MandatesC=cumsum(Mandates))%>%ungroup%>%
+            arrange(Pollster,Ideology,MandatesC)
+            )
+  
+
     str_x=paste0("as.numeric(",paste0("Ideology",input$lang.main),")")
     str_fill=paste0("Party",input$lang.main)
     str_title=ifelse(input$lang.main=="",
-                     paste("תוצאות נכון ל:",max(x$Date)),
-                     paste("Polling Results:",max(x$Date)))
+                     paste("מדגם נכון ל:",max(x$Date)),
+                     paste("Exit Polling Results:",max(x$Date)))
     if(input$lang.main==""){
       str_lvl=levels(mainplot$Ideology)[4:1]
     }else{
@@ -39,7 +48,7 @@ shinyServer(function(input, output, session) {
     p=p+geom_bar(stat="identity",position="stack",aes_string(fill=str_fill))+scale_fill_discrete(name=fac_vars.df[which(fac_vars=="Party"),lang.id])
     p=p+geom_hline(yintercept=61,linetype=2)+facet_wrap(as.formula(paste0("~",paste0("Pollster",input$lang.main))))+
       geom_text(aes_string(x=str_x,y="MandatesC",label="Mandates"),vjust=1,size=4)
-    p=p+xlab("\n\n\n https:\\\\yonicd.shinyapps.io\\Elections \n Project61: http:\\\\infomeyda.com")+ylab(fac_vars.df[which(fac_vars=="Mandates"),lang.id])+ggtitle(str_title)
+    p=p+xlab("\n\n\n https:\\\\yonicd.shinyapps.io\\Elections")+ylab(fac_vars.df[which(fac_vars=="Mandates"),lang.id])+ggtitle(str_title)
     p=p+scale_x_reverse(breaks=seq(4,1),labels=str_lvl)
     p+geom_text(aes_string(x=str_x,y="MandatesC",label="MandatesC"),vjust=-.5,data=top.bar)+ylim(0,70)
   })
