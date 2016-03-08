@@ -9,7 +9,7 @@ remove_geom <- function(p, geom) {
   p
 }
 
-load("C:/Users/yoni/Documents/GitHub/Elections/US 2016 Elections/poll_name.rdata")
+load("poll_name.rdata")
 df.in=data.frame(Poll.Party=c("Democrat","Republican"),
                  Poll.URL=c('http://www.realclearpolitics.com/epolls/2016/president/us/2016_democratic_presidential_nomination-3824.html',
                             'http://www.realclearpolitics.com/epolls/2016/president/us/2016_republican_presidential_nomination-3823.html'),stringsAsFactors = F)
