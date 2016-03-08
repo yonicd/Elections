@@ -194,7 +194,7 @@ if(input$facet.shp=="Wrap"){
   })
   #Data
     CoalitionData <- reactive({
-    a=x%>%mutate(Dateid=factor(Date),DatePoll=factor(paste(Dateid,Pollsterid,sep=".")))
+    a=x%>%filter(Date<=as.Date("2015-03-13"))%>%mutate(Dateid=factor(Date),DatePoll=factor(paste(Dateid,Pollsterid,sep=".")))
     nt=tail(levels(a$DatePoll),input$poll[2])
     nt=tail(nt,input$poll[2]-input$poll[1]+1)
     a=a%>%filter(DatePoll%in%nt)
@@ -220,10 +220,9 @@ if(input$facet.shp=="Wrap"){
         mutate(base=120*base/sum(base),
                base.floor=floor(base),
                pct=base/(base.floor+1),
-               add=0,id=0,
-               share=factor(Party,labels=c(1,1,2,3,4,5,6,6,2,7,3)))  
-
-    
+               add=0,id=0)
+    shares=data.frame(Party=unique(df$Party),share=c(1,1,2,3,4,5,6,6,2,7,3))%>%mutate(Party=as.character(Party))
+    df=left_join(df,shares,by="Party")
     
     #hagenbach-bischoff system 
     df=ddply(df,.(bs.id,variable),.fun = function(df){
@@ -261,7 +260,7 @@ if(input$facet.shp=="Wrap"){
     txt.lvl=df%>%filter(variable=="Mandates")%>%group_by(Party.En,Party)%>%summarise(base.floor=floor(mean(base.floor)))
     
     txt.lvl=left_join(txt.lvl,base.lvl,by=c("Party.En","Party","base.floor"))
-
+    txt.lvl$n[which(is.na(txt.lvl$n))]=0
 
     str_fill=paste0("Party",input$lang.sim)
     if(input$lang.sim==""){
@@ -373,5 +372,5 @@ if(input$facet.shp=="Wrap"){
                                         }
                                         ggsave(file, plot = p+theme(text=element_text(size=22)),width=20,height=10)})
 #Sheet 4  
-  output$table <- renderDataTable(x%>%select(-c(N,contains("id"))))
+  output$table <- renderDataTable(x%>%select(-c(contains("id"))))
 })

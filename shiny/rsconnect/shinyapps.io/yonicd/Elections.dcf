@@ -1,5 +1,8 @@
 name: Elections
 account: yonicd
 server: shinyapps.io
-bundleId: 149023
-url: http://yonicd.shinyapps.io/Elections
+bundleId: 214674
+url: https://yonicd.shinyapps.io/Elections
+when: 1435869809.59351
+asMultiple: FALSE
+asStatic: FALSE

@@ -45,8 +45,7 @@ if (Sys.info()[1] == "Windows") Sys.setlocale("LC_ALL")
 The Project 61 prediction is based past pollster error deriving weights from the 2003,2006,2009 and 2013 elections, dependant on days to elections and parties. In their [site](http://shiny.rstudio.com/) there is an extensive analysis on pollster bias towards certain parties and party blocks.
   
 ## Election Analysis
-  * An interactive polling analysis layout where the user can filter elections, parties, publishers and pollster, dates and create different types of plots using any variable as 
-the x and y axis.
+  * An interactive polling analysis layout where the user can filter elections, parties, publishers and pollster, dates and create different types of plots using any variable as the x and y axis.
 
   * The default layer is the 60 day trend (estimated with loess smoother) of mandates published by each pollster by party
 ![Snapshot of Election Analysis Page](www/pad_screen_grab.png)

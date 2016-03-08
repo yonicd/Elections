@@ -1,0 +1,6 @@
+\beamer@endinputifotherversion {3.33pt}
+\select@language {english}
+\beamer@sectionintoc {1}{Quickview}{3}{0}{1}
+\beamer@sectionintoc {2}{Interactive}{4}{0}{2}
+\beamer@sectionintoc {3}{Simulator}{5}{0}{3}
+\beamer@sectionintoc {4}{User Generated Coalitions}{6}{0}{4}
