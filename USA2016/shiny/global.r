@@ -1,4 +1,4 @@
-Sys.setlocale(locale="English_US")
+#Sys.setlocale(locale="English_US")
 library(rvest);library(reshape2);library(zoo);library(stringr);library(plyr);library(shinyAce);library(dplyr)
 
 remove_geom <- function(p, geom) {
