@@ -17,19 +17,21 @@ shinyServer(function(input, output, session) {
 #     top.bar=mainplot%>%mutate_each(funs(as.numeric),Party)%>%group_by(Pollster,Party)%>%
 #       filter(ResultsC==max(ResultsC))
     
-    p=mainplot%>%ggplot(aes(x=as.numeric(Party),y=Results))+theme_bw()
+    p=mainplot%>%ggplot(aes(x=Pollster,y=Results))+theme_bw()
     p=p+geom_bar(stat="identity",position="stack",aes(fill=Candidate))
-    p=p+facet_wrap(~Pollster)+
-      geom_text(aes(x=as.numeric(Party),y=ResultsC,label=Results),vjust=1,size=4)
-    p=p+xlab("")+ylab("Results (%)")+ggtitle(paste("Polling Results:",max(poll.shiny$Date)))
-    p=p+scale_x_reverse(breaks=seq(2,1),labels=str_lvl)
+    p=p+facet_wrap(~Party)
+    #geom_text(aes(x=as.numeric(Party),y=ResultsC,label=Results),vjust=1,size=4)
+    p=p+xlab("")+ylab("Results (%)")+
+      ggtitle(paste("Polling Results:",max(poll.shiny$Date)))
+    #p=p+scale_x_reverse(breaks=seq(2,1),labels=str_lvl)
     p
     #p+geom_text(aes(x=as.numeric(Party),y=ResultsC,label=ResultsC),vjust=-.5,data=top.bar)
   })
   
   #Plot Object
-  output$IntroPlot=renderPlot({
-    print(IntroPrePlot())
+  output$IntroPlot=renderPlotly({
+    p=ggplotly(IntroPrePlot())
+    print(p)
   })
 
   #Download
@@ -62,8 +64,8 @@ shinyServer(function(input, output, session) {
   })
   #Data
     selectedData <- reactive({
-    a=poll.shiny%>%filter(!is.na(Results)&
-                            DaysLeft>=input$DaysLeft[1]&DaysLeft<=input$DaysLeft[2])
+    a=poll.shiny%>%filter(!is.na(Results))
+    if(!is.null(input$DaysLeft)) a=a%>%filter(DaysLeft>=input$DaysLeft[1]&DaysLeft<=input$DaysLeft[2])
     if(length(input$Party)>0)a=a%>%filter(Party%in%input$Party)
     if(length(input$Candidate)>0)a=a%>%filter(Candidate%in%input$Publisher)
     if(length(input$Pollster)>0)a=a%>%filter(Pollster%in%input$Pollster)
@@ -76,7 +78,7 @@ shinyServer(function(input, output, session) {
     
     if("Discrete"%in%input$axis.attr) x_str=paste0("factor(",x_str,")")
 
-    p=ggplot(a)+geom_blank()+theme_bw()+theme(axis.text.x = element_text(angle = 90*as.numeric("Rotate Label"%in%input$axis.attr)))
+    p=a%>%ggplot()+geom_blank()+theme_bw()+theme(axis.text.x = element_text(angle = 90*as.numeric("Rotate Label"%in%input$axis.attr)))
 
     #yerr=aes_string(x=paste0("factor(",input$varx,")"),y=input$vary,
     #ymin="Mandates.lb",ymax="Mandates.ub",
@@ -128,16 +130,25 @@ if(input$facet.shp=="Wrap"){
       yl=input$vary
       p=p+xlab(xl)
       if(input$ptype!="density") p=p+ylab(yl)
-      p
+      return(p)
   })
   #Plot
-    output$plot1 <- renderPlot({
-    p=selectedData()
-    input$send
-    isolate({
-      print(eval(parse(text=input$code)))
-    })
-  })
+#     output$plot1 <- renderPlot({
+#     p=selectedData()
+#     input$send
+#     isolate({
+#       print(eval(parse(text=input$code)))
+
+#   })
+    
+    output$plot1 <- renderPlotly({
+      p=selectedData()
+      input$send
+      isolate({
+        print(eval(parse(text=input$code)))
+      })
+    })  
+    
   #Download Main Plot
     output$foo = downloadHandler(filename = "ElectionPlot.png",
                                content = function(file){

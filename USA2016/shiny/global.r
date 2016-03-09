@@ -1,5 +1,5 @@
 #Sys.setlocale(locale="English_US")
-library(ggplot2);library(rvest);library(reshape2);library(zoo);library(stringr);library(plyr);library(shinyAce);library(dplyr)
+library(plotly);library(ggplot2);library(rvest);library(reshape2);library(zoo);library(stringr);library(plyr);library(shinyAce);library(dplyr)
 
 remove_geom <- function(p, geom) {
   layers <- lapply(p$layers, function(x) if(any(grepl(paste0('(?i)',geom),class(x$geom)))) NULL else x)
@@ -34,7 +34,8 @@ poll=ddply(df.in,.(Poll.Party),.fun = function(df){
   return(xt)
 })%>%distinct
 
-poll=poll%>%mutate_each(funs(as.character),-c(Poll.Date))%>%mutate_each(funs(ifelse(.=="--",NA,.)),-c(Poll.Date))
+poll=poll%>%mutate_each(funs(as.character),-c(Poll.Date))%>%
+  mutate_each(funs(ifelse(.=="--",NA,.)),-c(Poll.Date))%>%filter(variable!="Spread")
 poll=poll%>%mutate_each(funs(as.numeric),value)
 poll=poll%>%left_join(poll.name,by=c("Poll"="old"))
 
@@ -55,7 +56,10 @@ sample.avg=poll.shiny%>%group_by(Pollster,Sample.Type)%>%summarise(Sample.Mean=f
 poll.shiny=poll.shiny%>%left_join(sample.avg,by=c("Pollster","Sample.Type"))%>%
   mutate(Results=Results,Sample=ifelse(is.na(Sample),Sample.Mean,Sample),
          Sample.Error=100*1/sqrt(Sample),
-         DaysLeft=as.numeric(as.Date("2016-11-08")-Date))%>%select(-Sample.Mean)
+         DaysLeft=as.numeric(as.Date("2016-11-08")-Date))%>%select(-Sample.Mean)%>%
+  filter(Sample.Type%in%c("LV","RV"))
+
+poll.shiny$Sample.Type=factor(poll.shiny$Sample.Type,labels=c("Likely Voter","Registered Voter"))
 
 fac_vars=names(poll.shiny)[c(7,6,4,8,13,1,3,11,10,2)]
 fac_vars=c(fac_vars,names(poll.shiny)[!names(poll.shiny)%in%fac_vars])

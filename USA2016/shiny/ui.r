@@ -14,9 +14,9 @@ shinyUI(
                       strong("Polling Database:"),p("All data used in the site can be viewed and filtered."),
                       p("Keeping in an open source state of mind all code and data used can be accessed on the project homepage on" , a("Github",href="https://github.com/yonicd/Elections")),
                       br(),
-                      fluidRow(column(2,downloadButton('main.down', 'Download Plot'))),
-                      h4("Polling Results",align="center"),
-                      plotOutput("IntroPlot",height="500px"),
+                      #fluidRow(column(2,downloadButton('main.down', 'Download Plot'))),
+                      #h4("Polling Results",align="center"),
+                      plotlyOutput("IntroPlot",height="500px"),
                       
                       h6(a("Created and maintained by Jonathan Sidi",href="https://github.com/yonicd/Elections")),
                       h6(a("Data Source: Realclearpolitics.com",href="http://www.realclearpolitics.com")),
@@ -30,8 +30,8 @@ shinyUI(
                       fluidRow(
                         column(2,uiOutput("Party")),
                         column(2,uiOutput("Candidate")),
-                        column(2,uiOutput("Pollster")),
-                        column(2,downloadButton('foo', 'Download Plot'))
+                        column(2,uiOutput("Pollster"))
+                        #column(2,downloadButton('foo', 'Download Plot'))
                       ),
                       
                       hr(),
@@ -58,13 +58,13 @@ shinyUI(
                         column(2,radioButtons(inputId = "trend",label = "Trend Line",choices = c("None","No Color","Color"),selected="Color"))
                       ),
                       hr(),
-                      plotOutput('plot1',height="500px"),
+                      plotlyOutput('plot1',height="500px"),
                       hr(),
                       helpText(a("Add layers with R ggplot2 open code (base layer p=ggplot(x), use remove_geom(p,geom='bar') to drop layers)",href="http://docs.ggplot2.org/current/")),
                       fluidRow(
                         column(8,
                                actionButton("send", "Update Plot"),
-                               aceEditor(outputId = "code",value="p",mode = "r", theme = "chrome", height = "100px", fontSize = 12))),
+                               aceEditor(outputId = "code",value="p; ggplotly(p)",mode = "r", theme = "chrome", height = "100px", fontSize = 12))),
                       hr(),
                       helpText(a("Data Source: Realclearpolitics.com",href="http://www.realclearpolitics.com"))
              ),
