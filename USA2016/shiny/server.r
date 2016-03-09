@@ -30,8 +30,8 @@ shinyServer(function(input, output, session) {
   
   #Plot Object
   output$IntroPlot=renderPlotly({
-    p=ggplotly(IntroPrePlot())
-    print(p)
+    p=IntroPrePlot()
+    p
   })
 
   #Download
@@ -145,7 +145,7 @@ if(input$facet.shp=="Wrap"){
       p=selectedData()
       input$send
       isolate({
-        print(eval(parse(text=input$code)))
+        eval(parse(text=input$code))
       })
     })  
     

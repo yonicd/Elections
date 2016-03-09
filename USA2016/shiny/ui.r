@@ -64,7 +64,7 @@ shinyUI(
                       fluidRow(
                         column(8,
                                actionButton("send", "Update Plot"),
-                               aceEditor(outputId = "code",value="p; ggplotly(p)",mode = "r", theme = "chrome", height = "100px", fontSize = 12))),
+                               aceEditor(outputId = "code",value="p",mode = "r", theme = "chrome", height = "100px", fontSize = 12))),
                       hr(),
                       helpText(a("Data Source: Realclearpolitics.com",href="http://www.realclearpolitics.com"))
              ),
