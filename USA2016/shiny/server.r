@@ -12,26 +12,25 @@ shinyServer(function(input, output, session) {
     mainplot$Party=factor(mainplot$Party)
     str_x=paste0("as.numeric(Party)")
     str_fill="Candidate"
-    str_lvl=levels(mainplot$Party)[2:1]
 
 #     top.bar=mainplot%>%mutate_each(funs(as.numeric),Party)%>%group_by(Pollster,Party)%>%
 #       filter(ResultsC==max(ResultsC))
     
-    p=mainplot%>%ggplot(aes(x=Pollsters))+theme_bw()
+    p=mainplot%>%ggplot(aes(x=Pollster,y=Results))+theme_bw()
     p=p+geom_bar(stat="identity",position="stack",aes(fill=Candidate))
     p=p+facet_wrap(~Party)
     #geom_text(aes(x=as.numeric(Party),y=ResultsC,label=Results),vjust=1,size=4)
     p=p+xlab("")+ylab("Results (%)")+
       ggtitle(paste("Polling Results:",max(poll.shiny$Date)))
-    p=p+scale_x_reverse(breaks=seq(2,1),labels=str_lvl)
     p
     #p+geom_text(aes(x=as.numeric(Party),y=ResultsC,label=ResultsC),vjust=-.5,data=top.bar)
   })
   
   #Plot Object
   output$IntroPlot=renderPlotly({
-    p=ggplotly(IntroPrePlot())
-    print(p)
+    p=IntroPrePlot()
+    p
+    #print(p)
   })
 
   #Download
@@ -143,10 +142,10 @@ if(input$facet.shp=="Wrap"){
     
     output$plot1 <- renderPlotly({
       p=selectedData()
-      p=ggplotly(p)
       input$send
       isolate({
-        print(eval(parse(text=input$code)))
+        #print(eval(parse(text=input$code)))
+        eval(parse(text=input$code))
       })
     })  
     
