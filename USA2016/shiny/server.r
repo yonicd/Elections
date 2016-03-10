@@ -40,7 +40,8 @@ shinyServer(function(input, output, session) {
                 data=State.Polls%>%group_by(Candidate)%>%
                   filter(!Candidate%in%c("Christie","Fiorina","Carson","Bush")&Date==max(Date)))+
       ggtitle("Rolling Mean and Standard Deviation (7 Day Window) \n Ribbon:Mean +/- 1 Sd, Points are last day polls published")+
-      ylab("Percent")
+      ylab("Percent")+scale_colour_discrete(name="Race")
+    #+theme(legend.position="top")
   })
   
   #Plot Object

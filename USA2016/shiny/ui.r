@@ -13,9 +13,9 @@ shinyUI(
 #       a("Realclearpolitics.com",href="http://www.realclearpolitics.com"),"database.")
     
   navbarPage(title=div("Election Polls Analysis Depot",
-                       a(href="http://github.com/yonicd/Elections",img(src='https://avatars2.githubusercontent.com/u/1755487?v=3&s=460', height='30px')),
-                       a(href="https://twitter.com/yoniceedee",img(src='http://vignette1.wikia.nocookie.net/sims/images/7/7d/Twitter_icon_logo.png/revision/latest?cb=20100709233110', height='30px')),
-                       a(href="http://www.realclearpolitics.com",img(src='http://www.realclearpolitics.com/asset/img/rcp-logo-ss-red-250.gif', height='30px'))
+                       a(href="http://github.com/yonicd/Elections",img(src='https://raw.githubusercontent.com/yonicd/Elections/master/USA2016/shiny/www/CDlogo_grey.png', height='35px')),
+                       a(href="https://twitter.com/yoniceedee",img(src='http://vignette1.wikia.nocookie.net/sims/images/7/7d/Twitter_icon_logo.png/revision/latest?cb=20100709233110', height='35px')),
+                       a(href="http://www.realclearpolitics.com",img(src='http://www.realclearpolitics.com/asset/img/rcp-logo-ss-red-250.gif', height='35px'))
                        ),
              
              tabPanel("Current Polling",
