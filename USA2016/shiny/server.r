@@ -39,7 +39,7 @@ shinyServer(function(input, output, session) {
       geom_text(aes(y=Results,colour=State.Abb,label=State.Abb),
                 data=State.Polls%>%group_by(Candidate)%>%
                   filter(!Candidate%in%c("Christie","Fiorina","Carson","Bush")&Date==max(Date)))+
-      ggtitle("Rolling Mean and Standard Deviation (Window 7 days) \n Ribbon:Mean +/- 1 Sd, Points are last day polls published")+
+      ggtitle("Rolling Mean and Standard Deviation (7 Day Window) \n Ribbon:Mean +/- 1 Sd, Points are last day polls published")+
       ylab("Percent")
   })
   
@@ -112,20 +112,42 @@ shinyServer(function(input, output, session) {
     #if(input$ptype%in%c("point","line","bar","step"))    p=p+stat_summary(fun.y=mean,aes_string(x=x_str,y=y_str,colour=str_fill,fill=str_fill),geom=input$ptype,position="dodge")
                                                               #stat_summary(fun.y=mean,aes_string(ymin="Mandates.lb",ymax="Mandates.ub",y=y_str,x=x_str,group=str_fill),geom="errorbar",position="dodge")
 
-    if(input$ptype=="point")     p=p+geom_point(aes_string(x=x_str,y=y_str,colour=str_fill)) 
-    if(input$ptype=="line")     p=p+geom_line(aes_string(x=x_str,y=y_str,colour=str_fill))
-     if(input$ptype=="step")     p=p+geom_step(aes_string(x=x_str,y=y_str,colour=str_fill))
-     if(input$ptype=="bar")      p=p+geom_bar(aes_string(x=x_str,y=y_str,fill=str_fill),stat="identity",position="dodge")
-    if(input$ptype=="boxplot")  p=p+geom_boxplot(aes_string(x=x_str,y=y_str,fill=str_fill))
-    if(input$ptype=="density"){x_str1=y_str  
-      p=p+geom_density(aes_string(x=x_str1,fill=str_fill,y="..scaled.."),alpha=.25)}
+    xl=input$varx
+    yl=input$vary
     
-     nm=input$fill_var
-    
-     p=p+scale_colour_discrete(name=nm)+scale_fill_discrete(name=nm)  
+    if(input$ptype=="point")     p=p+geom_point(aes_string(x=x_str,y=y_str)) 
+    if(input$ptype=="line")     p=p+geom_line(aes_string(x=x_str,y=y_str))
+     if(input$ptype=="step")     p=p+geom_step(aes_string(x=x_str,y=y_str))
+     if(input$ptype=="bar")      p=p+geom_bar(aes_string(x=x_str,y=y_str),stat="identity",position="dodge")
+    if(input$ptype=="boxplot")  p=p+geom_boxplot(aes_string(x=x_str,y=y_str))
+    if(input$ptype=="density"){
+      x_str1=y_str
+      xl=input$vary
+      p=p+geom_density(aes_string(x=x_str1,y="..scaled.."),alpha=.25)}
 
-    if(input$trend=="No Color") p=p+geom_smooth(aes_string(x=x_str,y=y_str),method="loess")
-    if(input$trend=="Color") p=p+geom_smooth(aes_string(x=x_str,y=y_str,fill=str_fill,colour=str_fill),method="loess")
+        if(input$trend=="No Color") p=p+geom_smooth(aes_string(x=x_str,y=y_str),method="loess",span=0.5)
+
+    if (input$fill_var != '.'){
+      filltxt=ifelse(input$factor,paste0("factor(",input$fill_var,")"),input$fill_var)
+      
+      if(input$ptype%in%c("line","point","step")){
+        p = p + aes_string(color=filltxt)
+        if(input$factor) p=p+scale_color_discrete(name=input$fill_var)
+      }
+      else if(input$ptype%in%c("boxplot","density")){
+        p = p + aes_string(fill=filltxt)
+        if(input$factor) p+scale_fill_discrete(name=input$fill_var)
+      }
+      if(input$trend=="Color"){
+        p=p+geom_smooth(aes_string(x=x_str,y=y_str),method="loess",span=0.5) + aes_string(color=filltxt,fill=filltxt)
+        if(input$factor) p+scale_colour_discrete(name=input$fill_var)+scale_fill_discrete(name=input$fill_var)
+      }      
+      }
+
+#      nm=input$fill_var
+#     
+#      p=p+scale_colour_discrete(name=nm)+scale_fill_discrete(name=nm)  
+
     
     
     
@@ -148,9 +170,7 @@ if(input$facet.shp=="Wrap"){
     p=p+facet_grid(paste(fr_str,fc_str,sep="~"),scales=input$scales)
   }
 }
-      xl=input$varx
-      xl=paste0(xl,"\n \n https:\\\\yonicd.shinyapps.io\\Elections")
-      yl=input$vary
+
       p=p+xlab(xl)
       if(input$ptype!="density") p=p+ylab(yl)
       return(p)

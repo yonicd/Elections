@@ -1,26 +1,38 @@
 shinyUI(
-  navbarPage("Election Polls Analysis Depot",
+  fluidPage(
+    list(tags$head(HTML('<link rel="icon", href="MyIcon.png", type="image/png" />'))),
+
+    div(style="padding: 1px 0px; width: '100%'",
+        titlePanel(
+          title="",windowTitle="My Window Title"
+        )
+    ),
+    
+#     p("The Election Polls Analysis Depot is an interactive web application for analysing the USA elections powered by the",
+#       a("Shiny library of RStudio",href="http://shiny.rstudio.com/"),"and realtime published polling data from the",
+#       a("Realclearpolitics.com",href="http://www.realclearpolitics.com"),"database.")
+    
+  navbarPage(title=div("Election Polls Analysis Depot",
+                       a(href="http://github.com/yonicd/Elections",img(src='https://avatars2.githubusercontent.com/u/1755487?v=3&s=460', height='30px')),
+                       a(href="https://twitter.com/yoniceedee",img(src='http://vignette1.wikia.nocookie.net/sims/images/7/7d/Twitter_icon_logo.png/revision/latest?cb=20100709233110', height='30px')),
+                       a(href="http://www.realclearpolitics.com",img(src='http://www.realclearpolitics.com/asset/img/rcp-logo-ss-red-250.gif', height='30px'))
+                       ),
              
              tabPanel("Current Polling",
-                      img(src='https://avatars2.githubusercontent.com/u/1755487?v=3&s=460', align = "right", height='75px'),
-                      img(src='http://www.realclearpolitics.com/asset/img/rcp-logo-ss-red-250.gif', align = "right", height='75px'),
-                      h3("The Election Polls Analysis Depot is an interactive web application for analysing the USA elections powered by the",
-                         a("Shiny library of RStudio",href="http://shiny.rstudio.com/"),"and realtime published polling data from the",
-                         a("Realclearpolitics.com",href="http://www.realclearpolitics.com"),"database."),
                       h4("Application Layout (Navigate on top ribbon of page):"),
-                      strong("Election Analyis:"),p("An interactive polling analysis layout where the user can filter elections, parties,candidates, pollster, dates
+                      strong("Current Polling:"),p("A quick snapshot showing how each candidate is trending in the polls. At the end of each trend are the current published poll results for the candidate by state. If they are outside of the ribbon it means that the polling shows that the candidate is one standard deviation outside of their overall 7 day trend."),
+                      strong("Election Analysis:"),p("An interactive polling analysis layout where the user can filter elections, parties,candidates, pollster, dates
                               and create different types of plots using any variable as the x and y axis.\n 
                               If you are an R user and know ggplot there is an additional editor console where you can create advanced plots freehand"),
                       strong("Polling Database:"),p("All data used in the site can be viewed and filtered."),
                       p("Keeping in an open source state of mind all code and data used can be accessed on the project homepage on" , a("Github",href="https://github.com/yonicd/Elections")),
+                      p("Created and maintained by",a("Jonathan Sidi",href="https://github.com/yonicd/Elections"),
+                        ", all data is from",a("Realclearpolitics.com",href="http://www.realclearpolitics.com")),
                       br(),
                       fluidRow(column(2,downloadButton('main.down', 'Download Plot'))),
                       #h4("Polling Results",align="center"),
-                      plotOutput("IntroPlot",height="500px"),
-                      
-                      h6(a("Created and maintained by Jonathan Sidi",href="https://github.com/yonicd/Elections")),
-                      h6(a("Data Source: Realclearpolitics.com",href="http://www.realclearpolitics.com")),
-                      h6(a("@yoniceedee",href="https://twitter.com/yoniceedee"))),
+                      plotOutput("IntroPlot",height="500px")
+                      ),
              
              tabPanel("Election Analysis",
                       h5("Analyze polling results from the Current USA Presidential Elections by slicing the data on any variable as you please. \n
@@ -40,7 +52,7 @@ shinyUI(
                       fluidRow(
                         column(2,uiOutput("DaysLeft"),
                         radioButtons(inputId="plotmode",label = "Plot Mode",choices=split(c("ggplot","plotly"),c("Static","Interactive")),selected = "ggplot")),
-                        column(1,
+                        column(2,
                                selectInput(inputId = "ptype",label = "Graph Type",choices = c("point","bar","line","step","boxplot","density"),selected="point"),
                                selectInput("fill_var","Colour",choices=c(None=".",fac_vars),selected="Candidate")),
                         column(2,
@@ -57,7 +69,8 @@ shinyUI(
                         column(2,
                                checkboxGroupInput(inputId = "axis.attr",label = "X-axis Attrib",inline=T,choices = c("Rotate Label","Discrete")),
                                radioButtons(inputId = "facet.shp",label = "Facet Layout",inline=T,choices = c("Wrap","Grid"),selected=c("Wrap"))),
-                        column(2,radioButtons(inputId = "trend",label = "Trend Line",choices = c("None","No Color","Color"),selected="Color"))
+                        column(3,radioButtons(inputId = "trend",label = "Trend Line",choices = c("None","No Color","Color"),selected="Color",inline=T),
+                               checkboxInput("factor",label = "Group Factor",value = F))
                       ),
                       hr(),
                       fluidRow(
@@ -90,4 +103,4 @@ shinyUI(
                       helpText(a("Data Source: Realclearpolitics.com",href="http://www.realclearpolitics.com"))
              )
   )
-)
+))
