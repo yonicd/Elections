@@ -1,5 +1,4 @@
 #Sys.setlocale(locale="English_US")
-setwd("C:/Users/yoni/Documents/GitHub/Elections/USA2016/shiny")
 
 library(plotly);library(ggplot2);library(rvest);library(reshape2);library(zoo);library(stringr);library(plyr);library(shinyAce);library(dplyr)
 
