@@ -2,35 +2,51 @@ shinyServer(function(input, output, session) {
 
 #Sheet 1
   IntroPrePlot <- reactive({
-    mainplot=poll.shiny%>%filter(Date==max(Date)&!is.na(Results))%>%select(Date,Pollster,Party,Candidate,Results)%>%
-      group_by(Pollster,Party)%>%mutate(ResultsC=cumsum(Results))%>%arrange(Pollster,Party,ResultsC)%>%ungroup
-    
-    mainplot=left_join(mainplot,
-                       poll.shiny%>%filter(Date==max(Date))%>%select(Candidate,Party,Pollster),
-                       by=c("Pollster", "Party", "Candidate"))
-
-    mainplot$Party=factor(mainplot$Party)
-    str_x=paste0("as.numeric(Party)")
-    str_fill="Candidate"
+#     mainplot=poll.shiny%>%filter(Date==max(Date)&!is.na(Results))%>%select(Date,Pollster,Party,Candidate,Results)%>%
+#       group_by(Pollster,Party)%>%mutate(ResultsC=cumsum(Results))%>%arrange(Pollster,Party,ResultsC)%>%ungroup
+#     
+#     mainplot=left_join(mainplot,
+#                        poll.shiny%>%filter(Date==max(Date))%>%select(Candidate,Party,Pollster),
+#                        by=c("Pollster", "Party", "Candidate"))
+# 
+#     mainplot$Party=factor(mainplot$Party)
+#     str_x=paste0("as.numeric(Party)")
+#     str_fill="Candidate"
 
 #     top.bar=mainplot%>%mutate_each(funs(as.numeric),Party)%>%group_by(Pollster,Party)%>%
 #       filter(ResultsC==max(ResultsC))
     
-    p=mainplot%>%ggplot(aes(x=Pollster,y=Results))+theme_bw()
-    p=p+geom_bar(stat="identity",position="stack",aes(fill=Candidate))
-    p=p+facet_wrap(~Party)
-    #geom_text(aes(x=as.numeric(Party),y=ResultsC,label=Results),vjust=1,size=4)
-    p=p+xlab("")+ylab("Results (%)")+
-      ggtitle(paste("Polling Results:",max(poll.shiny$Date)))
-    p
-    #p+geom_text(aes(x=as.numeric(Party),y=ResultsC,label=ResultsC),vjust=-.5,data=top.bar)
+#     p=mainplot%>%ggplot(aes(x=Pollster,y=Results))+theme_bw()
+#     p=p+geom_bar(stat="identity",position="stack",aes(fill=Candidate))
+#     p=p+facet_wrap(~Party)
+#     geom_text(aes(x=as.numeric(Party),y=ResultsC,label=Results),vjust=1,size=4)
+#     p=p+xlab("")+ylab("Results (%)")+
+#       ggtitle(paste("Polling Results:",max(poll.shiny$Date)))
+#     p
+#     p+geom_text(aes(x=as.numeric(Party),y=ResultsC,label=ResultsC),vjust=-.5,data=top.bar)
+    
+    State.roll=State.Polls%>%filter(!Candidate%in%c("Christie","Fiorina","Carson","Bush"))%>%arrange(Party,Candidate,Date)%>%
+      group_by(Date,Party,Candidate)%>%summarise_each(funs(mean),Results)%>%group_by(Party,Candidate)%>%
+      do(.,data.frame(roll.sd=zoo:::rollapplyr(.$Results,width=7,FUN=sd,fill=NA),roll.mean=zoo:::rollapplyr(.$Results,width=7,FUN=mean,fill=NA)))
+    
+    State.roll$Date=(State.Polls%>%filter(!Candidate%in%c("Christie","Fiorina","Carson","Bush"))%>%select(Candidate,Date)%>%arrange(Candidate,Date)%>%distinct)$Date
+    
+    State.roll%>%
+      ggplot(aes(x=Date))+
+      geom_line(aes(y=roll.mean,group=Candidate))+
+      geom_ribbon(aes(ymin=roll.mean-roll.sd,ymax=roll.mean+roll.sd,fill=Candidate),alpha=.5)+
+      facet_wrap(Party~Candidate,ncol=2)+theme_bw()+
+      geom_text(aes(y=Results,colour=State.Abb,label=State.Abb),
+                data=State.Polls%>%group_by(Candidate)%>%
+                  filter(!Candidate%in%c("Christie","Fiorina","Carson","Bush")&Date==max(Date)))+
+      ggtitle("Rolling Mean and Standard Deviation (Window 7 days) \n Ribbon:Mean +/- 1 Sd, Points are last day polls published")+
+      ylab("Percent")
   })
   
   #Plot Object
-  output$IntroPlot=renderPlotly({
+  output$IntroPlot=renderPlot({
     p=IntroPrePlot()
-    p
-    #print(p)
+    print(p)
   })
 
   #Download
@@ -41,16 +57,22 @@ shinyServer(function(input, output, session) {
   
 #Sheet 2  
   #Filters
+  output$State <- renderUI({
+    State=unique(poll.shiny$State)
+    selectInput("State","State Filter",choices = State,multiple=T)
+  })
+  
     output$Party <- renderUI({
       Party=unique(poll.shiny$Party)
       selectInput("Party","Party Filter",choices = Party,multiple=T)
     })
     output$Candidate <- renderUI({
-      Candidate=poll.shiny%>%filter(Party%in%input$Party)%>%select(Candidate)%>%unique
+      Candidate=unique(poll.shiny$Candidate)
       selectInput("Candidate","Candidate Filter",choices = Candidate,multiple=T)
     })
     output$Pollster <- renderUI({
       Pollster=unique(poll.shiny$Pollster)
+      #if(length(input$State)>0) Pollster=poll.shiny%>%filter(State%in%input$State)%>%select(Pollster)%>%unique
       selectInput("Pollster","Pollster Filter",choices = Pollster,multiple=T)
     })
   #Slider
@@ -58,15 +80,16 @@ shinyServer(function(input, output, session) {
     xmin=min(poll.shiny$DaysLeft,na.rm = T)
     xmax=max(poll.shiny$DaysLeft,na.rm = T)
     
-    sliderInput(inputId = "DaysLeft",label = "Days Left to Election",
+    sliderInput(inputId = "DaysLeft",label = "Days Left to Conventions",
                 min = xmin,max = xmax,step=1,value=c(xmin,60))
   })
   #Data
     selectedData <- reactive({
     a=poll.shiny%>%filter(!is.na(Results))
     if(!is.null(input$DaysLeft)) a=a%>%filter(DaysLeft>=input$DaysLeft[1]&DaysLeft<=input$DaysLeft[2])
+    if(length(input$State)>0)a=a%>%filter(State%in%input$State)
     if(length(input$Party)>0)a=a%>%filter(Party%in%input$Party)
-    if(length(input$Candidate)>0)a=a%>%filter(Candidate%in%input$Publisher)
+    if(length(input$Candidate)>0)a=a%>%filter(Candidate%in%input$Candidate)
     if(length(input$Pollster)>0)a=a%>%filter(Pollster%in%input$Pollster)
 
     x_str=input$varx
@@ -94,7 +117,8 @@ shinyServer(function(input, output, session) {
      if(input$ptype=="step")     p=p+geom_step(aes_string(x=x_str,y=y_str,colour=str_fill))
      if(input$ptype=="bar")      p=p+geom_bar(aes_string(x=x_str,y=y_str,fill=str_fill),stat="identity",position="dodge")
     if(input$ptype=="boxplot")  p=p+geom_boxplot(aes_string(x=x_str,y=y_str,fill=str_fill))
-    if(input$ptype=="density")  p=p+geom_density(aes_string(x=x_str,fill=str_fill,y="..scaled.."),alpha=.25)
+    if(input$ptype=="density"){x_str1=y_str  
+      p=p+geom_density(aes_string(x=x_str1,fill=str_fill,y="..scaled.."),alpha=.25)}
     
      nm=input$fill_var
     
@@ -132,15 +156,17 @@ if(input$facet.shp=="Wrap"){
       return(p)
   })
   #Plot
-#     output$plot1 <- renderPlot({
-#     p=selectedData()
-#     input$send
-#     isolate({
-#       print(eval(parse(text=input$code)))
 
-#   })
+  output$plot1 <- renderPlot({
+    p=selectedData()
+    input$send
+    isolate({
+      print(eval(parse(text=input$code)))
+
+  })
+  })
     
-    output$plot1 <- renderPlotly({
+    output$plot1ly <- renderPlotly({
       p=selectedData()
       input$send
       isolate({
