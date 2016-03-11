@@ -4,7 +4,7 @@ shinyUI(
 
     div(style="padding: 1px 0px; width: '100%'",
         titlePanel(
-          title="",windowTitle="My Window Title"
+          title="",windowTitle="Election PAD"
         )
     ),
     

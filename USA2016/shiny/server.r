@@ -126,8 +126,6 @@ shinyServer(function(input, output, session) {
       xl=input$vary
       p=p+geom_density(aes_string(x=x_str1,y="..scaled.."),alpha=.25)}
 
-        if(input$trend=="No Color") p=p+geom_smooth(aes_string(x=x_str,y=y_str),method="loess",span=0.5)
-
     if (input$fill_var != '.'){
       filltxt=ifelse(input$factor,paste0("factor(",input$fill_var,")"),input$fill_var)
       
@@ -139,12 +137,17 @@ shinyServer(function(input, output, session) {
         p = p + aes_string(fill=filltxt)
         if(input$factor) p+scale_fill_discrete(name=input$fill_var)
       }
-      if(input$trend=="Color"){
-        p=p+geom_smooth(aes_string(x=x_str,y=y_str),method="loess",span=0.5) + aes_string(color=filltxt,fill=filltxt)
-        if(input$factor) p+scale_colour_discrete(name=input$fill_var)+scale_fill_discrete(name=input$fill_var)
-      }      
+      
       }
 
+
+      if(input$trend=="No Color") p=p+geom_smooth(aes_string(x=x_str,y=y_str),method="loess")
+      if(input$trend=="Color") p=p+geom_smooth(aes_string(x=x_str,y=y_str,color=filltxt,fill=filltxt),method="loess")
+      if(input$trend!="None" & input$factor) p+scale_colour_discrete(name=input$fill_var)+scale_fill_discrete(name=input$fill_var)
+    
+    
+    
+    
 #      nm=input$fill_var
 #     
 #      p=p+scale_colour_discrete(name=nm)+scale_fill_discrete(name=nm)  
