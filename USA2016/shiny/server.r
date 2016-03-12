@@ -54,7 +54,7 @@ shinyServer(function(input, output, session) {
   output$main.down = downloadHandler(filename = "LastDayPlot.png",
                                      content = function(file){
                                        p=IntroPrePlot()+theme(text=element_text(size=25),axis.text.x = element_text(angle = 90))
-                                       ggsave(file, plot = p,width=20,height=10)})
+                                       if(input$plotmode){ggsave(file, plot = p,width=20,height=10)}})
   
 #Sheet 2  
   #Filters
