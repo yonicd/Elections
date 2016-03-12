@@ -200,11 +200,10 @@ if(input$facet.shp=="Wrap"){
     })  
     
   #Download Main Plot
-#     output$foo = downloadHandler(filename = "ElectionPlot.png",
-#                                content = function(file){
-#                                  p=selectedData()+theme(text=element_text(size=18))
-#                                 ggsave(file, plot = eval(parse(text=input$code)),width=20,height=10)})
-    #if(input$plotmode){
+     output$foo = downloadHandler(filename = "ElectionPlot.png",
+                                content = function(file){
+                                  p=selectedData()+theme(text=element_text(size=18))
+                                 ggsave(file, plot = eval(parse(text=input$code)),width=20,height=10)})
 #Sheet 3
   output$table <- renderDataTable(poll.shiny)
 })
