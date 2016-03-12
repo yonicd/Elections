@@ -54,7 +54,7 @@ shinyServer(function(input, output, session) {
   output$main.down = downloadHandler(filename = "LastDayPlot.png",
                                      content = function(file){
                                        p=IntroPrePlot()+theme(text=element_text(size=25),axis.text.x = element_text(angle = 90))
-                                       if(input$plotmode){ggsave(file, plot = p,width=20,height=10)}})
+                                       ggsave(file, plot = p,width=20,height=10)})
   
 #Sheet 2  
   #Filters
@@ -200,10 +200,11 @@ if(input$facet.shp=="Wrap"){
     })  
     
   #Download Main Plot
-    output$foo = downloadHandler(filename = "ElectionPlot.png",
-                               content = function(file){
-                                 p=selectedData()+theme(text=element_text(size=18))
-                                ggsave(file, plot = eval(parse(text=input$code)),width=20,height=10)})
+#     output$foo = downloadHandler(filename = "ElectionPlot.png",
+#                                content = function(file){
+#                                  p=selectedData()+theme(text=element_text(size=18))
+#                                 ggsave(file, plot = eval(parse(text=input$code)),width=20,height=10)})
+    #if(input$plotmode){
 #Sheet 3
   output$table <- renderDataTable(poll.shiny)
 })

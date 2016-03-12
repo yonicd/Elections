@@ -74,8 +74,8 @@ shinyUI(
                       ),
                       hr(),
                       fluidRow(
-                        conditionalPanel("input.plotmode==='ggplot'",
-                                         column(width=2,downloadButton('foo', 'Download Plot'))),
+#                         conditionalPanel("input.plotmode==='ggplot'",
+#                                          column(width=2,downloadButton('foo', 'Download Plot'))),
                         conditionalPanel('input.plotmode=="ggplot"',
                                          column(width=12,plotOutput(outputId = "plot1",height = "500px"))),
                         conditionalPanel('input.plotmode==="plotly"',
