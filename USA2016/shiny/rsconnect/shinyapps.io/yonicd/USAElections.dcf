@@ -1,0 +1,8 @@
+name: USAElections
+account: yonicd
+server: shinyapps.io
+bundleId: 392886
+url: https://yonicd.shinyapps.io/USAElections/
+when: 1457687518.29259
+asMultiple: FALSE
+asStatic: FALSE

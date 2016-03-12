@@ -1,5 +1,5 @@
 shinyServer(function(input, output, session) {  
-
+#update
 #Sheet 1
   IntroPrePlot <- reactive({
 #     mainplot=poll.shiny%>%filter(Date==max(Date)&!is.na(Results))%>%select(Date,Pollster,Party,Candidate,Results)%>%
