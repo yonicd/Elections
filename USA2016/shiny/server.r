@@ -194,6 +194,7 @@ if(input$facet.shp=="Wrap"){
       p=selectedData()
       input$send
       isolate({
+        pdf(NULL)
         #print(eval(parse(text=input$code)))
         eval(parse(text=input$code))
       })
