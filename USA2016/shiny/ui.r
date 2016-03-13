@@ -31,7 +31,7 @@ shinyUI(
                       br(),
                       fluidRow(column(2,downloadButton('main.down', 'Download Plot'))),
                       #h4("Polling Results",align="center"),
-                      plotOutput("IntroPlot",height="500px")
+                      plotlyOutput("IntroPlot",height="500px")
                       ),
              
              tabPanel("Election Analysis",

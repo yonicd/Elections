@@ -45,9 +45,9 @@ shinyServer(function(input, output, session) {
   })
   
   #Plot Object
-  output$IntroPlot=renderPlot({
-    p=IntroPrePlot()
-    print(p)
+  output$IntroPlot=renderPlotly({
+    IntroPrePlot()
+    #print(p)
   })
 
   #Download
@@ -191,7 +191,6 @@ if(input$facet.shp=="Wrap"){
   })
     
     output$plot1ly <- renderPlotly({
-      #pdf(NULL)
       p=selectedData()
       input$send
       isolate({
@@ -201,10 +200,10 @@ if(input$facet.shp=="Wrap"){
     })  
     
   #Download Main Plot
-     output$foo = downloadHandler(filename = "ElectionPlot.png",
-                                content = function(file){
-                                  p=selectedData()+theme(text=element_text(size=18))
-                                 ggsave(file, plot = eval(parse(text=input$code)),width=20,height=10)})
+#      output$foo = downloadHandler(filename = "ElectionPlot.png",
+#                                 content = function(file){
+#                                   p=selectedData()+theme(text=element_text(size=18))
+#                                  ggsave(file, plot = eval(parse(text=input$code)),width=20,height=10)})
 #Sheet 3
   output$table <- renderDataTable(poll.shiny)
 })
