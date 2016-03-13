@@ -191,10 +191,10 @@ if(input$facet.shp=="Wrap"){
   })
     
     output$plot1ly <- renderPlotly({
+      pdf(NULL)
       p=selectedData()
       input$send
       isolate({
-        pdf(NULL)
         #print(eval(parse(text=input$code)))
         eval(parse(text=input$code))
       })
