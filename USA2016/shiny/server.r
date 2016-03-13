@@ -23,6 +23,7 @@ shinyServer(function(input, output, session) {
   
   #Plot Object
   output$IntroPlot=renderPlotly({
+    pdf(NULL)
     IntroPrePlot()
   })
 
