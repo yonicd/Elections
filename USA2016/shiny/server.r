@@ -24,7 +24,7 @@ shinyServer(function(input, output, session) {
   #Plot Object
   output$IntroPlot=renderPlot({
     #pdf(NULL)
-    IntroPrePlot()
+    print(IntroPrePlot())
   })
 
 #Download
