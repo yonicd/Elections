@@ -2,29 +2,6 @@ shinyServer(function(input, output, session) {
 #update
 #Sheet 1
   IntroPrePlot <- reactive({
-#     mainplot=poll.shiny%>%filter(Date==max(Date)&!is.na(Results))%>%select(Date,Pollster,Party,Candidate,Results)%>%
-#       group_by(Pollster,Party)%>%mutate(ResultsC=cumsum(Results))%>%arrange(Pollster,Party,ResultsC)%>%ungroup
-#     
-#     mainplot=left_join(mainplot,
-#                        poll.shiny%>%filter(Date==max(Date))%>%select(Candidate,Party,Pollster),
-#                        by=c("Pollster", "Party", "Candidate"))
-# 
-#     mainplot$Party=factor(mainplot$Party)
-#     str_x=paste0("as.numeric(Party)")
-#     str_fill="Candidate"
-
-#     top.bar=mainplot%>%mutate_each(funs(as.numeric),Party)%>%group_by(Pollster,Party)%>%
-#       filter(ResultsC==max(ResultsC))
-    
-#     p=mainplot%>%ggplot(aes(x=Pollster,y=Results))+theme_bw()
-#     p=p+geom_bar(stat="identity",position="stack",aes(fill=Candidate))
-#     p=p+facet_wrap(~Party)
-#     geom_text(aes(x=as.numeric(Party),y=ResultsC,label=Results),vjust=1,size=4)
-#     p=p+xlab("")+ylab("Results (%)")+
-#       ggtitle(paste("Polling Results:",max(poll.shiny$Date)))
-#     p
-#     p+geom_text(aes(x=as.numeric(Party),y=ResultsC,label=ResultsC),vjust=-.5,data=top.bar)
-    
     State.roll=State.Polls%>%filter(!Candidate%in%c("Christie","Fiorina","Carson","Bush"))%>%arrange(Party,Candidate,Date)%>%
       group_by(Date,Party,Candidate)%>%summarise_each(funs(mean),Results)%>%group_by(Party,Candidate)%>%
       do(.,data.frame(roll.sd=zoo:::rollapplyr(.$Results,width=7,FUN=sd,fill=NA),roll.mean=zoo:::rollapplyr(.$Results,width=7,FUN=mean,fill=NA)))
@@ -47,14 +24,13 @@ shinyServer(function(input, output, session) {
   #Plot Object
   output$IntroPlot=renderPlotly({
     IntroPrePlot()
-    #print(p)
   })
 
-  #Download
-  output$main.down = downloadHandler(filename = "LastDayPlot.png",
-                                     content = function(file){
-                                       p=IntroPrePlot()+theme(text=element_text(size=25),axis.text.x = element_text(angle = 90))
-                                       ggsave(file, plot = p,width=20,height=10)})
+#Download
+#   output$main.down = downloadHandler(filename = "LastDayPlot.png",
+#                                      content = function(file){
+#                                        p=IntroPrePlot()+theme(text=element_text(size=25),axis.text.x = element_text(angle = 90))
+#                                        ggsave(file, plot = p,width=20,height=10)})
   
 #Sheet 2  
   #Filters
@@ -86,7 +62,7 @@ shinyServer(function(input, output, session) {
   })
   #Data
     selectedData <- reactive({
-    a=poll.shiny%>%filter(!is.na(Results))
+    a=poll.shiny%>%filter(!is.na(Results)&!Candidate%in%c("Christie","Fiorina","Carson","Bush"))
     if(!is.null(input$DaysLeft)) a=a%>%filter(DaysLeft>=input$DaysLeft[1]&DaysLeft<=input$DaysLeft[2])
     if(length(input$State)>0)a=a%>%filter(State%in%input$State)
     if(length(input$Party)>0)a=a%>%filter(Party%in%input$Party)
@@ -101,7 +77,7 @@ shinyServer(function(input, output, session) {
     
     if("Discrete"%in%input$axis.attr) x_str=paste0("factor(",x_str,")")
 
-    p=a%>%ggplot()+geom_blank()+theme_bw()+theme(axis.text.x = element_text(angle = 90*as.numeric("Rotate Label"%in%input$axis.attr)))
+    p=a%>%ggplot()+theme_bw()+theme(axis.text.x = element_text(angle = 90*as.numeric("Rotate Label"%in%input$axis.attr)))
 
     #yerr=aes_string(x=paste0("factor(",input$varx,")"),y=input$vary,
     #ymin="Mandates.lb",ymax="Mandates.ub",
@@ -177,7 +153,8 @@ if(input$facet.shp=="Wrap"){
 
       p=p+xlab(xl)
       if(input$ptype!="density") p=p+ylab(yl)
-      return(p)
+      #p=p+geom_blank()
+      p
   })
   #Plot
 
@@ -191,19 +168,19 @@ if(input$facet.shp=="Wrap"){
   })
     
     output$plot1ly <- renderPlotly({
+      pdf(NULL)
       p=selectedData()
       input$send
       isolate({
-        #print(eval(parse(text=input$code)))
         eval(parse(text=input$code))
       })
     })  
     
-  #Download Main Plot
-#      output$foo = downloadHandler(filename = "ElectionPlot.png",
-#                                 content = function(file){
-#                                   p=selectedData()+theme(text=element_text(size=18))
-#                                  ggsave(file, plot = eval(parse(text=input$code)),width=20,height=10)})
+#Download Main Plot
+     output$foo = downloadHandler(filename = "ElectionPlot.png",
+                                content = function(file){
+                                  p=selectedData()+theme(text=element_text(size=18))
+                                 ggsave(file, plot = eval(parse(text=input$code)),width=20,height=10)})
 #Sheet 3
   output$table <- renderDataTable(poll.shiny)
 })
