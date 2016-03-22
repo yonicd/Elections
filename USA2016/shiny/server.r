@@ -2,23 +2,34 @@ shinyServer(function(input, output, session) {
 #update
 #Sheet 1
   IntroPrePlot <- reactive({
-    State.roll=State.Polls%>%filter(!Candidate%in%c("Christie","Fiorina","Carson","Bush"))%>%arrange(Party,Candidate,Date)%>%
+    rm.cand=c("Christie","Fiorina","Carson","Bush","Rubio")
+    State.roll=State.Polls%>%filter(!Candidate%in%rm.cand)%>%arrange(Party,Candidate,Date)%>%
       group_by(Date,Party,Candidate)%>%summarise_each(funs(mean),Results)%>%group_by(Party,Candidate)%>%
       do(.,data.frame(roll.sd=zoo:::rollapplyr(.$Results,width=7,FUN=sd,fill=NA),roll.mean=zoo:::rollapplyr(.$Results,width=7,FUN=mean,fill=NA)))
     
-    State.roll$Date=(State.Polls%>%filter(!Candidate%in%c("Christie","Fiorina","Carson","Bush"))%>%select(Candidate,Date)%>%arrange(Candidate,Date)%>%distinct)$Date
+    State.roll$Date=(State.Polls%>%filter(!Candidate%in%rm.cand)%>%select(Candidate,Date)%>%arrange(Candidate,Date)%>%distinct)$Date
     
-    State.roll%>%
-      ggplot(aes(x=Date))+
-      geom_line(aes(y=roll.mean,group=Candidate))+
-      geom_ribbon(aes(ymin=roll.mean-roll.sd,ymax=roll.mean+roll.sd,fill=Candidate),alpha=.5)+
-      facet_wrap(Party~Candidate,ncol=2)+theme_bw()+
-      geom_text(aes(y=Results,colour=State.Abb,label=State.Abb),
-                data=State.Polls%>%group_by(Candidate)%>%
-                  filter(!Candidate%in%c("Christie","Fiorina","Carson","Bush")&Date==max(Date)))+
-      ggtitle("Rolling Mean and Standard Deviation (7 Day Window) \n Ribbon:Mean +/- 1 Sd, Points are last day polls published")+
-      ylab("Percent")+scale_colour_discrete(name="Race")
-    #+theme(legend.position="top")
+    state.roll.plot=State.roll%>%filter(!is.na(roll.mean))%>%rename(value=roll.mean,sd=roll.sd)%>%mutate(type="Trend Index")
+
+    delegate.plot=delegate%>%mutate(value=as.numeric(value))%>%filter(!is.na(value)&variable!="Rubio")%>%
+      group_by(Party,variable,Date)%>%summarise_each(funs(sum),value)%>%group_by(variable)%>%mutate(c.value=cumsum(value))%>%
+      select(Party,Candidate=variable,Date,value=c.value)%>%
+      mutate(type="Delegate Count",sd=NA,Party=ifelse(Party=="republican","Republican","Democratic"))
+
+    firstPlot=rbind(state.roll.plot,delegate.plot)
+            
+    State.Roll.Plot=
+      firstPlot%>%ggplot(aes(x=Date))+
+      geom_step(show.legend=F,aes(y=value,colour=Candidate),data=firstPlot%>%filter(type=="Delegate Count"))+
+      geom_line(aes(y=value,group=Candidate),data=firstPlot%>%filter(type=="Trend Index"))+
+      geom_ribbon(aes(ymin=value-sd,ymax=value+sd,fill=Candidate),alpha=.5)+
+      geom_hline(color="red",linetype=2,size=1,aes(yintercept=Threshold),data=data.frame(Party=c("Democratic","Republican"),Threshold=c(2382,1237),type=rep("Delegate Count",2)))+
+      geom_text(hjust=-.3,show.legend = F,aes(y=value,label=floor(value)),data=firstPlot%>%group_by(type,Party,Candidate)%>%do(.,tail(.,1)))+
+      facet_grid(type~Party,scales="free_y")+theme_bw()+theme(legend.position="top")+
+      ggtitle("Candidate Delegate Count and Polling Trend Index \n Ribbon represents moving average +/- 1 moving standard deviation on a 7 day window")+
+      ylab("Percent                                      Delegates")
+
+    State.Roll.Plot
   })
   
   #Plot Object
@@ -46,7 +57,7 @@ shinyServer(function(input, output, session) {
     })
     output$Candidate <- renderUI({
       Candidate=unique(poll.shiny$Candidate)
-      selectInput("Candidate","Candidate Filter",choices = Candidate,multiple=T)
+      selectInput("Candidate","Candidate Filter",selectize = T,selected = c("Clinton","Sanders","Trump","Cruz","Kasich"),choices = Candidate,multiple=T)
     })
     output$Pollster <- renderUI({
       Pollster=unique(poll.shiny$Pollster)
@@ -63,7 +74,8 @@ shinyServer(function(input, output, session) {
   })
   #Data
     selectedData <- reactive({
-    a=poll.shiny%>%filter(!is.na(Results)&!Candidate%in%c("Christie","Fiorina","Carson","Bush"))
+      rm.cand=c("Christie","Fiorina","Carson","Bush","Rubio")
+    a=poll.shiny%>%filter(!is.na(Results))
     if(!is.null(input$DaysLeft)) a=a%>%filter(DaysLeft>=input$DaysLeft[1]&DaysLeft<=input$DaysLeft[2])
     if(length(input$State)>0)a=a%>%filter(State%in%input$State)
     if(length(input$Party)>0)a=a%>%filter(Party%in%input$Party)
@@ -110,7 +122,7 @@ shinyServer(function(input, output, session) {
         p = p + aes_string(color=filltxt)
         if(input$factor) p=p+scale_color_discrete(name=input$fill_var)
       }
-      else if(input$ptype%in%c("boxplot","density")){
+      else if(input$ptype%in%c("boxplot","density","bar")){
         p = p + aes_string(fill=filltxt)
         if(input$factor) p+scale_fill_discrete(name=input$fill_var)
       }

@@ -1,5 +1,5 @@
 #Sys.setlocale(locale="English_US")
-
+#setwd("C:/Users/yoni/Documents/GitHub/Elections/USA2016/shiny")
 library(plotly);library(ggplot2);library(rvest);library(reshape2);library(zoo);library(stringr);library(plyr);library(shinyAce);library(dplyr)
 
 remove_geom <- function(p, geom) {
@@ -44,7 +44,7 @@ whichWeek <- function(aDate) paste0("0",ceiling(as.numeric(format(aDate, "%d"))/
 
 
 #State Polls
-url.in=data.frame(Party=c("Republican","Democrat"),
+url.in=data.frame(Party=c("Republican","Democratic"),
                   URL=c("http://www.realclearpolitics.com/epolls/latest_polls/gop_pres_primary/",
                         "http://www.realclearpolitics.com/epolls/latest_polls/dem_pres_primary/"),stringsAsFactors = F)
 
@@ -95,3 +95,17 @@ poll.shiny=State.Polls%>%select(-contains("Gen"))%>%rename(Pollster=Poll)%>%muta
 
 fac_vars=names(poll.shiny)[c(2,6,7,5,1,11,8:10)]
 
+load("DelegatesCurrent.Rdata")
+
+delegate=delegates%>%filter(Date!="-")%>%mutate_each(funs(as.character))
+delegate$Delegates=as.numeric(gsub('\\([^)]*\\)','',delegate$Delegates))
+delegate$State=gsub('^.{0,2}|[0-9]','',delegate$State)
+
+del.Date=function(x.in){
+  paste('2016',gsub(x.in[2],'',x.in[1]),x.in[2],sep="-")
+}
+
+delegate$Date[delegate$Party=="republican"]=unlist(lapply(strsplit(gsub('[ aA-zZ]','',delegate$Date[delegate$Party=="republican"]),'/'),del.Date))
+delegate$Date[delegate$Party=="democratic"]=as.character(as.Date(x = paste(delegate$Date[delegate$Party=="democratic"],"2016"),format = "%B %d %Y"))
+delegate$Date=as.Date(delegate$Date)
+delegate$Date[is.na(delegate$Date)]=as.Date("2016-03-01")
