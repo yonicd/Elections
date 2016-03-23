@@ -16,7 +16,7 @@ shinyUI(
                        a(href="http://github.com/yonicd/Elections",img(src='https://raw.githubusercontent.com/yonicd/Elections/master/USA2016/shiny/www/CDlogo_grey.png', height='35px')),
                        #a(href="https://twitter.com/yoniceedee",img(src='http://vignette1.wikia.nocookie.net/sims/images/7/7d/Twitter_icon_logo.png/revision/latest?cb=20100709233110', height='35px')),
                        a(href="http://www.realclearpolitics.com",img(src='http://www.realclearpolitics.com/asset/img/rcp-logo-ss-red-250.gif', height='35px'))
-                       ),
+                       ,collapsible=T),
              
              tabPanel("Current Polling",
                       h4("Application Layout (Navigate on top ribbon of page):"),
@@ -90,7 +90,11 @@ shinyUI(
                       hr(),
                       helpText(a("Data Source: Realclearpolitics.com",href="http://www.realclearpolitics.com"))
              ),
-             
+              tabPanel("General Elections",
+                       fluidPage(
+                         plotOutput(outputId = "H2HPlot.trend"),
+                         plotOutput(outputId = "H2HPlot.spread")
+                       )),
              tabPanel("Polling Datatable",tags$head(tags$style("tfoot {display:table-header-group;}")),
                       fluidPage(
                         fluidRow(

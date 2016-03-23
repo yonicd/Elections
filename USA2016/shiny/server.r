@@ -194,6 +194,14 @@ if(input$facet.shp=="Wrap"){
                                 content = function(file){
                                   p=selectedData()+theme(text=element_text(size=18))
                                  ggsave(file, plot = eval(parse(text=input$code)),width=20,height=10)})
-#Sheet 3
+
+     #Plot Object
+     output$H2HPlot.trend=renderPlot({
+       print(h2h.out$plot.trend)
+     })     
+     output$H2HPlot.spread=renderPlot({
+       print(h2h.out$plot.spread)
+     })     
+#Sheet 4
   output$table <- renderDataTable(poll.shiny)
 })
