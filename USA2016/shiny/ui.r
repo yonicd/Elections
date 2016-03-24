@@ -7,11 +7,6 @@ shinyUI(
           title="",windowTitle="Election PAD"
         )
     ),
-    
-#     p("The Election Polls Analysis Depot is an interactive web application for analysing the USA elections powered by the",
-#       a("Shiny library of RStudio",href="http://shiny.rstudio.com/"),"and realtime published polling data from the",
-#       a("Realclearpolitics.com",href="http://www.realclearpolitics.com"),"database.")
-    
   navbarPage(title=div("Election Polls Analysis Depot",
                        a(href="http://github.com/yonicd/Elections",img(src='https://raw.githubusercontent.com/yonicd/Elections/master/USA2016/shiny/www/CDlogo_grey.png', height='35px')),
                        #a(href="https://twitter.com/yoniceedee",img(src='http://vignette1.wikia.nocookie.net/sims/images/7/7d/Twitter_icon_logo.png/revision/latest?cb=20100709233110', height='35px')),
@@ -20,10 +15,11 @@ shinyUI(
              
              tabPanel("Current Polling",
                       h4("Application Layout (Navigate on top ribbon of page):"),
-                      strong("Current Polling:"),p("A quick snapshot showing how each candidate is trending in the polls. At the end of each trend are the current published poll results for the candidate by state. If they are outside of the ribbon it means that the polling shows that the candidate is one standard deviation outside of their overall 7 day trend."),
+                      strong("Current Polling:"),p("A quick snapshot showing the current accumulation of delegates by each candidate (not incl. superdelegates), and the 7 day polling trend of each candidate based on a moving average."),
                       strong("Election Analysis:"),p("An interactive polling analysis layout where the user can filter elections, parties,candidates, pollster, dates
                               and create different types of plots using any variable as the x and y axis.\n 
                               If you are an R user and know ggplot there is an additional editor console where you can create advanced plots freehand"),
+                      strong("General Elections:"),p("Current Polling of Democratic vs Republican Candidates."),
                       strong("Polling Database:"),p("All data used in the site can be viewed and filtered."),
                       p("Keeping in an open source state of mind all code and data used can be accessed on the project homepage on" , a("Github",href="https://github.com/yonicd/Elections")),
                       p("Created and maintained by",a("Jonathan Sidi",href="https://github.com/yonicd/Elections"),
@@ -31,7 +27,7 @@ shinyUI(
                       br(),
                       fluidRow(column(2,downloadButton('main.down', 'Download Plot'))),
                       #h4("Polling Results",align="center"),
-                      plotOutput("IntroPlot",height="500px")
+                      plotOutput("IntroPlot")
                       ),
              
              tabPanel("Election Analysis",
@@ -50,8 +46,9 @@ shinyUI(
                       hr(),
                       
                       fluidRow(
-                        column(2,uiOutput("DaysLeft"),
-                        radioButtons(inputId="plotmode",label = "Plot Mode",choices=split(c("ggplot","plotly"),c("Static","Interactive")),selected = "ggplot")),
+                        column(2, uiOutput("DaysLeft"),
+                                  checkboxInput(inputId = "remainingStates",label = "Only Remaining States",value = F),
+                                  radioButtons(inputId="plotmode",label = "Plot Mode",choices=split(c("ggplot","plotly"),c("Static","Interactive")),selected = "ggplot")),
                         column(2,
                                selectInput(inputId = "ptype",label = "Graph Type",choices = c("point","bar","line","step","boxplot","density"),selected="point"),
                                selectInput("fill_var","Colour",choices=c(None=".",fac_vars),selected="Candidate")),

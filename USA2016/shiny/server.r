@@ -47,7 +47,11 @@ shinyServer(function(input, output, session) {
 #Sheet 2  
   #Filters
   output$State <- renderUI({
-    State=unique(poll.shiny$State)
+    if(input$remainingStates){
+      State=unique(remaining.states$State)
+    }else{
+      State=unique(poll.shiny$State)
+    }
     selectInput("State","State Filter",choices = State,multiple=T)
   })
   
@@ -77,6 +81,7 @@ shinyServer(function(input, output, session) {
       rm.cand=c("Christie","Fiorina","Carson","Bush","Rubio")
     a=poll.shiny%>%filter(!is.na(Results))
     if(!is.null(input$DaysLeft)) a=a%>%filter(DaysLeft>=input$DaysLeft[1]&DaysLeft<=input$DaysLeft[2])
+    if(input$remainingStates) a=a%>%filter(State%in%remaining.states$State)
     if(length(input$State)>0)a=a%>%filter(State%in%input$State)
     if(length(input$Party)>0)a=a%>%filter(Party%in%input$Party)
     if(length(input$Candidate)>0)a=a%>%filter(Candidate%in%input$Candidate)

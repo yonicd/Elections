@@ -160,3 +160,5 @@ delegate$Date[delegate$Party=="republican"]=unlist(lapply(strsplit(gsub('[ aA-zZ
 delegate$Date[delegate$Party=="democratic"]=as.character(as.Date(x = paste(delegate$Date[delegate$Party=="democratic"],"2016"),format = "%B %d %Y"))
 delegate$Date=as.Date(delegate$Date)
 delegate$Date[is.na(delegate$Date)]=as.Date("2016-03-01")
+
+remaining.states=delegate%>%filter(value=='')%>%select(State,Date)%>%distinct%>%filter(Date>=Sys.Date())
