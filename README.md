@@ -44,7 +44,7 @@ if (Sys.info()[1] == "Windows") Sys.setlocale("LC_ALL")
 
   * The default layer is the long term trend (estimated with loess smoother) of polling results published by party and candidate
   
-![Snapshot of Election Analysis Page](USA2016/shiny/www/pad_screen_grab.png)
+![Snapshot of Election Analysis Page](USA2016/shiny/www/pad_screen_grab.PNG)
 
 The user can choose to include in the plots States, Parties, Candidates, Pollsters. Next there is a slider to choose the days before the conventions you want to view in the plot. This was used instead of a calendar to make a uniform timeline that is cleaner than arbitrary dates. Since there are a lot of states left and no one keeps track of which ones are left an extra filter was added to keep just the states left.
 
