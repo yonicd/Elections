@@ -35,7 +35,7 @@ if (Sys.info()[1] == "Windows") Sys.setlocale("LC_ALL")
 
 ## Current Polling
   * The top row depicts the current accumulation of delegates by party and candidate is shown in a step plot, with a horizontal reference line for the threshold needed per party to recieve the nomination. Ther accumulation does not include super delegates since it is uncertain which way they will vote. Currently this dataset is updated offline due to its somewhat static nature and the way the data is posted online forces the use of Selenium drivers. An action button will be added to invoke refreshing of the data by users as needed.
-  * The bottom row is a 7 day moving average of all polling results published on the state and national level. The ribbon around the moving average is the moving standard deviation on the same window. This is heplful to pick up any changes in uncertainty regarding how the voting public is percieving the candidates. It can be seen that candidates with low levels and increased variance are trending up while the opposite is true with the leading candidates (uncertainty is a bad thing for them).
+  * The bottom row is a 7 day moving average of all polling results published on the state and national level. The ribbon around the moving average is the moving standard deviation on the same window. This is helpful to pick up any changes in uncertainty regarding how the voting public is percieving the candidates. It can be seen that candidates with lower polling averages and increased variance trend up while the opposite is true with the leading candidates, where voter uncertainty is a bad thing for them.
 
 ![Snapshot of Overview Plot](USA2016/shiny/www/FirstPlot.PNG)
 
@@ -46,7 +46,7 @@ if (Sys.info()[1] == "Windows") Sys.setlocale("LC_ALL")
   
 ![Snapshot of Election Analysis Page](USA2016/shiny/www/DefaultPlotCntrl.PNG)
 
-The user can choose to include in the plots States, Parties, Candidates, Pollsters. Next there is a slider to choose the days before the conventions you want to view in the plot. This was used instead of a calendar to make a uniform timeline that is cleaner than arbitrary dates. Since there are a lot of states left and no one keeps track of which ones are left an extra filter was added to keep just the states left.
+The user can choose to filter in the plots States, Parties, Candidates, Pollsters. Next there is a slider to choose the days before the conventions you want to view in the plot. This was used instead of a calendar to make a uniform timeline that is cleaner than arbitrary dates. Since there are a lot of states left and no one keeps track of which ones are left an extra filter was added to keep just the states with open primaries.
 
 The new feature added is the option to go fully interactive and try out plotly!. Its integration with ggplot is great and new features are being added all the time to the package.
 
@@ -75,7 +75,7 @@ An example of the distribution of polling results in the open primaries over the
 Zooming in to this trend we can see the state level polling
 ![Election Comparison](USA2016/shiny/www/CurrentStateExample.png)
 
-  * If you are an R user and know ggplot there is an additional editor console,below the plot, where you can create advanced plots freehand, just add to the final object from the GUI called p and the data.frame is x, eg p+geom_point(). Just notice that all aesthetics must be given they are not defined in the original ggplot() definition. It is also possible to use any library you want just add it to the top of the code, the end object must be a ggplot. This also works great with plotly so do not worry if you are in interactive mode.
+  * If you are an R user and know ggplot syntax there is an additional editor console,below the plot, where you can create advanced plots freehand, just add to the final object from the GUI called p and the data.frame is poll.shiny, eg p+geom_point(). Just notice that all aesthetics must be given they are not defined in the original ggplot() definition. It is also possible to use any library you want just add it to the top of the code, the end object must be a ggplot. This also works great with plotly so do not worry if you are in interactive mode.
 ![Snapshot of PAD Plot](USA2016/shiny/www/DefaultPlotwConsole.png)
 
 ```r
@@ -95,12 +95,11 @@ scale_x_reverse()+scale_fill_discrete(name="Candidate")
 remove_geom(p,"point") #leaving only the trend on the plot
 ```
 
-  * Finally the plots can be viewed in English or Hebrew, and can be downloaded to you local computer using the download button.
+  * Finally the plots can be downloaded to your local computer using the download button.
 
-  
 ## General Elections
   * A peak into the sentiment of the public on cross party polling. Democratic candidate vs Republican candidate. The plots are set up to show the republican spread (Republican Candidate - Democratic Candidate) on the y-axis.
-  * The top plot is a longterm overview of the spread distributions with boxplots, while the bottom poll gives a daily account of the spread per candidate over the last two weeks. Both plots are split to National samples and State samples due to their heterogeneous nature.
+  * The top plot is a longterm overview of the spread distributions with boxplots, while the bottom plot shows a daily account of the spread per candidate over the last two weeks. Both plots are split to National samples and State samples due to their heterogeneous nature.
 
 ![General Elections Trend](USA2016/shiny/www/GeneralElectionsMonthly.PNG)
 
