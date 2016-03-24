@@ -27,7 +27,7 @@ shinyServer(function(input, output, session) {
       geom_text(hjust=-.3,show.legend = F,aes(y=value,label=floor(value)),data=firstPlot%>%group_by(type,Party,Candidate)%>%do(.,tail(.,1)))+
       facet_grid(type~Party,scales="free_y")+theme_bw()+theme(legend.position="top")+
       ggtitle("Candidate Delegate Count and Polling Trend Index \n Ribbon represents moving average +/- 1 moving standard deviation on a 7 day window")+
-      ylab("Percent                                      Delegates")
+      ylab("Percent                          Delegates")
 
     State.Roll.Plot
   })
