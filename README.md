@@ -37,7 +37,7 @@ if (Sys.info()[1] == "Windows") Sys.setlocale("LC_ALL")
   * The top row depicts the current accumulation of delegates by party and candidate is shown in a step plot, with a horizontal reference line for the threshold needed per party to recieve the nomination. Ther accumulation does not include super delegates since it is uncertain which way they will vote. Currently this dataset is updated offline due to its somewhat static nature and the way the data is posted online forces the use of Selenium drivers. An action button will be added to invoke refreshing of the data by users as needed.
   * The bottom row is a 7 day moving average of all polling results published on the state and national level. The ribbon around the moving average is the moving standard deviation on the same window. This is heplful to pick up any changes in uncertainty regarding how the voting public is percieving the candidates. It can be seen that candidates with low levels and increased variance are trending up while the opposite is true with the leading candidates (uncertainty is a bad thing for them).
 
-![Snapshot of Overview Plot](USA2016/shiny/www/FirstPlot.png)
+![Snapshot of Overview Plot](USA2016/shiny/www/FirstPlot.PNG)
 
 ## Election Analysis
   * An interactive polling analysis layout where the user can filter elections, parties, publishers and pollster, dates and create different types of plots using any variable as the x and y axis.
@@ -102,9 +102,9 @@ remove_geom(p,"point") #leaving only the trend on the plot
   * A peak into the sentiment of the public on cross party polling. Democratic candidate vs Republican candidate. The plots are set up to show the republican spread (Republican Candidate - Democratic Candidate) on the y-axis.
   * The top plot is a longterm overview of the spread distributions with boxplots, while the bottom poll gives a daily account of the spread per candidate over the last two weeks. Both plots are split to National samples and State samples due to their heterogeneous nature.
 
-![General Elections Trend](USA2016/shiny/www/GeneralElectionsMonthly.png)
+![General Elections Trend](USA2016/shiny/www/GeneralElectionsMonthly.PNG)
 
-![General Elections Daily](USA2016/shiny/www/GeneralElectionsDaily.png)
+![General Elections Daily](USA2016/shiny/www/GeneralElectionsDaily.PNG)
 
 ## Polling Database
   * All raw data used in the application can be viewed and filtered in a datatable.
