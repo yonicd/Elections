@@ -105,7 +105,7 @@ remove_geom(p,"point") #leaving only the trend on the plot
 
 ![General Elections Trend](USA2016/shiny/www/GeneralElectionsTrend.png)
 
-![General Elections Daily](USA2016/shiny/www/GeneralElectionsDaily.png)
+![General Elections Daily](USA2016/shiny/www/GeneralElectionsDaily.PNG)
 
 ## Polling Database
   * All raw data used in the application can be viewed and filtered in a datatable.
