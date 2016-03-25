@@ -4,10 +4,10 @@ shinyUI(
 
     div(style="padding: 1px 0px; width: '100%'",
         titlePanel(
-          title="",windowTitle="Election PAD"
+          title="",windowTitle="Election tRends"
         )
     ),
-  navbarPage(title=div("Election Polls Analysis Depot",
+  navbarPage(title=div("Election tRends",
                        a(href="http://github.com/yonicd/Elections",img(src='https://raw.githubusercontent.com/yonicd/Elections/master/USA2016/shiny/www/CDlogo_grey.png', height='35px')),
                        #a(href="https://twitter.com/yoniceedee",img(src='http://vignette1.wikia.nocookie.net/sims/images/7/7d/Twitter_icon_logo.png/revision/latest?cb=20100709233110', height='35px')),
                        a(href="http://www.realclearpolitics.com",img(src='http://www.realclearpolitics.com/asset/img/rcp-logo-ss-red-250.gif', height='35px'))
@@ -104,7 +104,7 @@ shinyUI(
                       helpText(a("Data Source: Realclearpolitics.com",href="http://www.realclearpolitics.com"))
               ),
              tags$script(HTML("var header = $('.navbar > .container');
-                       header.append('<div style=\"float:right\"><a href=\"https://twitter.com/share\" class=\"twitter-share-button\" data-via=\"yoniceedee\" data-hashtags=\"election2016\" aling=\"middle\" data-url=\"github.com/yonicd/Elections\" data-text=\"TryR Election tRends http://bit.ly/1XkeUNb\">Tweet</a></div>');
+                       header.append('<div style=\"float:right\"><a href=\"https://twitter.com/share\" class=\"twitter-share-button\" data-via=\"yoniceedee\" data-hashtags=\"election2016\" aling=\"middle\" data-url=\"github.com/yonicd/Elections\" data-text=\"Personalise your polling analysis at Election tRends\">Tweet</a></div>');
                               console.log(header)")),
              tags$script(HTML("!function(d,s,id){
                               var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
