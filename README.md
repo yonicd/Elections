@@ -77,6 +77,9 @@ An example of the distribution of polling results in the open primaries over the
 Zooming in to this trend we can see the state level polling
 ![Election Comparison](USA2016/shiny/www/CurrentStateExample.png)
 
+An analysis showing the convergence of polling errors to Sanders and Clinton over the Primary season. Initially Sanders was underestimated by the pollsters and over time the public sentiment has shifted. Currently the pollsters have captured the public sentiment to the primary outcomes. This can be seen as a ceiling to the Sanders campaign:
+![Sanders Vs. Clinton](USA2016/shiny/www/DemDensity.png)
+
   * If you are an R user and know ggplot syntax there is an additional editor console,below the plot, where you can create advanced plots freehand, just add to the final object from the GUI called p and the data.frame is poll.shiny, eg p+geom_point(). Just notice that all aesthetics must be given they are not defined in the original ggplot() definition. It is also possible to use any library you want just add it to the top of the code, the end object must be a ggplot. This also works great with plotly so do not worry if you are in interactive mode.
 ![Snapshot of PAD Plot](USA2016/shiny/www/DefaultPlotwConsole.png)
 
