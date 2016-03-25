@@ -76,7 +76,7 @@ plot.trend=x4%>%filter(Republican_name%in%c("Trump","Cruz","Kasich"))%>%
   ylab("Republican Spread")+xlab("Republican Candidate")+
   scale_colour_discrete(name="Republican Candidate")+
   theme_bw()+theme(legend.position="top")+
-  ggtitle("General Election: Head to Head Polling \n Monthy Spread Distribution")
+  ggtitle("General Election: Head to Head Polling \n Monthly Spread Distribution")
 
 plot.spread=x4%>%filter(Republican_name%in%c("Trump","Cruz","Kasich")&as.Date(Date)>=Sys.Date()-14)%>%
   group_by(Date,race,Republican_name,Democratic_name)%>%summarise_each(funs(mean),contains("Result"))%>%

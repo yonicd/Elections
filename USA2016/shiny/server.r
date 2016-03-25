@@ -206,7 +206,16 @@ if(input$facet.shp=="Wrap"){
      })     
      output$H2HPlot.spread=renderPlot({
        print(h2h.out$plot.spread)
-     })     
+     })
+     output$General1.down = downloadHandler(filename = "GeneralElectionsTrend.png",
+                                  content = function(file){
+                                    p=h2h.out$plot.trend+theme(text=element_text(size=18))
+                                    ggsave(file, plot = p,width=20,height=10)})
+     
+     output$General2.down = downloadHandler(filename = "GeneralElectionsDaily.png",
+                                  content = function(file){
+                                    p=h2h.out$plot.spread+theme(text=element_text(size=18))
+                                    ggsave(file, plot = p,width=20,height=10)})
 #Sheet 4
   output$table <- renderDataTable(poll.shiny)
 })

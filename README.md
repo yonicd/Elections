@@ -103,9 +103,9 @@ remove_geom(p,"point") #leaving only the trend on the plot
   * A peak into the sentiment of the public on cross party polling. Democratic candidate vs Republican candidate. The plots are set up to show the republican spread (Republican Candidate - Democratic Candidate) on the y-axis.
   * The top plot is a longterm overview of the spread distributions with boxplots, while the bottom plot shows a daily account of the spread per candidate over the last two weeks. Both plots are split to National samples and State samples due to their heterogeneous nature.
 
-![General Elections Trend](USA2016/shiny/www/GeneralElectionsMonthly.PNG)
+![General Elections Trend](USA2016/shiny/www/GeneralElectionsTrend.png)
 
-![General Elections Daily](USA2016/shiny/www/GeneralElectionsDaily.PNG)
+![General Elections Daily](USA2016/shiny/www/GeneralElectionsDaily.png)
 
 ## Polling Database
   * All raw data used in the application can be viewed and filtered in a datatable.

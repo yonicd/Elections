@@ -89,7 +89,9 @@ shinyUI(
              ),
               tabPanel("General Elections",
                        fluidPage(
+                         fluidRow(column(2,downloadButton('General1.down', 'Download Plot'))),
                          plotOutput(outputId = "H2HPlot.trend"),
+                         fluidRow(column(2,downloadButton('General2.down', 'Download Plot'))),
                          plotOutput(outputId = "H2HPlot.spread")
                        )),
              tabPanel("Polling Datatable",tags$head(tags$style("tfoot {display:table-header-group;}")),
