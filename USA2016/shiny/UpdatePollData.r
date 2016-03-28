@@ -48,4 +48,4 @@ StatePollsOpen=ddply(StateLinks.df%>%filter(State%in%c("National",remaining.stat
 
 StatePollsCurrent=rbind(StatePollsOpen,StatePollsCurrent%>%filter(!State%in%c("National",remaining.states$State)))
 
-save(StatePollsCurrent,file="StatePollsHistory.Rdata")
+save(StatePollsCurrent,file="Temp/StatePollsHistory.Rdata")
