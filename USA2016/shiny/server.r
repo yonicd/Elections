@@ -2,14 +2,14 @@ shinyServer(function(input, output, session) {
 #update
 #Sheet 1
   IntroPrePlot <- reactive({
-    rm.cand=c("Christie","Fiorina","Carson","Bush","Rubio")
-    State.roll=State.Polls%>%filter(!Candidate%in%rm.cand)%>%arrange(Party,Candidate,Date)%>%
+    cand=c("Clinton","Sanders","Trump","Cruz","Kasich")
+    State.roll=StatePollsCurrent%>%filter(Candidate%in%cand)%>%arrange(Party,Candidate,Date)%>%
       group_by(Date,Party,Candidate)%>%summarise_each(funs(mean),Results)%>%group_by(Party,Candidate)%>%
       do(.,data.frame(roll.sd=zoo:::rollapplyr(.$Results,width=7,FUN=sd,fill=NA),roll.mean=zoo:::rollapplyr(.$Results,width=7,FUN=mean,fill=NA)))
     
-    State.roll$Date=(State.Polls%>%filter(!Candidate%in%rm.cand)%>%select(Candidate,Date)%>%arrange(Candidate,Date)%>%distinct)$Date
+    State.roll$Date=(StatePollsCurrent%>%filter(Candidate%in%cand)%>%select(Candidate,Date)%>%arrange(Candidate,Date)%>%distinct)$Date
     
-    state.roll.plot=State.roll%>%filter(!is.na(roll.mean))%>%rename(value=roll.mean,sd=roll.sd)%>%mutate(type="Trend Index")
+    state.roll.plot=State.roll%>%filter(!is.na(roll.mean))%>%rename(value=roll.mean,sd=roll.sd)%>%mutate(type="Trend Index")%>%ungroup%>%filter(Date>="2016-01-01")
 
     delegate.plot=delegate%>%mutate(value=as.numeric(value))%>%filter(!is.na(value)&variable!="Rubio")%>%
       group_by(Party,variable,Date)%>%summarise_each(funs(sum),value)%>%group_by(variable)%>%mutate(c.value=cumsum(value))%>%
@@ -48,7 +48,7 @@ shinyServer(function(input, output, session) {
   #Filters
   output$State <- renderUI({
     if(input$remainingStates){
-      State=unique(remaining.states$State)
+      State=c("National",unique(remaining.states$State))
     }else{
       State=unique(poll.shiny$State)
     }
@@ -74,14 +74,14 @@ shinyServer(function(input, output, session) {
     xmax=max(poll.shiny$DaysLeft,na.rm = T)
     
     sliderInput(inputId = "DaysLeft",label = "Days Left to Conventions",
-                min = xmin,max = xmax,step=1,value=c(xmin,60))
+                min = xmin,max = xmax,step=1,value=c(xmin,xmin+60))
   })
   #Data
     selectedData <- reactive({
       rm.cand=c("Christie","Fiorina","Carson","Bush","Rubio")
     a=poll.shiny%>%filter(!is.na(Results))
     if(!is.null(input$DaysLeft)) a=a%>%filter(DaysLeft>=input$DaysLeft[1]&DaysLeft<=input$DaysLeft[2])
-    if(input$remainingStates) a=a%>%filter(State%in%remaining.states$State)
+    if(input$remainingStates) a=a%>%filter(State%in%c("National",remaining.states$State))
     if(length(input$State)>0)a=a%>%filter(State%in%input$State)
     if(length(input$Party)>0)a=a%>%filter(Party%in%input$Party)
     if(length(input$Candidate)>0)a=a%>%filter(Candidate%in%input$Candidate)

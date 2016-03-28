@@ -53,9 +53,9 @@ shinyUI(
                                selectInput(inputId = "ptype",label = "Graph Type",choices = c("point","bar","line","step","boxplot","density"),selected="point"),
                                selectInput("fill_var","Colour",choices=c(None=".",fac_vars),selected="Candidate")),
                         column(2,
-                               selectInput("varx","X axis",selected = "Date",choices=c("Date",fac_vars)),
+                               selectInput("varx","X axis",selected = "Date",choices=c(fac_vars)),
                                
-                               selectInput("vary","Y axis",selected = "Results",choices=c("Results",fac_vars))
+                               selectInput("vary","Y axis",selected = "Results",choices=c(fac_vars))
                         ),
                         column(2,
                                selectInput("facet_row","Row Facet",choices=c(None=".",fac_vars),selected="Party"),
