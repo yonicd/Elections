@@ -53,7 +53,7 @@ The user can choose to filter in the plots States, Parties, Candidates, Pollster
 The new feature added is the option to go fully interactive and try out plotly!. Its integration with ggplot is great and new features are being added all the time to the package.
 
 The base graphics are ggplot thus the options above the graph give the user control on nearly all the options to build a plot. The user can choose from the following variables:
-**Date, Days Left to Convention, Month, Weekday, Week in Month, Party, Candidate, State, Pollster**
+**Date, Days Left to Convention, Month, Weekday, Week in Month, Party, Candidate, State, Pollster, Results, Final Primary Result, Pollster Error, Sample Type (Registerd/Likely Voter), Sample Size**. There is an extra column in the [Polling Database](#polling-database) tab that gives the source URL of the poll that was conducted for anyone who wants to dig deeper in the data.
 
 To define the following plot attributes:
 
@@ -111,4 +111,4 @@ remove_geom(p,"point") #leaving only the trend on the plot
 ![General Elections Daily](USA2016/shiny/www/GeneralElectionsDaily.PNG)
 
 ## Polling Database
-  * All raw data used in the application can be viewed and filtered in a datatable.
+  * All raw data used in the application can be viewed and filtered in a datatable. There is an extra column that gives the source URL of the poll that was conducted for anyone who wants to dig deeper in the data.
