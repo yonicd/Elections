@@ -112,7 +112,7 @@ delegate$Date[is.na(delegate$Date)]=as.Date("2016-03-01")
 
 remaining.states=delegate%>%filter(value=='')%>%select(State,Date)%>%distinct%>%filter(Date>=Sys.Date())%>%arrange(Date,State)
 
-load("StatePollsHistory.Rdata")
+load("Temp/StatePollsHistory.Rdata")
 
 source("UpdatePollData.r")
 
