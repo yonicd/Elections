@@ -2,7 +2,7 @@
 
 The US primaries are coming on fast with almost 120 days left until the conventions. After building a shinyapp for the [Israeli Elections](http://www.r-bloggers.com/israels-2015-election-polls-analysis-with-shiny-ggplot2/) I decided to update features in the app tried out plotly in the shiny framework.
 
-As a casual voter trying to gauge the true temperature of the political landscape from the the overwhelming abundance of polling is a heavy task.  Polling data is continuously published during the state primaries and the variaety of pollsters makes it hard to keep track what is going on. The app self updates using data published publicly by [realclearpolitics.com](http://www.realclearpolitics.com).
+As a casual voter trying to gauge the true temperature of the political landscape from the overwhelming abundance of polling is a heavy task.  Polling data is continuously published during the state primaries and the variaety of pollsters makes it hard to keep track what is going on. The app self updates using data published publicly by [realclearpolitics.com](http://www.realclearpolitics.com).
 
 The app keeps track of polling trends and delegate count daily for you. You create personal analysis from the granular level data all the way to distributions using interactive [ggplot2](http://ggplot2.org/) and [plotly](https://github.com/ropensci/plotly) graphs and check out the general elections polling to peak into the near future.
 
