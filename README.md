@@ -6,7 +6,7 @@ As a casual voter trying to gauge the true temperature of the political landscap
 
 The app keeps track of polling trends and delegate count daily for you. You create personal analysis from the granular level data all the way to distributions using interactive [ggplot2](http://ggplot2.org/) and [plotly](https://github.com/ropensci/plotly) graphs and check out the general elections polling to peak into the near future.
 
-The app can be accessed through a couple of places. I set up an [AWS instance](54.191.51.69/Elections/USA2016/shiny) to host the app for realtime use and there is the Github repository that is the maintained home of the app that is meant for the R community that can host shiny locally. 
+The app can be accessed through a couple of places. I set up an [AWS instance](http://54.191.51.69/Elections/USA2016/shiny) to host the app for realtime use and there is the Github repository that is the maintained home of the app that is meant for the R community that can host shiny locally. 
 
 ####Running the App through Github
 
