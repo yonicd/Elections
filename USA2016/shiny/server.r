@@ -20,11 +20,11 @@ shinyServer(function(input, output, session) {
             
     State.Roll.Plot=
       firstPlot%>%ggplot(aes(x=Date))+
-      geom_step(show.legend=F,aes(y=value,colour=Candidate),size=2,data=firstPlot%>%filter(type=="Delegate Count"))+
-      geom_line(aes(y=value,group=Candidate),linetype=2,data=firstPlot%>%filter(type=="Trend Index"))+
+      geom_step(show.legend=F,aes(y=value,colour=Candidate),size=2,data=firstPlot%>%ungroup%>%filter(type=="Delegate Count"))+
+      geom_line(aes(y=value,group=Candidate),linetype=2,data=firstPlot%>%ungroup%>%filter(type=="Trend Index"))+
       geom_ribbon(aes(ymin=value-sd,ymax=value+sd,fill=Candidate),alpha=.5)+
       geom_hline(color="red",linetype=2,size=1,aes(yintercept=Threshold),data=data.frame(Party=c("Democratic","Republican"),Threshold=c(2382,1237),type=rep("Delegate Count",2)))+
-      geom_text(hjust=.5,vjust=-.3,show.legend = F,aes(y=value,label=floor(value)),data=firstPlot%>%group_by(type,Party,Candidate)%>%do(.,tail(.,1)))+
+      geom_text(hjust=.5,vjust=-.3,show.legend = F,aes(y=value,label=floor(value)),data=firstPlot%>%ungroup%>%group_by(type,Party,Candidate)%>%do(.,tail(.,1)))+
       facet_grid(type~Party,scales="free_y")+theme_bw()+theme(legend.position="top")+
       ggtitle("Candidate Delegate Count and Polling Trend Index \n Ribbon represents moving average +/- 1 moving standard deviation on a 7 day window")+
       ylab("Percent                          Delegates")

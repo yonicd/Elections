@@ -3,6 +3,8 @@
 #setwd("C:/Users/yoni/Documents/GitHub/Elections/USA2016/shiny")
 library(plotly);library(ggplot2);library(rvest);library(reshape2);library(zoo);library(stringr);library(plyr);library(shinyAce);library(dplyr)
 
+
+#Function that removes a specific geometery from ggplot
 remove_geom <- function(p, geom) {
   layers <- lapply(p$layers, function(x) if(any(grepl(paste0('(?i)',geom),class(x$geom)))) NULL else x)
   layers <- layers[!sapply(layers, is.null)]
@@ -11,8 +13,10 @@ remove_geom <- function(p, geom) {
   p
 }
 
+#Function that returns week of month
 whichWeek <- function(aDate) paste0("0",ceiling(as.numeric(format(aDate, "%d"))/7 ))
 
+#Head to Head General Election data
 h2h=function(url){
 x=read_html(url)
 x1=x%>%html_table(header = T)
@@ -64,37 +68,8 @@ return(list(data=x4,plot.trend=plot.trend,plot.spread=plot.spread))
 
 h2h.out=h2h("http://www.realclearpolitics.com/epolls/latest_polls/pres_general/")
 
-#State Polls
-# url.in=data.frame(Party=c("Republican","Democratic"),
-#                   URL=c("http://www.realclearpolitics.com/epolls/latest_polls/gop_pres_primary/",
-#                         "http://www.realclearpolitics.com/epolls/latest_polls/dem_pres_primary/"),stringsAsFactors = F)
 
-# State.Polls=ddply(url.in,.(Party),.fun = function(df){
-#   x=read_html(df$URL)
-#   x1=x%>%html_table(header = T)
-#   names(x1)=seq(1,length(x1))
-#   x2=ldply(x1[seq(2,60,2)],.fun = function(y) y%>%select(-Spread),.id = "id")%>%mutate(id=as.numeric(id))
-#   x3=ldply(x1[seq(1,59,2)],.fun = function(y) data.frame(Date=strptime(names(y[1]),"%A, %B %d")),.id="id")%>%mutate(id=as.numeric(id))
-#   x3=x3%>%left_join(x2,"id")%>%select(-id)
-#   names(x3)[2]="Race"
-#   x3$State=stringi::stri_trim_both(gsub('Democratic|Republican|Presidential|Primary|Caucus|[0-9]','',x3$Race))
-#   x3$State[grepl('Nomination',x3$State)]='General Election'
-#   x3$id=seq(1,nrow(x3))
-#   
-#   x4=ddply(x3,.(id),.fun = function(x.in){
-#     Candidate=unlist(lapply(strsplit(x.in$Results,", ")[[1]],function(x) gsub('[0-9 ]','',x[1])))
-#     Results=unlist(lapply(strsplit(x.in$Results,", ")[[1]],function(x) as.numeric(gsub('[aA-zZ ]','',x[1]))))
-#     x.out=data.frame(Candidate,Results)%>%do(.,filter(.,complete.cases(.)))%>%mutate(Date=x.in$Date,Poll=x.in$Poll,State=x.in$State)
-#     return(x.out)
-#   })%>%select(-id)
-#   
-#   return(x4)
-# })
-# 
-# State.Polls=State.Polls%>%left_join(State.Polls%>%filter(State=="General Election")%>%group_by(Candidate)%>%do(head(.,5))%>%summarise(GenMean=mean(Results),GenSd=sd(Results)),by="Candidate")%>%
-#   left_join(data.frame(State=state.name,State.Abb=state.abb,stringsAsFactors = F),by="State")%>%
-#   mutate(State.Abb=ifelse(is.na(State.Abb),"US",State.Abb))
-
+#Load Delegate Data (Currently offline)
 load("DelegatesCurrent.Rdata")
 
 delegate=delegates%>%filter(Date!="-")%>%mutate_each(funs(as.character))
@@ -110,10 +85,13 @@ delegate$Date[delegate$Party=="democratic"]=as.character(as.Date(x = paste(deleg
 delegate$Date=as.Date(delegate$Date)
 delegate$Date[is.na(delegate$Date)]=as.Date("2016-03-01")
 
+#Calculate remaining states in primaries
 remaining.states=delegate%>%filter(value=='')%>%select(State,Date)%>%distinct%>%filter(Date>=Sys.Date())%>%arrange(Date,State)
 
+#Load historical polling data
 load("Temp/StatePollsHistory.Rdata")
 
+#Read in latest polling data
 source("UpdatePollData.r")
 
 StatePollsCurrent$MoE=as.numeric(gsub('--',NA,StatePollsCurrent$MoE))
@@ -123,8 +101,10 @@ StatePollsCurrent=StatePollsCurrent%>%mutate(MoE=ifelse(is.na(MoE),100*SampleSiz
 
 StatePollsCurrent$Party=ifelse(StatePollsCurrent$Party=="democratic","Democratic","Republican")
 
+#Clean up any dates that are past current date
 StatePollsCurrent=StatePollsCurrent%>%filter(Date<=Sys.Date())
 
+#Create shiny data
 poll.shiny=StatePollsCurrent%>%select(-Sample)%>%mutate(
           Date=as.Date(Date),Month=format(Date,"%b"),
           Weekday=format(Date,"%A"),MonthWeek=whichWeek(Date),
@@ -134,4 +114,5 @@ poll.shiny=StatePollsCurrent%>%select(-Sample)%>%mutate(
 poll.shiny=poll.shiny[,c(c(1:17)[-4],4)]
 names(poll.shiny)[3]="State.Abb"
 
+#factor variables for the plots
 fac_vars=head(names(poll.shiny),-1)
