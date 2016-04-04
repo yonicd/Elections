@@ -1,4 +1,4 @@
-#library(rvest);library(RSelenium);library(plyr);library(dplyr)
+#library(reshape2);library(rvest);library(RSelenium);library(plyr);library(dplyr)
 
 RSelenium::startServer()
 remDr <- remoteDriver(browserName = "phantomjs")
