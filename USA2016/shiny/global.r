@@ -1,7 +1,7 @@
 #Sys.setlocale(locale="English_US")
 #Sys.setlocale(category = "LC_TIME",locale="C")
 #setwd("C:/Users/yoni/Documents/GitHub/Elections/USA2016/shiny")
-library(plotly);library(ggplot2);library(rvest);library(reshape2);library(zoo);library(stringr);library(plyr);library(shinyAce);library(dplyr)
+library(RSelenium);library(plotly);library(ggplot2);library(rvest);library(reshape2);library(zoo);library(stringr);library(plyr);library(shinyAce);library(dplyr)
 
 
 #Function that removes a specific geometery from ggplot
@@ -70,7 +70,9 @@ h2h.out=h2h("http://www.realclearpolitics.com/epolls/latest_polls/pres_general/"
 
 
 #Load Delegate Data (Currently offline)
-load("DelegatesCurrent.Rdata")
+load("Temp/DelegatesCurrent.Rdata")
+#if((Sys.time()-delegates$now[1])>=20) 
+#source("update_delegate_count_phantomjs.r")
 
 delegate=delegates%>%filter(Date!="-")%>%mutate_each(funs(as.character))
 delegate$Delegates=as.numeric(gsub('\\([^)]*\\)','',delegate$Delegates))
