@@ -36,7 +36,7 @@ if (Sys.info()[1] == "Windows") Sys.setlocale("LC_ALL")
 # Usage Instructions:
 
 ## Current Polling
-  * The top row depicts the current accumulation of delegates by party and candidate is shown in a step plot, with a horizontal reference line for the threshold needed per party to recieve the nomination. Ther accumulation does not include super delegates since it is uncertain which way they will vote. Currently this dataset is updated offline due to its somewhat static nature and the way the data is posted online forces the use of Selenium drivers. An action button will be added to invoke refreshing of the data by users as needed.
+  * The top row depicts the current accumulation of delegates by party and candidate is shown in a step plot, with a horizontal reference line for the threshold needed per party to recieve the nomination. Ther accumulation does not include super delegates since it is uncertain which way they will vote. The delegate count is set to refresh every 20 minutes, using RSelenium and phantomjs headless drivers, given a user opens the app.
   * The bottom row is a 7 day moving average of all polling results published on the state and national level. The ribbon around the moving average is the moving standard deviation on the same window. This is helpful to pick up any changes in uncertainty regarding how the voting public is percieving the candidates. It can be seen that candidates with lower polling averages and increased variance trend up while the opposite is true with the leading candidates, where voter uncertainty is a bad thing for them.
 
 ![Snapshot of Overview Plot](USA2016/shiny/www/FirstPlot.PNG)
