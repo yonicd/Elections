@@ -29,16 +29,14 @@ StateLinks.df=rbind(data.frame(Party=c("republican","democratic"),state.abb=rep(
 
 delegates=ldply(delegate.list,function(df){
   df=df%>%mutate_each(funs(as.character))
-  #cols=head(names(df),-2)
-  #if(tail(cols,1)=="Primary/Caucus") cols=cols[1:(length(cols)-1)]
   if(!any(names(df)%in%"Primary/Caucus")){
     df$`Primary/Caucus`=df$DelegateAllocation
     df$DelegateAllocation="Proportional"}
   df=df%>%mutate_each(funs(gsub('\u2207|\\*|#','',.)),DelegateAllocation,`Open/Closed`)
   df%>%melt(.,id=c("State","Date","Delegates","Primary/Caucus","DelegateAllocation","Open/Closed"))
-},.id = "Party")
-  
-save(StateLinks.df,delegates,file="DelegatesCurrent.Rdata")
+},.id = "Party")%>%mutate(now=Sys.time())
+
+save(StateLinks.df,delegates,file="Temp/DelegatesCurrent.Rdata")
 
  
 # StatePolls%>%filter(Candidate%in%c("Clinton","Sanders"),Date<=Sys.Date()&!is.na(PollError))%>%
