@@ -71,7 +71,9 @@ h2h.out=h2h("http://www.realclearpolitics.com/epolls/latest_polls/pres_general/"
 
 #Load Delegate Data (Currently offline)
 load("Temp/DelegatesCurrent.Rdata")
-if((difftime(Sys.time(),as.POSIXct(delegates$now[1]),units="mins")>=20)&Sys.info()[1]=="Linux") source("update_delegate_count_phantomjs.r")
+if(Sys.info()[1]=="Linux"){
+if(difftime(Sys.time(),delegates$now[1],units="mins")>=20) source("update_delegate_count_phantomjs.r")
+}
 
 delegate=delegates%>%filter(Date!="-")%>%mutate_each(funs(as.character))
 delegate$Delegates=as.numeric(gsub('\\([^)]*\\)','',delegate$Delegates))
