@@ -29,6 +29,7 @@ StateLinks.df=rbind(data.frame(Party=c("republican","democratic"),state.abb=rep(
 
 delegates=ldply(delegate.list,function(df){
   df=df%>%mutate_each(funs(as.character))
+  names(df)[2]="Date"
   if(!any(names(df)%in%"Primary/Caucus")){
     df$`Primary/Caucus`=df$DelegateAllocation
     df$DelegateAllocation="Proportional"}
