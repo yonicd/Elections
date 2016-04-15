@@ -5,17 +5,17 @@ remDr <- remoteDriver(browserName = "phantomjs")
 delegate.list=vector('list',2)
 names(delegate.list)=c("republican","democratic")
 StateLinks=delegate.list
-remDr$open()
-remDr$setTimeout(type = "page load", milliseconds = 50000)
 for(i in 1:2){
-remDr$navigate(paste0("http://www.realclearpolitics.com/epolls/2016/president/",names(delegate.list)[i],"_delegate_count.html"))
-  Sys.sleep(2)
-out=htmlParse(remDr$getPageSource()[[1]])
-StateLinks[[i]]=as.character(getNodeSet(out,'//*[contains(concat( " ", @class, " " ), concat( " ", "state_col", " " ))]//a/@href'))
-dataNode=getNodeSet(out,'//*[@id="polling-data-rcp"]//table')
-delegate.list[[i]]=readHTMLTable(dataNode[[1]],header = T)
+  remDr$open()
+    remDr$setTimeout(type = "page load", milliseconds = 50000)
+    remDr$navigate(paste0("http://www.realclearpolitics.com/epolls/2016/president/",names(delegate.list)[i],"_delegate_count.html"))
+    Sys.sleep(2)
+    out=htmlParse(remDr$getPageSource()[[1]])
+    StateLinks[[i]]=as.character(getNodeSet(out,'//*[contains(concat( " ", @class, " " ), concat( " ", "state_col", " " ))]//a/@href'))
+    dataNode=getNodeSet(out,'//*[@id="polling-data-rcp"]//table')
+    delegate.list[[i]]=readHTMLTable(dataNode[[1]],header = T)
+  remDr$close()
 }
-remDr$close()
 
 StateLinks.df=ldply(StateLinks,function(x){ 
   state=toupper(substr(gsub("http://www.realclearpolitics.com/epolls/2016/president/",'',x),1,2))
