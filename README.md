@@ -15,7 +15,7 @@ The app can be accessed through a couple of places. I set up an [AWS instance](h
 if (Sys.info()[1] == "Windows") Sys.setlocale("LC_TIME","C") 
 
 #check to see if libraries need to be installed
-libs=c("shiny","shinyAce","plotly","ggplot2","rvest","reshape2","zoo","stringr","scales","plyr","dplyr")
+libs=c("RSelenium","shiny","shinyAce","plotly","ggplot2","rvest","reshape2","zoo","stringr","scales","plyr","dplyr")
 x=sapply(libs,function(x)if(!require(x,character.only = T)) install.packages(x));rm(x,libs)
 
 #run App

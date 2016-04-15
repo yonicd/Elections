@@ -122,7 +122,7 @@ $(document).ready(function () {
 if (Sys.info()[1] == &quot;Windows&quot;) Sys.setlocale(&quot;LC_TIME&quot;,&quot;C&quot;) 
 
 #check to see if libraries need to be installed
-libs=c(&quot;shiny&quot;,&quot;shinyAce&quot;,&quot;plotly&quot;,&quot;ggplot2&quot;,&quot;rvest&quot;,&quot;reshape2&quot;,&quot;zoo&quot;,&quot;stringr&quot;,&quot;scales&quot;,&quot;plyr&quot;,&quot;dplyr&quot;)
+libs=c(&quot;RSelenium&quot;,&quot;shiny&quot;,&quot;shinyAce&quot;,&quot;plotly&quot;,&quot;ggplot2&quot;,&quot;rvest&quot;,&quot;reshape2&quot;,&quot;zoo&quot;,&quot;stringr&quot;,&quot;scales&quot;,&quot;plyr&quot;,&quot;dplyr&quot;)
 x=sapply(libs,function(x)if(!require(x,character.only = T)) install.packages(x));rm(x,libs)
 
 #run App
