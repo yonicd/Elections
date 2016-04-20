@@ -1,4 +1,4 @@
-library(rvest);library(RSelenium);library(plyr);library(dplyr)
+library(rvest);library(RSelenium);library(plyr);library(reshape2);library(dplyr)
 
 RSelenium::startServer()
 remDr <- remoteDriver()
