@@ -1,5 +1,5 @@
-
-StatePollsOpen=ddply(StateLinks.df%>%filter(State%in%c("National",remaining.states$State)),
+rem.state=remaining.states%>%filter(State!="Montana")
+StatePollsOpen=ddply(StateLinks.df%>%filter(State%in%c("National",rem.state$State)),
                     .(Party,State,state.abb),.fun = function(x){
   p=read_html(x$url)
   pt=html_nodes(p,xpath = '//*[@id="polling-data-full"]//table')
